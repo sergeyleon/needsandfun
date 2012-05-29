@@ -1,0 +1,213 @@
+{% macro categoryItem(item, linked) %}
+    {% if item.is_visible %}
+    <div class="category-item{% if item.selected %} selected{% endif %}">
+        {% if item.children %}
+            <div class="category-item-icon"></div>
+        {% endif %}
+        
+        {% if item.current and not linked %}
+            <div class="category-item-link">        
+        {% else %}
+            <a class="category-item-link{% if item.current %} current{% endif %}" href="{{ item.url }}">
+        {% endif %}
+            {{ item.name }}
+        {% if item.current and not linked %}
+            </div>
+        {% else %}
+            </a>
+        {% endif %}
+        
+        {% if item.children %}
+            <div class="category-children">
+                {% for _item in item.children %}
+                    {{ _self.categoryItem(_item, linked)}}
+                {% endfor %}
+                <div class="clear"></div>
+            </div>
+        {% endif %}
+    </div>
+    {% endif %}
+{% endmacro %}
+
+{% macro rating(item, url) %}
+    {% import defaults.macros ~ '/common.twig' as common %}
+    {{ common.rating(item, url) }}
+{% endmacro %}
+
+{% macro goods(goods, pager) %}
+    {% import defaults.macros ~ '/common.twig' as common %}
+    <div class="goods">    
+        {% for good in goods %}
+            {{ _self.good(good) }}
+            {% if 0 == loop.index % 4%}
+                <div class="clear"></div>
+            {% endif %}            
+        {% endfor %}
+        <div class="clear"></div>
+        {% if pager %}
+            {{ common.pager(pager) }}
+        {% endif %}        
+    </div>    
+{% endmacro %}
+
+{% macro itemPicture(icon, type, gallery) %}
+    {% if icon.picture.filename %}
+        {% if gallery %}
+            <a class="fancybox" rel="gallery" href="{{ path('item_img', {'filename': icon.picture.filename, 'type': 'full'}) }}">
+        {% endif %}
+            <img src="{{ path('item_img', {'filename': icon.picture.filename, 'type': type}) }}" />            
+        {% if gallery %}            
+            </a>
+        {% endif %}
+    {% else %}
+        <img src="{{ defaults.common }}/img/noimg.gif" />
+    {% endif %}
+{% endmacro %}
+
+{% macro good(good) %}
+    <a href="{{ good.url }}" class="good-item">
+        <div class="good-item-pic">
+            {{ _self.itemPicture(good.getIcon, 'small') }}
+        </div>
+        
+        <div class="good-item-title">
+            {{ good.name }}
+        </div>
+        
+        {% if good.discount %}
+            <div class="good-item-oldprice">
+                <span>{{ good.old_price|money }}</span>
+            </div>
+
+            <div class="good-item-price discounted">
+                {{ good.price|money }}
+            </div>
+        {% else %}
+            <div class="good-item-price">
+                {{ good.price|money }}
+            </div>
+        {% endif %}
+    </a>
+{% endmacro %}
+
+{% macro orderItem(ordergood) %}
+    <a href="{{ ordergood.size.good.url }}" class="good-item">
+        <div class="good-item-pic">
+            {{ _self.itemPicture(ordergood.size.good.getIcon, 'small') }}
+        </div>
+        
+        <div class="good-item-title">
+            {{ ordergood.size.good.name }}{% if ordergood.size.name %}({{ ordergood.size.name }}){% endif %}
+        </div>
+        
+        <div class="good-item-price">
+            {{ ordergood.size.price|money }}
+        </div>
+    </a>
+{% endmacro %}
+
+
+{% macro sorter(sort, context) %}
+    {% import defaults.macros ~ '/markup.twig' as markup %}
+
+    <form>
+        <div class="sorter">
+            <div class="sorter-item">
+                <select name="sort[type]">
+                    <option value="abc"    {% if 'abc' == sort.type %} selected="selected"{% endif %}>По алфавиту</option>
+                    <option value="rating" {% if 'rating' == sort.type %} selected="selected"{% endif %}>По рейтингу</option>
+                    <option value="price"  {% if 'price'  == sort.type %} selected="selected"{% endif %}>По стоимости</option>
+                    <option value="date"   {% if 'date'   == sort.type %} selected="selected"{% endif %}>По дате поступления</option>
+                </select>
+            </div>
+
+            {#
+            <div class="sorter-item">
+                <select name="sort[dir]">
+                    <option value="asc"  {% if 'asc'  == sort.dir %} selected="selected"{% endif %}>По возрастанию</option>
+                    <option value="desc" {% if 'desc' == sort.dir %} selected="selected"{% endif %}>По убыванию</option>
+                </select>
+            </div>
+            #}
+
+            <div class="sorter-item">
+                {{ markup.button({'value': 'Ok', 'small': true}) }}
+            </div>
+
+            <div class="sorter-item show-all">
+                <div class="sorter-item-icon"></div>
+                <a href="{{ context.clearFilter }}">Показать все</a>
+            </div>
+
+            <div class="clear"></div>
+        </div>
+    </form>
+{% endmacro %}
+
+{% macro filter(filter, context) %}
+    {% import defaults.macros ~ '/markup.twig' as markup %}
+    <div class="filter">
+        <form data-type="filter">
+            <div>
+                <div class="filter-item filter-item-right">
+                    <div class="filter-item-title">Пол</div>
+                    <div class="radio" data-type="fakeradio"{% if filter.gender %} data-value="{{ filter.gender }}"{% endif %}>
+                        <div class="radio-item first" data-type="item" data-value="male">
+                            М
+                        </div>
+
+                        <div class="radio-item last" data-type="item" data-value="female">
+                            Ж
+                        </div>
+
+                        <div class="clear"></div>
+
+                        <input type="hidden" data-name="gender" data-type="input" />
+                    </div>
+                </div>
+
+                <div class="filter-item filter-item-left">
+                    <div class="filter-item-title">Возраст</div>
+                    <select data-name="age">
+                        <option value="any">Любой</option>
+                        <option value="0"{% if '0' == filter.age %} selected="selected"{% endif %}>0 – 3</option>
+                        <option value="3"{% if 3 == filter.age %} selected="selected"{% endif %}>3 – 5</option>
+                        <option value="5"{% if 5 == filter.age %} selected="selected"{% endif %}>5 – 7</option>
+                        <option value="7"{% if 7 == filter.age %} selected="selected"{% endif %}>7 – 9</option>
+                        <option value="9"{% if 9 == filter.age %} selected="selected"{% endif %}>9 – 12</option>
+                    </select>
+                </div>
+
+                <div class="clear"></div>
+            </div>
+
+            <div class="filter-item">
+                <div class="filter-item-title">Бренды</div>
+
+                <div class="multiple removable" data-type="multiple" data-name="brands">
+                    {% for brand in filter.brands %}
+                        {{ _self.filterBrand(context.brands, brand) }}
+                    {% endfor %}
+                    {{ _self.filterBrand(context.brands) }}
+                </div>
+            </div>
+
+            {{ markup.button({'value': 'Фильтровать'}) }}
+
+        </form>
+    </div>
+{% endmacro %}
+
+{% macro filterBrand(brands, brandId) %}
+    <div class="multiple-item{% if not brandId %} sample{% endif %}" data-type="item">
+        <div class="multiple-item-remove" data-type="remove">&times;</div>
+        <div class="multiple-item-content">
+            <select data-type="handle"{% if not brandId %} data-sample="1"{% endif %}>
+                <option value="0">Любой</option>
+                {% for brand in brands %}
+                    <option value="{{ brand.id }}"{% if brand.id == brandId %} selected="selected"{% endif %}>{{ brand.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+{% endmacro %}

@@ -1,0 +1,157 @@
+{% extends defaults.layouts ~ '/manage.twig' %}
+
+{% block title %}
+    {% if item.id %}
+        Правка доставки №&laquo;{{ item.id }}&raquo;
+    {% else %}
+        Новая доставка
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <div class="header-title">{{ block('title') }}</div>
+    
+    <form method="post">
+        {% if item.id %}
+            <input type="hidden" name="id" value="{{ item.id }}">
+        {% endif %}
+                
+        <table class="form-table lefted">
+            <tr>
+                <td width="100px">
+                    Тип доставки
+                </td>
+                <td width="300px">
+                    <select name="type">
+                        {% for type in types %}
+                            <option value="{{ type.id }}"{% if item.delivery_type_id == type.id %} selected="selected"{% endif %}>{{ type.name }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+                <td width="200px"></td>
+            </tr>            
+
+            <tr>
+                <td>
+                    Метро
+                </td>
+                <td>
+                    <select name="metro">
+                        <option value="0">Выберите&hellip;</option>
+                        {% for line in metrolines %}
+                            <optgroup label="{{ line.name }}">
+                                {% for metro in line.metros %}
+                                    <option value="{{ metro.id }}"{% if item.metro.id == metro.id %} selected="selected"{% endif %}>
+                                        {{ metro.name }}
+                                    </option>
+                                {% endfor %}
+                            </optgroup>
+                        {% endfor %}
+                    </select>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    Адрес
+                </td>
+                <td>
+                    <div class="input-wrap">
+                        <input type="text" name="address" value="{{ item.address }}" />
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    Указанный телефон для связи
+                </td>
+                <td>
+                    <div class="input-wrap">
+                        <input type="text" name="recall" value="{{ item.recall }}" />
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    Дата доставки
+                </td>
+                <td>
+                    <div class="input-wrap small">
+                        <input type="text" class="jcalendar" name="delivery_date"{% if item.delivery_date %} value="{{ item.delivery_date|date('d.m.Y') }}"{% endif %}/>
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    Клиент
+                </td>
+                <td>
+                    <div class="tools">
+                        <div class="tools-item edit" data-type="edit">
+                            <a href="{{ path('manage_clients_edit', {'clientId': item.order.client.id}) }}" class="icon"></a>
+                        </div>
+                    </div>   
+
+                    <div>
+                        {{ item.order.client.name|default(item.order.client.user.login) }}
+                    </div>
+                    {% if item.order.client.phone %}
+                        <div>
+                            {{ item.order.client.phone }}
+                        </div>
+                    {% endif %}
+                    <div>
+                        <a href="mailto:{{ item.order.client.email|default(item.order.client.user.login) }}">
+                            {{ item.order.client.email|default(item.order.client.user.login) }}
+                        </a>
+                    </div>
+
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    Заказ
+                </td>
+                <td>
+                    <div class="tools">
+                        <div class="tools-item edit" data-type="edit">
+                            <a href="{{ path('manage_orders_edit', {'orderId': item.order.id}) }}" class="icon"></a>
+                        </div>
+                    </div>   
+
+                    <div>
+                        №&laquo;{{ item.order.id }}&raquo; от {{ item.order.created|date('d.m.Y') }}, товаров: {{ item.order.getItems|length }}
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    Комментарий
+                </td>
+                <td colspan="2">
+                    <div class="input-wrap">
+                        <textarea name="comment">{{ item.comment }}</textarea>
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td></td>
+                <td>
+                    <div class="form-submit">
+                        <button type="submit" name="proceed">
+                            Сохранить
+                        </button>
+                    </div>                
+                </td>
+            </tr>
+        </table>
+        
+        <div class="clear"></div>
+    </form> 
+{% endblock %}

@@ -1,0 +1,127 @@
+{% extends defaults.layouts ~ '/manage.twig' %}
+
+{% block title %}
+    {% if item.id %}
+        Правка категории товаров &laquo;{{ item.name }}&raquo;
+    {% else %}
+        Новая категория товаров
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <div class="header-title">{{ block('title') }}</div>
+    
+    <form method="post">
+        {% if item.id %}
+            <input type="hidden" name="id" value="{{ item.id }}">
+        {% endif %}
+
+        <div class="tabs">
+            <div class="tabs-items" data-type="items">
+                <div class="tabs-item selected">
+                    Основное
+                </div>
+                <div class="tabs-item">
+                    МЕТА
+                </div>
+                <div class="clear"></div>
+            </div>
+
+            <div class="tabs-contents" data-type="contents">
+                <div class="tabs-content selected">
+                    <table class="form-table">
+                        <tr>
+                            <td width="120px">
+                                Название
+                            </td>
+                            <td width="300px">
+                                <div class="input-wrap">
+                                    <input type="text" name="name" value="{{ item.name }}">
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                Родительская категория
+                            </td>
+                            <td>
+                                <select name="parent">
+                                    <option value="root">Корень сайта</option>                    
+                                    {% for category in categories %}
+                                        <option value="{{ category.id }}"{% if category.id == item.parent_id %} selected="selected"{% endif %}>{{ category.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                Видимость на сайте
+                            </td>
+                            <td>
+                                <select name="visible">
+                                    <option value="0">Нет</option>
+                                    <option value="1"{% if item.is_visible %} selected="selected"{% endif %}>Да</option>                        
+                                </select>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="tabs-content">
+                    <table class="form-table">
+                        <tr>
+                            <td width="120px" class="top">
+                                Описание в низу страницы
+                            </td>
+                            <td width="300px">
+                                <div class="input-wrap">
+                                    <textarea class="wysiwyg" name="description" data-common="{{ defaults.common }}">{{ item.description }}</textarea>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                META-keywords
+                            </td>
+                            <td>
+                                <div class="input-wrap">
+                                    <textarea name="meta_keywords">{{ item.meta_keywords }}</textarea>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                META-description
+                            </td>
+                            <td>
+                                <div class="input-wrap">
+                                    <textarea name="meta_description">{{ item.meta_description }}</textarea>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <table class="form-table">
+            <tr>
+                <td width="130px">&nbsp;</td>
+                <td width="300px">
+                    <div class="form-submit">
+                        <button type="submit" name="proceed_category">
+                                Сохранить
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+        
+        <div class="clear"></div>
+    </form>    
+{% endblock %}

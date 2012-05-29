@@ -1,0 +1,55 @@
+{% extends defaults.layouts ~ '/basic.twig' %}
+{% import defaults.macros ~ '/banners.twig' as banners %}
+{% import defaults.macros ~ '/pages.twig' as pages %}
+{% import defaults.macros ~ '/markup.twig' as markup %}
+{% import defaults.macros ~ '/search.twig' as search %}
+
+{% block title %}
+Поиск
+{% endblock %}
+
+{% block content %}
+    <div class="page short">
+
+    	<div class="place about-page">
+    		{% set results %}
+    			{% if searchResults %}
+	    			<div class="search-form-title">
+		    			По запросу &laquo;{{ searchResults.query }}&raquo; найдено: {{ searchResults.results|length }}
+		    		</div>
+
+		    		<div class="search-results" data-name="searchForm" data-type="filterable">
+		    			{% for item in searchResults.results %}
+			    			{{ search.result(item) }}
+			    		{% endfor %}
+		    		</div>
+		    	{% else %}
+		    		<div class="search-form-empty">
+		    			Пустой запрос
+		    		</div>
+		    	{% endif %}
+    		{% endset %}
+
+    		{% set column %}
+    			{{ search.title('Фильтр результатов поиска по разделам') }}
+
+    			<div class="search-form-categories" data-type="filtered" data-name="searchForm">
+	    			{% for category in searchResults.categories %}
+	    				{{ search.category(category.name, category.type, category.count) }}
+	    			{% endfor %}
+	    		</div>
+    		{% endset %}
+
+    		{{ search.form(column, results) }}
+
+            {{ pages.actual(actual) }}
+		</div>
+
+        <div class="page-right">
+            <div class="main-body-right">
+                {{ banners.shop(shopBanners, true) }}
+            </div>
+        </div>
+    </div>
+    <div class="clear"></div>    
+{% endblock %}

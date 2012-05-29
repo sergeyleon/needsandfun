@@ -1,0 +1,118 @@
+{% extends defaults.layouts ~ '/basic.twig' %}
+{% import defaults.macros ~ '/places.twig' as places %}
+{% import defaults.macros ~ '/banners.twig' as banners %}
+{% import defaults.macros ~ '/markup.twig' as markup %}
+
+{% block title %}
+    {{ item.name }}
+{% endblock %}
+
+{% block content %}
+    <div class="page short">
+        <div class="place">
+            <div class="place-head">
+                <div class="place-head-img">
+                    {{ places.itemPicture(item.getIcon, 'place') }}
+                </div>
+                
+                <div class="place-head-info">
+                    <div class="place-head-wrap">
+                        <a href="{{ item.category.url }}" class="place-category">
+                            {{ item.category.name }}
+                        </a>
+                        
+                        <div class="place-address-wrap">
+                            <div class="place-address-head">Где это?</div>
+                            <div class="place-address">{{ item.address }}</div>
+                            {% if item.metro %}
+                                <div class="place-metro">
+                                    <div class="icon"></div>
+                                    {{ item.metro.name }}
+                                </div>
+                            {% endif %}
+
+                            {% if item.maps_yandex %}
+                                <div class="place-maps yandex">
+                                    <div class="icon"></div>
+                                    <a target="_blank" href="{{ item.maps_yandex }}">На Яндекс.Картах</a>
+                                    <div class="clear"></div>
+                                </div>
+                            {% endif %}
+                            
+                            {% if item.maps_google %}
+                                <div class="place-maps google">
+                                    <div class="icon"></div>
+                                    <a target="_blank" href="{{ item.maps_google }}">На картах Гугла</a>
+                                    <div class="clear"></div>
+                                </div>
+                            {% endif %}                        
+                        </div>
+                    </div>
+                </div>
+                <div class="clear"></div>                
+            </div>
+                    
+            <div class="place-info-wrap">
+                <div class="place-info-desc">
+                    <h1>{{ item.name }}</h1>
+                    {{ item.description|raw }}
+                </div>
+                {#
+                {% if item.phone or emails or wwws %}
+                #}
+                    <div class="place-info">
+                        <div class="place-info-title">Как связаться?</div>
+                        
+                        <div class="place-info-wrap">
+                            {% if item.phone %}
+                                <div class="place-info-item">{{ item.phone }}</div>
+                            {% endif %}
+                            
+                            {% if emails %}
+                                {% for email in emails %}
+                                    <div class="place-info-item-wrap">                            
+                                        <a href="{{ mail(email) }}" class="place-info-item">{{ email|truncate(25) }}</a>
+                                    </div>
+                                {% else %}
+                                    <div class="place-info-item-wrap">                        
+                                        <a href="{{ mail(item.email) }}" class="place-info-item">{{ item.email|truncate(25) }}</a>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                            
+                            {% if wwws %}
+                                {% for www in wwws %}
+                                    <div class="place-info-item-wrap">
+                                        <a href="{{ go(www) }}" class="place-info-item" target="_blank">{{ www|truncate(25) }}</a>
+                                    </div>
+                                {% else %}
+                                    <div class="place-info-item-wrap">
+                                        <a href="{{ go(item.www) }}" class="place-info-item" target="_blank">{{ item.www|truncate(30) }}</a>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+
+                        {{ places.rating(item, path('places_ratings_index', {'place': item.encoded_key})) }}
+
+                        {{ markup.addThis() }}
+                    </div>
+                {#
+                {% endif %}
+                #}
+            </div>
+
+            <div class="clear"></div>
+
+            {{ places.coming(comingEvents) }}
+            {{ places.past(pastEvents) }}
+        </div>
+
+        <div class="page-right">
+            <div class="main-body-right">
+                {{ banners.shop(shopBanners, true) }}
+            </div>
+        </div>
+    </div>
+    <div class="clear"></div>
+{% endblock %}

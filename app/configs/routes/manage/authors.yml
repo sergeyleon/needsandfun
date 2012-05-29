@@ -1,0 +1,19 @@
+index:
+  pattern: /
+  defaults:
+    controller: Authors:index
+
+add:
+  pattern: /add
+  defaults:
+    controller: Authors:add
+
+edit:
+  pattern: /edit/{authorId}
+  defaults:
+    controller: Authors:edit
+
+remove:
+  pattern: /remove/{authorId}
+  defaults:
+    controller: Authors:remove

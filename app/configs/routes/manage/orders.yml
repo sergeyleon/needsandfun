@@ -1,0 +1,19 @@
+index:
+  pattern: /
+  defaults:
+    controller: Orders:index
+
+add:
+  pattern: /add
+  defaults:
+    controller: Orders:add
+
+edit:
+  pattern: /edit/{orderId}
+  defaults:
+    controller: Orders:edit
+
+remove:
+  pattern: /remove/{orderId}
+  defaults:
+    controller: Orders:remove

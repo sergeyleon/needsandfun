@@ -1,0 +1,104 @@
+index:
+  pattern: /
+  defaults:
+    controller: Index:index
+
+update_all_links:
+  pattern: /update_all_links
+  defaults:
+    controller: Index:updateAllLinks
+
+goods:
+  pattern: /goods
+  source: routes/manage/goods.yml  
+  appendName: true
+
+pages:
+  pattern: /pages
+  defaults:
+    controller: Pages:index  
+
+pages_edit:
+  pattern: /pages/edit/{pageId}
+  defaults:
+    controller: Pages:edit
+
+pages_remove:
+  pattern: /pages/remove/{pageId}
+  defaults:
+    controller: Pages:remove    
+
+pages_add:
+  pattern: /pages/add
+  defaults:
+    controller: Pages:add
+
+brands:
+  pattern: /brands
+  source: routes/manage/brands.yml  
+  appendName: true  
+
+reviews:
+  pattern: /reviews
+  source: routes/manage/reviews.yml  
+  appendName: true    
+
+articles:
+  pattern: /articles
+  source: routes/manage/articles.yml  
+  appendName: true    
+
+callbacks:
+  pattern: /callbacks
+  source: routes/manage/callbacks.yml  
+  appendName: true    
+
+partners:
+  pattern: /partners
+  source: routes/manage/partners.yml  
+  appendName: true  
+  
+places:
+  pattern: /places
+  source: routes/manage/places.yml  
+  appendName: true  
+ 
+orders:
+  pattern: /orders
+  source: routes/manage/orders.yml
+  appendName: true  
+
+deliveries:
+  pattern: /deliveries
+  source: routes/manage/deliveries.yml
+  appendName: true  
+
+clients:
+  pattern: /clients
+  source: routes/manage/clients.yml
+  appendName: true  
+
+metro:
+  pattern: /metro
+  source: routes/manage/metro.yml  
+  appendName: true    
+  
+events:
+  pattern: /events
+  source: routes/manage/events.yml  
+  appendName: true    
+  
+sponsors:
+  pattern: /sponsors
+  source: routes/manage/sponsors.yml  
+  appendName: true
+
+banners:
+  pattern: /banners
+  source: routes/manage/banners.yml  
+  appendName: true
+  
+processPictures:
+  pattern: /processPictures
+  defaults:
+    controller: Index:processPictures

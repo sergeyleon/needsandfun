@@ -1,0 +1,54 @@
+<div class="cabinet-menu-items">
+    <div class="cabinet-menu-item">
+        {% if 'cabinet_index' != current_route %}
+            <a href="{{ path('cabinet_index') }}">
+        {% endif %}
+            Моя афиша
+        {% if 'cabinet_index' != current_route %}
+            </a>
+        {% endif %}
+    </div>
+
+    <div class="cabinet-menu-item">
+        {% if 'cabinet_orders' != current_route %}
+            <a href="{{ path('cabinet_orders') }}">
+        {% endif %}
+            Мои покупки
+        {% if 'cabinet_orders' != current_route %}
+            </a>
+        {% endif %}
+    </div>
+
+    <div class="cabinet-menu-item">
+        {% if 'cabinet_profile' != current_route %}
+            <a href="{{ path('cabinet_profile') }}">
+        {% endif %}
+            Мои данные
+        {% if 'cabinet_profile' != current_route %}
+            </a>
+        {% endif %}
+    </div>
+
+
+    <div class="cabinet-menu-item">
+        {% if 'cabinet_discounts' != current_route %}
+            <a href="{{ path('cabinet_discounts') }}">
+        {% endif %}
+            Мои скидки
+        {% if 'cabinet_discounts' != current_route %}
+            </a>
+        {% endif %}
+    </div>
+
+    <div class="cabinet-menu-delim"></div>
+
+    <div class="cabinet-menu-item">
+        {% if 'cabinet_event' != current_route %}
+            <a href="{{ path('cabinet_event') }}">
+        {% endif %}
+            Разместить<br />объявление
+        {% if 'cabinet_event' != current_route %}
+            </a>
+        {% endif %}
+    </div>
+</div>

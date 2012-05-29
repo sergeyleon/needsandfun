@@ -1,0 +1,10 @@
+{% macro past(list) %}
+    {% import defaults.macros ~ '/events.twig' as events %}
+
+    {% if list %}
+        <div class="goods-title">Проведенные мероприятия</div>
+        <div class="coming-events">
+            {{ events.list(list, false, true) }}
+        </div>
+    {% endif %}
+{% endmacro %}

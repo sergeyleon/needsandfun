@@ -1,0 +1,34 @@
+{% macro categoryItem(item) %}
+    {#{% if item.is_visible %}#}
+        <category id="{{ item.id }}"{% if item.parent_id %} parentId="{{ item.parent_id }}"{% endif %}>{{ item.name }}</category>
+        {% if item.children %}
+            {% for _item in item.children %}
+                {{ _self.categoryItem(_item)}}
+            {% endfor %}
+        {% endif %}
+    {#{% endif %}#}
+{% endmacro %}
+
+{% macro good(good) %}
+	<offer id="{{ good.id }}" type="vendor.model" available="true">
+		<url>{{ url('shop_good', {'good': good.encoded_key}) }}</url>
+		<price>{{ good.price }}</price>
+		<currencyId>RUB</currencyId>
+		<categoryId>{{ good.category.id }}</categoryId >
+		<picture>{{ url('item_img', {'filename': good.getIcon.picture.filename, 'type': 'full'}) }}</picture>
+{#		<store>false</store>
+		<pickup>true</pickup>
+		<delivery>true</delivery>#}
+		<typePrefix>{{ good.category.name }}</typePrefix>
+		<vendor>{{ good.brand.name }}</vendor>
+		<vendorCode>{{ good.article }}</vendorCode>
+		<model>{{ good.name }}</model>
+		<description>
+			{{ good.description|striptags }}
+		</description>
+{#		<country_of_origin>Япония</country_of_origin>
+		{% for property in good.getProperties %}		
+			<param name="Технология печати">термическая струйная</param>
+		{% endfor %}#}		
+	</offer>
+{% endmacro %}

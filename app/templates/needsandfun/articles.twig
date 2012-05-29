@@ -1,0 +1,62 @@
+{% extends defaults.layouts ~ '/basic.twig' %}
+{% import defaults.macros ~ '/banners.twig' as banners %}
+{% import defaults.macros ~ '/common.twig' as common %}
+
+{% block title %}
+Статьи
+{% endblock %}
+
+{% block content %}
+    <div class="main-body-left">
+        {{ banners.shop(shopBanners) }}
+    </div>
+    
+    <div class="shop">
+        <div class="shop-body">
+            <div class="tabs" data-type="class">
+                <div class="tabs-items" data-type="items">
+                    <div class="tabs-item selected">
+                        ВСЕ СТАТЬИ
+                    </div>
+
+                    {% for category in categories %}
+                        <div class="tabs-item" data-id="{{ category.id }}">
+                            {{ category.name }}
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="content" data-type="contents">
+                    <div class="article-items">
+                        {% for article in articles %}
+                            <div class="article-item" data-category="{{ article.category_id }}">
+                                <div class="article-item-pic">
+                                    <a href="{{ article.url }}">
+                                        {{ common.itemPicture(article.getIcon, 'small_article') }}
+                                    </a>
+                                </div>
+                                <div class="article-item-date">
+                                    {{ article.created|date('d.m.Y') }}
+                                </div>
+                                <div class="article-item-title">
+                                    <a href="{{ article.url }}">
+                                        {{ article.name }}
+                                    </a>
+                                </div>
+
+                                <div class="article-item-author">
+                                    {{ article.author.name }}
+                                </div>
+                            </div>
+                            {% if not loop.index % 3 %}
+                                <div class="clear"></div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="clear"></div>            
+    </div>
+    
+{% endblock %}

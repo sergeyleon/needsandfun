@@ -1,0 +1,42 @@
+{% extends defaults.layouts ~ '/basic.twig' %}
+{% import defaults.macros ~ '/shop.twig' as shop %}
+
+{% block title 'Мои покупки' %}
+
+{% block content %}
+    <div class="page">
+        {% include defaults.templates ~ '/cabinet/menu.twig' %}
+
+        <div class="cabinet-page">
+            Здесь отображаются ранее совершенные в нашем магазине покупки.
+
+            <div class="cabinet-orders">
+            	{% for order in orders %}
+	            	<div class="cabinet-order">
+	            		<div class="cabinet-head">
+		            		<div class="cabinet-order-status">
+		            			{{ order.status.title }}
+		            		</div>
+		            		№{{ order.id }} от {{ order.created|date('H:i, d.m.Y') }}
+		            	</div>
+		            	
+		            	<div class="clear"></div>
+
+		            	<div class="cabinet-order-items">
+		            		{% for good in order.getItems %}
+			            		{{ shop.orderItem(good) }}
+			            		{% if 0 == loop.index % 4 %}
+			            			<div class="clear"></div>
+			            		{% endif %}
+			            	{% endfor %}
+			            	<div class="clear"></div>
+		            	</div>
+		            	
+	            	</div>
+            	{% endfor %}
+            </div>
+        </div>
+
+        <div class="clear"></div>
+    </div>
+{% endblock %}

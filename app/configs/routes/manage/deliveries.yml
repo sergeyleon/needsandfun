@@ -1,0 +1,29 @@
+index:
+  pattern: /
+  defaults:
+    controller: Deliveries:index
+
+# add:
+#   pattern: /add
+#   defaults:
+#     controller: Deliveries:add
+
+edit:
+  pattern: /edit/{deliveryId}
+  defaults:
+    controller: Deliveries:edit
+
+remove:
+  pattern: /remove/{deliveryId}
+  defaults:
+    controller: Deliveries:remove
+
+finish:
+  pattern: /finish/{deliveryId}
+  defaults:
+    controller: Deliveries:finish
+
+undo:
+  pattern: /undo/{deliveryId}
+  defaults:
+    controller: Deliveries:undo

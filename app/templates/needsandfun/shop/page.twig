@@ -1,0 +1,28 @@
+{% extends defaults.layouts ~ '/basic.twig' %}
+{% import defaults.macros ~ '/banners.twig' as banners %}
+{% import defaults.macros ~ '/pages.twig' as pages %}
+
+{% block title %}
+{{ item.name|default(item.pagetype.name) }}
+{% endblock %}
+
+{% block content %}
+	<div class="page short">
+		<div class="place">
+            {% if item.deletable %}
+                <h3>{{ item.name }}</h3>
+            {% endif %}
+		    {{ item.contents|raw }}
+            <br />
+            {{ pages.actual(actual) }}
+		</div>
+
+    	<div class="page-right">
+            <div class="main-body-right">
+                {{ banners.shop(shopBanners, true) }}
+            </div>
+        </div>
+
+        <div class="clear"></div>
+	</div>
+{% endblock %}

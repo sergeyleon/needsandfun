@@ -1,0 +1,65 @@
+{% extends defaults.layouts ~ '/manage.twig' %}
+
+{% block title %}
+Клиенты
+{% endblock %}
+
+{% block content %}
+	<div class="header-title">
+        {{ block('title') }} [<a href="{{ path('manage_clients_add') }}">+</a>]
+    </div>
+
+    <table class="items-table">
+        <thead>
+            <tr>
+                <th class="left">
+                    <div>Имя</div>
+                </th>
+
+                <th width="250px">
+                    <div>Электропочта</div> 
+                </th>
+
+                <th width="250px">
+                    <div>Телефон</div>
+                </th>
+
+                <th width="100px">
+                    <div>Заказов</div>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}        
+                <tr class="items-table-item">
+                    <td class="left">
+                        <div class="tools">
+                            <div class="tools-item edit" data-type="edit">
+                                <a href="{{ path('manage_clients_edit', {'clientId': item.id}) }}" class="icon"></a>
+                            </div>
+                        </div>
+
+                        <a href="{{ path('manage_clients_edit', {'clientId': item.id}) }}">
+                            {{ item.name|default('Клиент №' ~ item.id) }}
+                        </a>
+                    </td>
+                    <td>
+                        {{ item.email|default(item.user.login) }}
+                    </td>
+                    <td>
+                        {{ item.phone }}
+                    </td>
+                    <td>
+                        {{ item.orders|length }} 
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="4">
+                        Ни одной доставкиы не найдено!
+                    </td>
+                </tr>
+            {% endfor %}                    
+        </tbody>
+    </table> 
+{% endblock %}

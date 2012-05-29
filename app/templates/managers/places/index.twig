@@ -1,0 +1,82 @@
+{% extends defaults.layouts ~ '/manage.twig' %}
+{% import defaults.macros ~ '/shop.twig' as shop %}
+
+{% block title %}
+    Места
+{% endblock %}
+
+{% block content %}
+    <div class="header-title">
+        {{ block('title') }} [<a href="{{ path('manage_places_add') }}">+место</a>][<a href="{{ path('manage_places_category_add') }}">+категория</a>]
+    </div>
+    
+
+    <div class="groups">
+        {% for category in items %}
+            <div class="group-item">
+                <div class="group-name">
+                    <div class="tools">
+                        <div class="tools-item edit" data-type="edit">
+                            <a href="{{ path('manage_places_category_edit', {'categoryId': category.id}) }}" class="icon"></a>
+                        </div>
+                    
+                        <div class="tools-item delete" data-type="delete" data-confirm="true">
+                            <a href="{{ path('manage_places_category_remove', {'categoryId': category.id}) }}" class="icon"></a>
+                        </div>
+                    </div>                        
+                    
+                    {{ category.name|default('Без названия') }}{% if category.places %} [{{ category.places|length }}]{% endif %}
+                </div>
+                
+                <div class="group-children">
+                    {% for place in category.places %}
+                        <div class="group-child{% if not place.is_checked %} forbidden{% endif %}{% if loop.last %} last{% endif %}">
+                            <div class="tools">
+                                <div class="tools-item forbid" data-type="forbid">
+                                    <a href="{{ path('manage_places_forbid', {'placeId': place.id}) }}" class="icon"></a>
+                                </div>
+
+                                <div class="tools-item confirm" data-type="confirm">
+                                    <a href="{{ path('manage_places_confirm', {'placeId': place.id}) }}" class="icon"></a>
+                                </div>
+                            
+                                <div class="tools-item edit" data-type="edit">
+                                    <a href="{{ path('manage_places_edit', {'placeId': place.id}) }}" class="icon"></a>
+                                </div>
+                            
+                                <div class="tools-item delete" data-type="delete" data-confirm="true">
+                                    <a href="{{ path('manage_places_remove', {'placeId': place.id}) }}" class="icon"></a>
+                                </div>
+                            </div>                        
+                            
+                            <div class="group-child-name">
+                                <table>
+                                    <tr>
+                                        <td width="400px">
+                                            <div>{{ place.name }}</div>
+                                            {% if place.address %}
+                                                <small>{{ place.address }}</small>
+                                            {% endif %}
+                                        </td>
+                                        <td width="20px"></td>
+                                        <td>
+                                            <div class="gallery">
+                                                {% for image in place.getIcons %}
+                                                    <div class="gallery-item">
+                                                        {{ shop.itemPicture(image, 'icon') }}
+                                                    </div>
+                                                {% endfor %}
+                                                <div class="clear"></div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>   
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+{% endblock %}

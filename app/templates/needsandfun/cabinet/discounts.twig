@@ -1,0 +1,64 @@
+{% extends defaults.layouts ~ '/basic.twig' %}
+{% import defaults.macros ~ '/shop.twig' as shop %}
+
+{% block title 'Мои скидки' %}
+
+{% block content %}
+    <div class="page">
+        {% include defaults.templates ~ '/cabinet/menu.twig' %}
+
+        <div class="cabinet-page">
+            Здесь вы можете узнать, какую скидку мы дарим вам за активное использование нашего сайта. Чтобы получить скидку — не забудьте зайти на сайт под своим именем и оформить заказ.
+            <ul>
+            	<li>
+            		за каждую 1000 рублей, потраченную в нашем магазине, вы получаете скидку в 1%, но не более 10% в сумме;
+            	</li>
+            	<li>
+            		за оставленный отзыв о товаре, месте или мероприятии вы получите бонус 50 рублей, которым сможете воспользоваться при оплате следующего заказа. 
+            	</li>
+            </ul>
+
+	        <div class="cabinet-bonuses">
+	        	<div class="cabinet-bonus orders">
+	        		<div class="cabinet-bonus-value">
+	        			{{ client.discount.reviews.value }}
+	        		</div>
+
+	        		<div class="cabinet-bonus-desc">
+		        		Отзывов, по которым начислен бонус: {{ client.discount.reviews.value }}
+		        	</div>
+	        	</div>
+
+	        	<div class="cabinet-bonus discount">
+	        		<div class="cabinet-bonus-value">
+	        			{{ client.discount.summ.value|money }}
+	        		</div>
+
+	        		<div class="cabinet-bonus-desc">
+		        		Сумма, потраченная в нашем магазине: {{ client.discount.summ.value|money }}
+		        	</div>
+	        	</div>
+
+	        	<div class="cabinet-bonus further">
+	        		<div class="cabinet-bonus-value">
+	        			{{ client.discount.reviews.discount|money }}<br />
+	        			{{ client.discount.summ.discount }}%
+	        		</div>
+	        		<div class="cabinet-bonus-desc">
+		        		<div>
+			        		Бонус на следующую покупку: {{ client.discount.reviews.discount|money }}
+			        	</div>
+			        	<div>
+			        		Постоянная скидка: {{ client.discount.summ.discount }}%
+			        	</div>
+			        </div>
+	        	</div>
+		        <div class="clear"></div>	
+	        </div>
+			
+	    </div>
+
+		<div class="clear"></div>
+    </div>
+    <div class="clear"></div>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% if loggedUser %}
+	<form class="reviews-form" method="post">
+		<table width="100%">
+	        <tr class="reviews-form-row">
+	        	<td width="150px">
+	        		Рейтинг
+	        	</td>
+	        	<td>
+	        		{{ markup.rating() }}
+	        	</td>
+	        </tr>
+	        <tr class="reviews-form-row">
+	        	<td width="150px">
+	        		Достоинства
+	        	</td>
+	        	<td>
+	        		<textarea name="pros"></textarea>
+	        	</td>
+	        </tr>
+	        <tr class="reviews-form-row">
+	        	<td>
+	        		Недостатки
+	        	</td>
+	        	<td>
+	        		<textarea name="contras"></textarea>
+	        	</td>
+	        </tr>
+	        <tr class="reviews-form-row">
+	        	<td>
+	        		Комментарий
+	        	</td>
+	        	<td>
+	        		<textarea name="comment"></textarea>
+	        	</td>
+	        </tr>
+	    </table>
+	    {{ markup.submitBlock({'value': 'Оставить отзыв', 'name': 'proceed'}) }}
+	</form>
+{% else %}
+	Отзывы могут оставлять только <a href="{{ path('register') }}">клиенты</a>.
+{% endif %}

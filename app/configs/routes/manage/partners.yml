@@ -1,0 +1,19 @@
+index:
+  pattern: /
+  defaults:
+    controller: Partners:index
+    
+add:
+  pattern: /add
+  defaults:
+    controller: Partners:add
+    
+edit:
+  pattern: /edit/{partnerId}
+  defaults:
+    controller: Partners:edit
+    
+remove:
+  pattern: /remove/{partnerId}
+  defaults:
+    controller: Partners:remove

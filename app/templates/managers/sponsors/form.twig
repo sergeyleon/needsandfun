@@ -1,0 +1,81 @@
+{% extends defaults.layouts ~ '/manage.twig' %}
+
+{% block title %}
+    {% if sponsor.id %}
+        Правка спонсора &laquo;{{ sponsor.name }}&raquo;
+    {% else %}
+        Новый партнер
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <div class="header-title">{{ block('title') }}</div>
+    
+    <form method="post" enctype="multipart/form-data">
+        {% if sponsor.id %}
+            <input type="hidden" name="id" value="{{ sponsor.id }}">
+        {% endif %}
+                
+        <table class="form-table lefted">
+            <tr>
+                <td width="100px">
+                    Название
+                </td>
+                <td width="500px">
+                    <div class="input-wrap">
+                        <input type="text" name="name" value="{{ sponsor.name }}">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Ссылка
+                </td>
+                <td>
+                    <div class="input-wrap">
+                        <input type="text" name="link" value="{{ sponsor.link }}">
+                    </div>
+                </td>
+            </tr>            
+            <tr>
+                <td>
+                    Описание
+                </td>
+                <td>
+                    <div class="input-wrap">
+                        <textarea name="description" class="wysiwyg" data-common="{{ defaults.common }}">{{ sponsor.description }}</textarea>  
+                    </div>                
+                </td>
+            </tr>            
+            <tr>
+                <td></td>
+                <td>
+                    <div class="form-submit">
+                        <button type="submit" name="proceed">
+                                Сохранить
+                        </button>
+                    </div>                
+                </td>
+            </tr>
+        </table>
+        
+        <div class="row lefted">
+            <div class="gallery">
+                {% if sponsor.getIcons|length %}
+                    <div class="gallery-wrap" data-url="{{ path('manage_processPictures') }}" data-type="sponsor">
+                    {% for pic in sponsor.getIcons %}
+                        <div class="gallery-item" data-id="{{ pic.id }}">
+                            <div class="gallery-item-delete"></div>
+                            <img width="40px" height="40px" src="{{ pic.picture.icon }}" />
+                        </div>
+                    {% endfor %}
+                        <div class="clear"></div>
+                    </div>
+                {% endif %}
+                <input type="file" name="pictures[]" multiple="multiple" min="1" max="5" />
+            </div>
+        </div>        
+        
+        <div class="clear"></div>
+    </form>    
+{% endblock %}

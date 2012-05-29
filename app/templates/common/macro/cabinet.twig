@@ -1,0 +1,74 @@
+{% macro currentEvents(list) %}
+    {% import defaults.macros ~ '/events.twig' as events %}
+
+    {% if list %}
+        <div class="coming-events">
+            {{ events.list(list, false, true) }}
+        </div>
+    {% endif %}
+{% endmacro %}
+
+
+{% macro calendar(calendar) %}
+	<div class="calendar">
+		<div class="calendar-wrap">
+			<div class="calendar-uis">
+				<div class="calendar-ui left" data-type="control">
+					<div class="calendar-ui-icon"></div>
+				</div>
+				<div class="calendar-ui right" data-type="control" data-dir="right">
+					<div class="calendar-ui-icon"></div>
+				</div>
+			</div>
+
+			<div class="calendar-months">
+				<div class="calendar-head">
+					<div class="calendar-head-days">
+						<div class="calendar-head-day">Пн</div>
+						<div class="calendar-head-day">Вт</div>
+						<div class="calendar-head-day">Ср</div>
+						<div class="calendar-head-day">Чт</div>
+						<div class="calendar-head-day">Пт</div>
+						<div class="calendar-head-day">Сб</div>
+						<div class="calendar-head-day">Вс</div>
+					</div>
+				</div>
+
+				<table class="calendar-months-wrap" cellspacing="0" cellpadding="0" data-type="months" width="{{ 710*calendar|length }}px">
+					<tr>
+						{% for month in calendar %}
+							<td class="calendar-month" data-type="month">
+								<div class="calendar-month-name">{{ defaults.fullMonths[month.name] }}</div>
+								<div class="calendar-days">
+									{% for index, day in (month.pre+1)..(month.days + month.after) %}
+										<div class="calendar-day{% if loop.index % 7 == 1 %} mon{% endif %}{% if loop.index % 7 == 0 %} sun{% endif %}{% if day < 1 or day > month.days %} inactive{% endif %}{% if month.today and month.today == day %} today{% endif %}">
+											{% if day > 0 and day <= month.days %}
+												<div class="calendar-day-name">
+													{{ day }}
+													<div class="calendar-day-today">{% if month.today == day %}сегодня{% endif %}</div>
+												</div>
+											{% endif %}
+
+											{% if month.events[day] %}
+												<div class="calendar-day-events">
+													<div class="calendar-day-events-wrap">
+														{% for event in month.events[day] %}
+															<div class="calendar-day-event">
+																{{ event.held_date|date('H:i') }} <a href="{{ event.url }}">{{ event.name }}</a>
+															</div>
+														{% endfor %}
+													</div>
+												</div>
+											{% endif %}
+										</div>
+									{% endfor %}
+									<div class="clear"></div>
+								</div>
+							</td>
+						{% endfor %}
+					</tr>
+				</table>
+			</div>
+		</div>
+	</div>
+{% endmacro %}

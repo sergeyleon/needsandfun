@@ -1,0 +1,19 @@
+index:
+  pattern: /
+  defaults:
+    controller: Clients:index
+
+add:
+  pattern: /add
+  defaults:
+    controller: Clients:add
+
+edit:
+  pattern: /edit/{clientId}
+  defaults:
+    controller: Clients:edit
+
+remove:
+  pattern: /remove/{clientId}
+  defaults:
+    controller: Clients:remove

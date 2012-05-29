@@ -1,0 +1,64 @@
+action: 
+  pattern: /action/
+  defaults:
+    controller: Goods:action
+
+index:
+  pattern: /
+  defaults:
+    controller: Goods:index
+    
+category_add:
+  pattern: /category/add
+  defaults:
+    controller: Goods:addCategory    
+
+category_edit:
+  pattern: /category/edit/{categoryId}
+  defaults:
+    controller: Goods:editCategory    
+    
+category_weight:
+  pattern: /category/weight
+  defaults:
+    controller: Goods:categoryWeight
+    
+category_visibility:
+  pattern: /category/visibility
+  defaults:
+    controller: Goods:categoryVisibility    
+    
+category_remove:
+  pattern: /category/remove
+  defaults:
+    controller: Goods:removeCategory
+
+types:
+  pattern: /type/
+  defaults:    
+    controller: GoodTypes:index
+
+type_add:
+  pattern: /type/add
+  defaults:
+    controller: GoodTypes:add
+    
+type_edit:
+  pattern: /type/edit/{itemId}
+  defaults:
+    controller: GoodTypes:edit
+    
+type_remove:
+  pattern: /type/remove/{itemId}
+  defaults:
+    controller: GoodTypes:remove
+    
+add:
+  pattern: /add
+  defaults:
+    controller: Goods:add
+    
+edit:
+  pattern: /edit/{goodId}
+  defaults:
+    controller: Goods:edit

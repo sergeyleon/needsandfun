@@ -1,0 +1,14 @@
+index:
+  pattern: /
+  defaults:
+    controller: Callbacks:index
+
+edit:
+  pattern: /edit/{callbackId}
+  defaults:
+    controller: Callbacks:edit
+
+remove:
+  pattern: /remove/{callbackId}
+  defaults:
+    controller: Callbacks:remove

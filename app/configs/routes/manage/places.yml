@@ -1,0 +1,44 @@
+index:
+  pattern: /
+  defaults:
+    controller: Places:index
+    
+add:
+  pattern: /add
+  defaults:
+    controller: Places:add
+    
+edit:
+  pattern: /edit/{placeId}
+  defaults:
+    controller: Places:edit    
+    
+remove:
+  pattern: /remove/{placeId}
+  defaults:
+    controller: Places:remove    
+    
+confirm:
+  pattern: /confirm/{placeId}
+  defaults:
+    controller: Places:confirmPlace    
+
+forbid:
+  pattern: /forbid/{placeId}
+  defaults:
+    controller: Places:forbidPlace    
+    
+category_add:
+  pattern: /category/add
+  defaults:
+    controller: Places:categoryAdd
+    
+category_edit:
+  pattern: /category/edit/{categoryId}
+  defaults:
+    controller: Places:categoryEdit        
+    
+category_remove:
+  pattern: /category/remove/{categoryId}
+  defaults:
+    controller: Places:categoryRemove

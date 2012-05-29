@@ -1,0 +1,29 @@
+index:
+  pattern: /
+  defaults:
+    controller: Cabinet:index
+
+orders:
+  pattern: /orders
+  defaults:
+    controller: Cabinet:orders
+
+discounts:
+  pattern: /discounts
+  defaults:
+    controller: Cabinet:discounts
+
+event:
+  pattern: /event
+  defaults:
+    controller: Cabinet:event
+
+logout:
+  pattern: /logout
+  defaults:
+    controller: Cabinet:logout
+
+profile:
+  pattern: /profile
+  defaults:
+    controller: Cabinet:profile

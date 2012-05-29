@@ -1,0 +1,19 @@
+index:
+  pattern: /
+  defaults:
+    controller: Reviews:index
+    
+confirm:
+  pattern: /confirm/{reviewId}
+  defaults:
+    controller: Reviews:confirm
+    
+edit:
+  pattern: /edit/{reviewId}
+  defaults:
+    controller: Reviews:edit
+    
+remove:
+  pattern: /remove/{reviewId}
+  defaults:
+    controller: Reviews:remove

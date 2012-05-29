@@ -1,0 +1,174 @@
+{% import defaults.macros ~ '/markup.twig' as markup %}
+
+<form method="post" enctype="multipart/form-data" action="{{ path('cabinet_index') }}">
+	<table class="form-table">
+		<tr>
+            <th colspan="5">Название</th>
+        </tr>
+		<tr>
+			<td colspan="5">
+				<div class="input-wrap full">
+                    <input type="text" name="title" />
+                </div>                    
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="5">
+                <div class="form-table-spacer"></div>
+            </td>
+        </tr>
+
+        <tr>
+            <th colspan="5">Описание</th>
+        </tr>
+		<tr>
+			<td colspan="5">
+				<div class="input-wrap full">
+                    <textarea name="description"></textarea>
+                </div>                    
+            </td>
+        </tr>
+
+		<tr>
+            <td colspan="5">
+                <div class="form-table-spacer"></div>
+            </td>
+        </tr>			        
+
+        <tr>
+        	<td colspan="5">
+            	<table>
+            		<tr>
+                        <th width="223px">Дата</th>
+                        <th width="21px"></th>
+                        <th width="223px">Время</th>
+                        <th width="20px"></th>
+                        <th>Категория</th>
+                    </tr>
+			        <tr>
+            			<td>
+							<div class="input-wrap">
+			                    <input type="text" name="date" class="jcalendar" placeholder="{{ now|date('d.m.Y') }}" />
+			                </div>                    
+			            </td>
+			            <td></td>
+			            <td>
+							<div class="input-wrap">
+			                    <input type="text" name="time" placeholder="{{ now|date('H:i') }}" />
+			                </div>                    
+			            </td>
+			            <td></td>
+			            <td>
+			        		<div class="input-wrap">
+			                    <select name="category">
+			                    	{% for category in categories %}
+				                    	<option value="{{ category.id }}">{{ category.name }}</option>
+				                    	{% for category in category.children %}
+					                    	<option value="{{ category.id }}">-&nbsp;{{ category.name }}</option>
+				                    	{% endfor %}
+			                    	{% endfor %}
+			                    </select>
+			                </div> 
+			        	</td>
+			        </tr>
+			    </table>
+			</td>
+		</tr>
+
+        <tr>
+            <td colspan="5">
+                <div class="form-table-spacer"></div>
+            </td>
+        </tr>                    
+
+        <tr>
+            <th width="223px">Место проведения</th>
+            <th width="24px"></th>
+            <th width="223px">Организаторы</th>
+            <th width="24px"></th>
+            <th width="224px">Стоимость</th>
+        </tr>
+
+        <tr>
+			<td>
+				<div class="input-wrap">
+                    <input type="text" name="place" />
+                </div>                    
+            </td>
+            <td></td>
+            <td>
+				<div class="input-wrap">
+                    <input type="text" name="sponsor" />
+                </div>                    
+            </td>
+            <td></td>
+            <td>
+        		<div class="input-wrap">
+                    <input type="text" name="price" />
+                </div> 
+        	</td>
+        </tr>
+
+        <tr>
+            <td colspan="5">
+                <div class="form-table-spacer"></div>
+            </td>
+        </tr>
+
+        <tr>
+            <th width="224px">Возраст</th>
+            <th width="24px"></th>
+            <th>Фото</th>
+        </tr>
+
+		<tr>
+        	<td>
+				<table>
+					<tr>
+						<td width="100px">
+							<div class="input-wrap">
+			                    <select name="age_from">
+			                    	<option value="any">Любой</option>
+			                    	{% for age in 0..16 %}
+				                    	<option>{{ age }}</option>
+				                    {% endfor %}
+			                    </select>
+			                </div>
+						</td>
+						<td width="24px">
+							&mdash;
+						</td>
+						<td width="100px">
+							<div class="input-wrap">
+								<select name="age_to">
+									<option value="any">Любой</option>
+				                    {% for age in 0..16 %}
+				                    	<option>{{ age }}</option>
+				                    {% endfor %}
+				                </select>
+			                </div>
+						</td>
+					</tr>
+				</table>
+            </td>
+            <td></td>
+            <td colspan="3">
+				<input type="file" name="pictures[]" class="file" multiple="multiple" />
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="5">
+                <div class="form-table-spacer"></div>
+            </td>
+        </tr>
+
+        <tr>
+        	<td colspan="5">
+        		{{ markup.submitBlock({'name': 'addEvent', 'value': 'Отправить заявку!'}) }}
+        	</td>
+        </tr>
+    </table>
+	
+</form>

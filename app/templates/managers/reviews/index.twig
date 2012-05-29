@@ -1,0 +1,78 @@
+{% extends defaults.layouts ~ '/manage.twig' %}
+
+{% block title 'Отзывы' %}
+
+{% block content %}
+    <div class="header-title">
+        Отзывы
+    </div>
+
+    <table class="items-table">
+        <thead>
+            <tr>
+                <th class="left">
+                    <div>Автор</div>
+                </th>
+                <th>
+                    <div>Отзыв</div>
+                </th>
+                <th width="300px">
+                    <div>Элемент</div>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}        
+                <tr class="items-table-item"> 
+                    <td class="left">
+                        <a href="{{ path('manage_clients_edit', {'clientId': item.client.id}) }}">
+                            {{ item.client.name|default('Клиент №' ~ item.client.id) }}
+                        </a>
+                    </td>
+                    <td class="left">
+                        {% if item.pros %}
+                            <div>
+                                <strong>Достоинства: </strong>{{ item.pros|truncate(100) }}
+                            </div>
+                        {% endif %}
+
+                        {% if item.contras %}
+                            <div>
+                                <strong>Недостатки: </strong>{{ item.contras|truncate(100) }}
+                            </div>
+                        {% endif %}
+
+                        {% if item.comment %}
+                            <div>
+                                <strong>Комментарий: </strong>{{ item.comment|truncate(100) }}
+                            </div>
+                        {% endif %}
+                    </td>
+                    <td class="left {% if not item.is_checked %} forbidden{% endif %}">
+                        <a href="{{ item.element.getLink }}">{{ item.element.item.name|truncate(75) }}</a>
+
+                        <div class="tools">
+                            <div class="tools-item confirm" data-type="confirm">
+                                <a href="{{ path('manage_reviews_confirm', {'reviewId': item.id}) }}" class="icon"></a>
+                            </div>
+
+                            <div class="tools-item edit" data-type="edit">
+                                <a href="{{ path('manage_reviews_edit', {'reviewId': item.id}) }}" class="icon"></a>
+                            </div>
+                        
+                            <div class="tools-item delete" data-type="delete" data-confirm="true">
+                                <a href="{{ path('manage_reviews_remove', {'reviewId': item.id}) }}" class="icon"></a>
+                            </div>
+                        </div>   
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="3">
+                        Нет непроверенных отзывов!
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>    
+{% endblock %}

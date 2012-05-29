@@ -1,0 +1,61 @@
+{% extends defaults.layouts ~ '/manage.twig' %}
+
+{% block title 'Статьи' %}
+
+{% block content %}
+    <div class="header-title">
+        Статьи [<a href="{{ path('manage_articles_add') }}">+</a>]
+    </div>
+    <table class="items-table">
+        <thead>
+            <tr>
+                <th width="50px">
+                    <div>#</div>
+                </th>
+                <th class="left" width="30%">
+                    <div>Название</div>
+                </th>
+                <th class="left" width="30%">
+                    <div>Категория</div>
+                </th>
+                <th class="left" width="30%">
+                    <div>Автор</div>
+                </th>                    
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+                <tr class="items-table-item">
+                    <td>{{ loop.index }}</td>   
+                    <td class="left">
+                        {{ item.name }}
+                        {% if item.announce %}         
+                            <div class="article-announce">
+                                {{ item.announce|truncate(100) }}
+                            </div>
+                        {% endif %}
+                    </td>
+                    <td class="left">{{ item.category.name }}</td>
+                    <td class="left">
+                        {{ item.author.name }}
+                        <div class="tools">
+                            <div class="tools-item edit" data-type="edit">
+                                <a href="{{ path('manage_articles_edit', {'articleId': item.id}) }}" class="icon"></a>
+                            </div>
+                        
+                            <div class="tools-item delete" data-type="delete" data-confirm="true">
+                                <a href="{{ path('manage_articles_remove', {'articleId': item.id}) }}" class="icon"></a>
+                            </div>
+                        </div>                             
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="4">
+                        Тут пусто.
+                    </td>
+                </tr>
+            {% endfor %}                    
+        </tbody>
+    </table>    
+{% endblock %}

@@ -1,0 +1,19 @@
+index:
+  pattern: /
+  defaults:
+    controller: Banners:index
+    
+add:
+  pattern: /add
+  defaults:
+    controller: Banners:add
+    
+edit:
+  pattern: /edit/{bannerId}
+  defaults:
+    controller: Banners:edit
+    
+remove:
+  pattern: /remove/{bannerId}
+  defaults:
+    controller: Banners:remove

@@ -1,0 +1,58 @@
+{% extends defaults.layouts ~ '/manage.twig' %}
+
+{% block title %}
+    Станции метро
+{% endblock %}
+
+{% block content %}
+    <div class="header-title">
+        {{ block('title') }} [<a href="{{ path('manage_metro_line_add') }}">+ линия</a>] [<a href="{{ path('manage_metro_add') }}">+ метро</a>]
+    </div>
+    
+    <div class="groups lefted">
+        {% for line in lines %}
+            <div class="group-item">
+                <div class="group-name">
+                    <div class="tools">
+                        <div class="tools-item edit" data-type="edit">
+                            <a href="{{ path('manage_metro_line_edit', {'lineId': line.id}) }}" class="icon"></a>
+                        </div>
+                    
+                        <div class="tools-item delete" data-type="delete" data-confirm="true">
+                            <a href="{{ path('manage_metro_line_remove', {'lineId': line.id}) }}" class="icon"></a>
+                        </div>
+                    </div>                        
+                    
+                    <div class="metro-square" style="background-color: {{ line.color }}"></div>
+                    {{ line.name|default('Без названия') }}
+                </div>
+                
+                <div class="group-children">
+                    {% for metro in line.metros %}
+                        <div class="group-child">
+                            <div class="tools">
+                                <div class="tools-item edit" data-type="edit">
+                                    <a href="{{ path('manage_metro_edit', {'metroId': metro.id}) }}" class="icon"></a>
+                                </div>
+                            
+                                <div class="tools-item delete" data-type="delete" data-confirm="true">
+                                    <a href="{{ path('manage_metro_remove', {'metroId': metro.id}) }}" class="icon"></a>
+                                </div>
+                            </div>                        
+                            
+                            <div class="metro-icon"></div>
+                            <div class="group-child-name">
+                                {{ metro.name }}
+                            </div>
+                        </div>
+                    {% endfor %}
+                    <div class="clear"></div>
+                </div>
+            </div>
+            {% if 0 == loop.index % 4 %}
+                <div class="clear"></div>
+            {% endif %}
+        {% endfor %}
+        <div class="clear"></div>
+    </div>
+{% endblock %}

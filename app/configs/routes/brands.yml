@@ -1,0 +1,19 @@
+index:
+  pattern: /
+  defaults:
+    controller: Brands:index
+    
+add:
+  pattern: /add
+  defaults:
+    controller: Brands:add
+    
+edit:
+  pattern: /edit/{brandId}
+  defaults:
+    controller: Brands:edit
+    
+remove:
+  pattern: /remove/{brandId}
+  defaults:
+    controller: Brands:remove

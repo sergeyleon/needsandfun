@@ -1,0 +1,33 @@
+{% extends defaults.layouts ~ '/basic.twig' %}
+{% import defaults.macros ~ '/shop.twig' as shop %}
+{% import defaults.macros ~ '/banners.twig' as banners %}
+
+{% block title 'Наши друзья' %}
+
+{% block content %}
+    <div class="page">
+
+        <div class="main-body-right">
+            {{ banners.shop(shopBanners) }}
+        </div>
+
+        <div class="column">
+            <div class="brands">
+                {% for friend in friends %}
+                    <div class="brand-item">
+                        <div class="brand-img">
+                            {{ shop.itemPicture(friend.getIcon, 'friend_preview') }}
+                        </div>
+                        <div class="brand-content">
+                            <div class="brand-title">{{ friend.name }}</div>
+                            <div class="brand-desc">{{ friend.description|raw }}</div>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <div class="clear"></div>
+    </div>
+{% endblock %}

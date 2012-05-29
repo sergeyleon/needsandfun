@@ -1,0 +1,86 @@
+{% extends defaults.layouts ~ '/basic.twig' %}
+{% import defaults.macros ~ '/markup.twig' as markup %}
+{% import defaults.macros ~ '/banners.twig' as banners %}
+
+{% block title 'Регистрация' %}
+
+
+{% block content %}
+    
+    <div class="page">
+
+        <div class="main-body-right">
+            {{ banners.shop(shopBanners) }}
+        </div>
+
+        <div class="main-body-content">
+            <form method="post">
+                {{ markup.formRow('N.B.', 'Заполните форму ниже. Через 2-3 минуты мы пришлем вам письмо для подтверждения регистрации') }}
+                
+                {% set registerform %}
+                    <form method="post" name="registerForm">
+                        <table class="form-table">
+                            <tr>
+                                <th width="224px">Почтовый ящик</th>
+                                <th width="24px"></th>
+                                <th width="224px"></th>
+                                <th></th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="input-wrap">
+                                        <input type="text" name="login" />
+                                    </div>
+                                </td>
+                                <td></td>
+                                <td class="middle">
+                                    <div class="form-table-hint">
+                                        Ваш ящик является вашим именем пользователя
+                                    </div>
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <td colspan="3">
+                                    <div class="form-table-spacer"></div>
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <th>Пароль</td>
+                                <th></td>
+                                <th>Повторите пароль</td>                                
+                            </tr>
+                            
+                            <tr>
+                                <td>
+                                    <div class="input-wrap">
+                                        <input type="password" name="password" />
+                                    </div>                    
+                                </td>
+                                <td></td>
+                                <td>
+                                    <div class="input-wrap">
+                                        <input type="password" name="repassword" />
+                                    </div>
+                                </td>                
+                            </tr>
+                            
+                            <tr>
+                                <td colspan="3">
+                                    <div class="form-table-spacer"></div>
+                                </td>
+                            </tr>                        
+                        </table>
+
+                        {{ markup.submitBlock({'name': 'register', 'value': 'Зарегистрироваться'}) }}
+                        
+                    </form>
+                {% endset %}
+                
+                {{ markup.formRow('РЕГИСТРАЦИЯ', registerform) }}
+            </form>
+        </div>
+        <div class="clear"></div>
+    </div>
+{% endblock %}

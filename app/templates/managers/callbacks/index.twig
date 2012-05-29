@@ -1,0 +1,68 @@
+{% extends defaults.layouts ~ '/manage.twig' %}
+
+{% block title 'Обращения' %}
+
+{% block content %}
+    <div class="header-title">
+        Обращения
+    </div>
+    <table class="items-table">
+        <thead>
+            <tr>
+                <th width="50px">
+                    <div>#</div>
+                </th>
+                <th width="200px">
+                    <div>Телефон</div>
+                </th>
+                <th width="200px">
+                    <div>Позвонить</div>
+                </th>
+                <th width="200px">
+                    <div>Исполнено</div>
+                </th>
+                <th class="left">
+                    <div>Комментарий</div>
+                </th>                    
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+                <tr class="items-table-item">
+                    <td>{{ loop.index }}</td>   
+                    <td>
+                        {{ item.phone }}
+                    </td>
+                    <td>
+                        {{ item.call_at|date('H:i d.m.Y') }}
+                    </td>
+                    <td>
+                        {% if item.is_called %}
+                            {{ item.is_called|date('H:i d.m.Y') }}
+                        {% else %}
+                            Еще не звонили
+                        {% endif %}
+                    </td>
+                    <td class="left">
+                        {{ item.comment }}
+                        <div class="tools">
+                            <div class="tools-item edit" data-type="edit">
+                                <a href="{{ path('manage_callbacks_edit', {'callbackId': item.id}) }}" class="icon"></a>
+                            </div>
+                        
+                            <div class="tools-item delete" data-type="delete" data-confirm="true">
+                                <a href="{{ path('manage_callbacks_remove', {'callbackId': item.id}) }}" class="icon"></a>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="5">
+                        Тут пусто.
+                    </td>
+                </tr>
+            {% endfor %}                    
+        </tbody>
+    </table>    
+{% endblock %}

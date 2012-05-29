@@ -1,0 +1,71 @@
+{% extends defaults.layouts ~ '/manage.twig' %}
+{% import defaults.macros ~ '/shop.twig' as shop %}
+
+{% block title 'События' %}
+
+{% block absolute %}absolute{% endblock %}
+
+{% block content %}
+    <div class="header-title">
+        События [<a href="{{ path('manage_events_add') }}">+</a>]
+    </div>
+
+    <div class="window">   
+        <div class="categories events" data-selected="{{ selectedCategory }}" data-action-delete="{{ path('manage_events_category_remove') }}" data-action-visibility="{{ path('manage_events_category_visibility') }}"> 
+            <div class="category-item" data-id="all" data-type="events">
+                <div class="category-name">            
+                    Все события
+                </div>
+            </div>
+        
+            <ol class="sortable categories-wrap" data-url="{{ path('manage_events_category_weight')}}">
+                {% for item in categories %}
+                    {{ common.sortableCategory(item, selectedCategory, 'events') }}
+                {% endfor %}
+            </ol>
+            
+            <div class="category-add form">
+                <form class="category-add-form" method="post" action="{{ path('manage_events_category_add') }}"> 
+                    <div class="input-wrap">
+                        <input type="text" name="categoryName" placeholder="Добавить категорию" />
+                    </div>
+                </form>
+                <div class="category-add-link">
+                    [Добавить категорию]
+                </div>
+            </div>            
+        </div>
+        
+        <div class="goods" data-url="{{ path('manage_events_action') }}">
+            {% for event in events %}
+                <div class="good-item{% if not event.isAvailable %} notAvailable{% endif %}" data-id="{{ event.id }}" data-category="{{ event.getCategory }}" data-exclusive="{{ event.getCategory }}">
+                    <div class="good-item-pic">
+                        {{ shop.itemPicture(event.getIcon, 'thumb') }}
+                        
+                        {% if event.ages %}
+                            <div class="good-item-price">
+                                {{ event.ages }}
+                            </div>
+                        {% endif %}
+                        
+                        <div class="tools">
+                            <div class="tools-item show" data-action="show">
+                                <div class="icon"></div>
+                            </div>
+                            <div class="tools-item hide" data-action="hide">
+                                <div class="icon"></div>
+                            </div>
+                            <div class="tools-item delete" data-action="delete">
+                                <div class="icon"></div>                        
+                            </div>
+                        </div>
+                    </div>
+                    <div class="good-item-name">
+                        <a href="{{ path('manage_events_edit', {'eventId': event.id}) }}">{{ event.name|default('Категория') }}</a>
+                    </div>
+                </div>
+            {% endfor %}
+            <div class="clear"></div>
+        </div>
+    </div>    
+{% endblock %}

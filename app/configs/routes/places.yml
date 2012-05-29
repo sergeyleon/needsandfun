@@ -1,0 +1,26 @@
+index_page:
+  pattern: -page-{page}
+  defaults:
+    page: 1
+    controller: Places:index
+  requirements:
+    page: (\d+)
+
+index:
+  pattern: 
+  defaults:
+    page: 1  
+    controller: Places:index
+
+category_page:
+  pattern: -{category}-page-{page}
+  defaults:
+    page: 1
+    controller: Places:category
+  requirements:
+    page: (\d+)
+
+category:
+  pattern: -{category}
+  defaults:
+    controller: Places:category

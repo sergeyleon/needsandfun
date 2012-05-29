@@ -1,0 +1,81 @@
+{% extends defaults.layouts ~ '/basic.twig' %}
+{% import defaults.macros ~ '/markup.twig' as markup %}
+{% import defaults.macros ~ '/events.twig' as events %}
+
+{% block title %}
+Все события Москвы
+{% endblock %}
+
+{% block metaKeywords %}{{ currentCategory.meta_keywords }}{% endblock %}
+{% block metaDescription %}{{ currentCategory.meta_description }}{% endblock %}
+
+{% block content %}
+    <div class="shop">
+        <div class="categories">
+            <div class="categories-padder">
+                <div class="categories-title events">
+                    Все события москвы
+                </div>
+                
+                {{ events.filter(filter, _context) }}
+
+                {% for category in eventCategories %}
+                    {{ events.categoryItem(category) }}
+                {% endfor %}
+            </div>
+        </div>
+        
+        <div class="shop-body">
+            {{ events.sorter(sort, _context) }}
+
+            <div class="tabs">
+                <div class="tabs-items" data-type="items">
+                    <div class="tabs-title">
+                        События
+                    </div>
+                    <div class="tabs-item selected">
+                        Список
+                    </div>
+                    <div class="tabs-item">
+                        Календарь
+                    </div>
+                    <div class="tabs-item">
+                        Разместить
+                    </div>
+                </div>
+                <div class="clear"></div>
+
+                <div class="tabs-contents" data-type="contents">
+                    <div class="tabs-content selected">
+                        {% if items %}
+                            {{ events.list(items) }}
+                        {% else %}
+                            К сожалению, эта категория пуста.
+                        {% endif %}
+                    </div>
+                    <div class="tabs-content">
+                        {% if loggedUser %}
+                            {{ events.calendar(loggedUser.client.calendar) }}
+                        {% else %}
+                            {{ markup.needToRegister }}
+                        {% endif %}
+                    </div>
+                    <div class="tabs-content">
+                        {% if loggedUser %}
+                            {% include 'needsandfun/cabinet/event_form.twig' %}
+                        {% else %}
+                            {{ markup.needToRegister }}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            {% if currentCategory.description %}
+                {{ currentCategory.description|raw }}
+            {% endif %}
+        </div>
+
+        <div class="clear"></div>            
+    </div>
+
+{% endblock %}

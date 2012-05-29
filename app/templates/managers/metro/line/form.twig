@@ -1,0 +1,62 @@
+{% extends defaults.layouts ~ '/manage.twig' %}
+
+{% block title %}
+    {% if line.id %}
+        Правка линии метро &laquo;{{ line.name }}&raquo;
+    {% else %}
+        Новая линия метро
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <link rel="stylesheet" media="screen" type="text/css" href="{{ defaults.common }}/js/mylibs/colorpicker/farbtastic.css" />
+    <script type="text/javascript" src="{{ defaults.common }}/js/mylibs/colorpicker/farbtastic.js"></script>
+    <div class="header-title">{{ block('title') }}</div>
+    
+    <form method="post">
+        {% if line.id %}
+            <input type="hidden" name="id" value="{{ line.id }}">
+        {% endif %}
+                
+        <table class="form-table lefted">
+            <tr>
+                <td width="100px">
+                    Название
+                </td>
+                <td width="300px">
+                    <div class="input-wrap">
+                        <input type="text" name="name" value="{{ line.name }}">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td width="100px">
+                    Цвет
+                </td>
+                <td width="300px">
+                    <div class="input-wrap">
+                        <div id="colorpicker" class="colorpicker"></div>
+                        <input id="colorplaceholder" type="text" name="color" value="{{ line.color|default('#ffffff') }}">
+                    </div>
+                </td>
+            </tr>            
+            <tr>
+                <td></td>
+                <td>
+                    <div class="form-submit">
+                        <button type="submit" name="saveLine">
+                            Сохранить
+                        </button>
+                    </div>                
+                </td>
+            </tr>
+        </table>
+        
+        <div class="clear"></div>
+    </form> 
+    <script type="text/javascript">
+        $(function() {
+            $.farbtastic($('#colorpicker')).linkTo('#colorplaceholder');   
+        });
+    </script>
+{% endblock %}

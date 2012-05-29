@@ -1,0 +1,15 @@
+{% extends defaults.layouts ~ '/basic.twig' %}
+
+{% block container %}
+   <div class="syserror">
+      {{exception.msg}}<br />
+      {{exception.file}}:{{exception.line}}
+      <div class="syserror-trace">
+         {% for line in exception.trace %}
+            <div class="syserror-trace-line">
+               #{{ loop.index }} {{ line.file }}:{{ line.line }}
+            </div>
+         {% endfor %}
+      </div>
+   </div>
+{% endblock %}

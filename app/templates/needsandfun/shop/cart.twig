@@ -1,0 +1,350 @@
+{% extends defaults.layouts ~ '/basic.twig' %}
+{% import defaults.macros ~ '/shop.twig' as shop %}
+
+{% block title %}
+Корзина
+{% endblock %}
+
+{% block content %}
+    <div class="shop">
+        <div class="categories">
+            <div class="categories-padder">
+                <div class="categories-title">
+                    Каталог
+                </div>
+                {% for item in shopCategories %}
+                    {{ shop.categoryItem(item) }}
+                {% endfor %}
+
+                <div class="shop-info">
+                    <div class="shop-info-item">
+                        <div class="shop-info-pic"></div>
+                        <a href="{{ path('shop_size_chart') }}" class="shop-info-text">Таблица размеров</a>
+                    </div>
+
+                    <div class="shop-info-item">
+                        <div class="shop-info-pic"></div>
+                        <a href="{{ path('brands') }}" class="shop-info-text">Наши бренды</a>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        
+        {% if cart.getGoods %}
+            <form method="post" class="cart" id="cart" data-summ="{{ client.discount.summ.discount }}" data-reviews="{{ client.discount.reviews.discount }}">
+                <div class="cart-row cart">
+                    <div class="cart-row-title">
+                        В вашей корзине сейчас
+                    </div>
+                    
+                    <div class="cart-row-box">
+                        <table class="cart-goods" data-type="cart-goods">
+                            {% for id, ordergood in cart.getGoods %}
+                                <tr class="cart-goods-item whitened" data-id="{{ id }}" data-qnt="{{ ordergood.qnt }}" data-perGood="{{ ordergood.perGood }}">
+                                    <td class="cart-good-pic">
+                                        {{ shop.itemPicture(ordergood.good.getIcon, 'icon') }}
+                                    </td>
+                                    <td width="100%">
+                                        <a href="{{ ordergood.good.url }}">
+                                            {{ ordergood.good.name }}
+                                        </a>
+                                    </td>
+                                    <td class="cart-good-size">
+                                        {{ ordergood.size.name }}
+                                    </td>
+                                    <td class="cart-good-qnt">
+                                        <input type="text" maxlength="3" data-type="qnt" name="goods[{{ id }}][qnt]" value="{{ ordergood.qnt }}" />
+                                        <div class="cart-good-frame"></div>
+                                    </td>
+                                    <td class="cart-good-price" data-type="price">
+                                        {{ ordergood.price|money }}
+                                    </td>
+                                    <td class="cart-good-del">
+                                        <div class="cart-good-icon delete" data-action="delete"></div>
+                                    </td>                                
+                                </tr>
+                                {#
+                                {% if ordergood.good.description %}
+                                    <tr data-desc="{{ id }}">
+                                        <td></td>
+                                        <td colspan="4" class="cart-good-desc">
+                                            {{ ordergood.good.description|raw }}
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                                #}
+                            {% endfor %}
+                        </table>
+                    </div>
+                </div>
+                
+                <div class="cart-row wodelivery">
+                    <div class="cart-row-title">
+                        Итого без доставки
+                    </div>
+                    
+                    <div class="cart-row-box delivery">
+                        <div class="cart-row-cartOverall-wrap">
+                            <table class="cart-row-cartOverall">
+                                <tr>
+                                    <td class="cart-price-text">
+                                        <div data-type="withoutGoodsText"></div>
+                                    </td>
+                                    <td width="0" class="cart-price">
+                                        <div data-type="withoutGoodsPrice">
+                                            {{ cart.price|money }}
+                                        </div>
+                                    </td>                        
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+                
+                
+                <div class="tabs">
+                    <input type="hidden" name="deliveryType" data-type="tabsType">
+                    <div class="tabs-items" data-type="items">
+                        <div class="tabs-title">
+                            Метод доставки
+                        </div>
+                        <div class="tabs-item selected delivery-type" data-id="courier" data-price="{{ cartDeliveries.courier.price }}" data-text="{{ cartDeliveries.courier.text }}">
+                            Курьером
+                        </div>
+                        
+                        <div class="tabs-item delivery-type" data-id="pickup" data-price="{{ cartDeliveries.pickup.price }}" data-text="{{ cartDeliveries.pickup.text }}">
+                            Самовывоз
+                        </div>
+        
+                        <div class="tabs-item delivery-type" data-id="metro" data-price="{{ cartDeliveries.metro.price }}" data-text="{{ cartDeliveries.metro.text }}">
+                            К метро
+                        </div>
+                        
+                        <div class="clear"></div>
+                    </div>
+                    
+                    <div class=""></div>
+                    
+                    <div class="tabs-contents" style="margin-top:60px" data-type="contents">
+                        <div class="tabs-content selected">
+                            <div class="cart-delivery-text">
+                                Доставка осуществляется курьером и стоит <span class="price">{{ cartDeliveries.courier.price|money }}</span>
+                            </div>
+                            
+                            <table class="tabs-address">
+                                <tr>
+                                    <th width="221px">
+                                        Электропочта
+                                    </th>
+                                    <th width="20px"></th>
+                                    <th width="221px" colspan="3">
+                                        Телефон
+                                    </th>
+                                    <th width="20px"></th>
+                                    <th width="221px">
+                                        Город&nbsp;<span class="tabs-address-zip">(с индексом, если не Москва)</span>
+                                    </th>
+                                </tr>
+                                
+                                <tr>
+                                    <td>
+                                        <input type="text" name="delivery[courier][email]" data-required="true" data-name="email" placeholder="mail@mailbox.com"{% if currentEmail %} value="{{ currentEmail }}" readonly="readonly"{% endif %} />
+                                    </td>
+                                    <td></td>
+                                    <td colspan="3">
+                                        <input type="text" name="delivery[courier][phone]" data-name="phone" placeholder="+7 (123) 456-78-90"{% if currentPhone %} value="{{ currentPhone }}" {% endif %} />
+                                    </td>
+                                    <td></td>
+                                    <td>
+                                        <input type="text" name="delivery[courier][city]" data-required="true" data-name="city" placeholder="Москва" />
+                                    </td>
+                                </tr>
+                                
+                                <tr>
+                                    <td colspan="3">
+                                        <div class=""></div>
+                                    </td>
+                                </tr>
+                                
+                                <tr>
+                                    <th>
+                                        Улица
+                                    </th>
+                                    
+                                    <th></th>
+                                    
+                                    <th>
+                                        Дом
+                                    </th>
+                                    
+                                    <th>
+                                        Корп.
+                                    </th>
+                                    
+                                    <th>
+                                        Квартира
+                                    </th>
+                                    
+                                    <th></th>
+                                    
+                                    <th>
+                                        Перезвонить подтвердить
+                                    </th>
+                                </tr>
+                                
+                                <tr>
+                                    <td>
+                                        <input type="text" name="delivery[courier][street]" data-required="true" data-name="street" />
+                                    </td>
+                                    
+                                    <td></td>
+                                    
+                                    <td width="74px">
+                                        <input type="text" name="delivery[courier][house]" data-required="true" data-name="house" class="small" />
+                                    </td>
+                                    
+                                    <td width="73px">
+                                        <input type="text" name="delivery[courier][building]" data-name="house" class="small middle" />
+                                    </td>                            
+                                    
+                                    <td width="74px">
+                                        <input type="text" name="delivery[courier][appartments]" data-name="appartments" class="small" />
+                                    </td>
+                                    
+                                    <td></td>
+                                    
+                                    <td>
+                                        <input type="text" name="delivery[courier][recall]" />
+                                    </td>
+                                </tr>                            
+                                
+                            </table>
+                        </div>
+                        <div class="tabs-content">
+                            <div class="cart-delivery-text">
+                                Вы можете забрать свой заказ по адресу: {{ cartDefaults.pickupAddress }}
+                            </div>
+                            
+                            <table class="tabs-address">
+                                <tr>
+                                    <th width="221px">
+                                        Электропочта
+                                    </th>
+                                    <th width="20px"></th>
+                                    <th width="221px" colspan="3">
+                                        Телефон
+                                    </th>
+                                </tr>
+                                
+                                <tr>
+                                    <td>
+                                        <input type="text" name="delivery[pickup][email]" data-required="true" data-name="email" placeholder="mail@mailbox.com"{% if currentEmail %} value="{{ currentEmail }}" readonly="readonly"{% endif %} />
+                                    </td>
+                                    <td></td>
+                                    <td>
+                                        <input type="text" name="delivery[pickup][phone]" data-name="phone" placeholder="+7 (123) 456-78-90"{% if currentPhone %} value="{{ currentPhone }}" {% endif %}  />
+                                    </td>
+                                </tr>
+                                
+                                <tr>
+                                    <td colspan="3">
+                                        <div class=""></div>
+                                    </td>
+                                </tr>
+                            </table>                      
+                        </div>
+                        <div class="tabs-content">
+                            <div class="cart-delivery-text">                        
+                                Доставка к ближайшему метро:
+                                <select name="delivery[metro][metro]">
+                                    {% for line in cartDefaults.metrolines %}
+                                        <optgroup label="{{ line.name }}"
+                                        {% for metro in line.metros %}
+                                            <option value="{{ metro.id }}">{{ metro.name }}</option>
+                                        {% endfor %}
+                                        </optgroup>
+                                    {% endfor %}
+                                </select>
+                                
+                            </div>
+                            
+                            <table class="tabs-address">
+                                <tr>
+                                    <th width="221px">
+                                        Электропочта
+                                    </th>
+                                    <th width="20px"></th>
+                                    <th width="221px" colspan="3">
+                                        Телефон
+                                    </th>
+                                </tr>
+                                
+                                <tr>
+                                    <td>
+                                        <input type="text" name="delivery[metro][email]" data-required="true" data-name="email" placeholder="mail@mailbox.com"{% if currentEmail %} value="{{ currentEmail }}" readonly="readonly"{% endif %} />
+                                    </td>
+                                    <td></td>
+                                    <td>
+                                        <input type="text" name="delivery[metro][phone]" data-name="phone" placeholder="+7 (123) 456-78-90"{% if currentPhone %} value="{{ currentPhone }}" {% endif %}  />
+                                    </td>
+                                </tr>
+                                
+                                <tr>
+                                    <td colspan="3">
+                                        <div class=""></div>
+                                    </td>
+                                </tr>
+                            </table>                                  
+                        </div>                    
+                    </div>
+                </div>
+              
+                <div class="cart-row overall">
+                    <div class="cart-row-title">
+                        Итого с доставкой, <a href="{{ path('cabinet_discounts') }}">скидками и бонусами</a>
+                    </div>
+                    
+                    <div class="cart-row-box" style="height:40px">
+                        <div class="cart-row-cartOverall-wrap">
+                            <table class="cart-row-cartOverall">
+                                <tr>
+                                    <td class="cart-price-text">
+                                        <div data-type="cartText"></div>
+                                        <div data-type="discountText"></div>
+                                    </td>
+                                    <td class="cart-price">
+                                        =&nbsp;
+                                    </td>
+                                    <td width="0" class="cart-price" data-type="cartPrice">
+                                        {{ cart.price|money }}
+                                    </td>                        
+                                </tr>
+                            </table>
+                        </div>
+                        
+                        <div class=""></div>
+                    </div>
+                    
+                    <div class="cart-row submit" style="height:40px">            
+                        <div class="cart-submit-wrap">
+                            <div class="cart-submit disabled" data-type="submit">
+                                <input class="cart-submit-btn" type="submit" disabled="disabled" name="cartSubmit" value="Оформить заказ" />
+                                <div class="cart-submit-bg"></div>                        
+                                <div class="cart-submit-side left"></div>
+                                <div class="cart-submit-side right"></div>                        
+                            </div>
+                        </div>
+                        <div class=""></div>
+                    </div>
+                </div>         
+            </form>
+        {% else %}
+            <div class="cart-empty">
+                Корзина пуста!
+            </div>
+        {% endif %}
+        <div class="clear"></div>
+    </form>
+{% endblock %}

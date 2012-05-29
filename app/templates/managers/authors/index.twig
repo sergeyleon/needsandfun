@@ -1,0 +1,58 @@
+{% extends defaults.layouts ~ '/manage.twig' %}
+
+{% block title 'Авторы' %}
+
+{% block content %}
+    <div class="header-title">
+        Авторы [<a href="{{ path('manage_articles_authors_add') }}">+</a>]
+    </div>
+    <table class="items-table">
+        <thead>
+            <tr>
+                <th width="50px">
+                    <div>#</div>
+                </th>
+                <th class="left">
+                    <div>Автор</div>
+                </th>
+                <th class="left" width="100px">
+                    <div>Статей</div>
+                </th>                    
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+                <tr class="items-table-item">
+                    <td>{{ loop.index }}</td>   
+                    <td class="left">
+                        <div class="tools">
+                            <div class="tools-item edit" data-type="edit">
+                                <a href="{{ path('manage_articles_authors_edit', {'authorId': item.id}) }}" class="icon"></a>
+                            </div>
+                        
+                            <div class="tools-item delete" data-type="delete" data-confirm="true">
+                                <a href="{{ path('manage_articles_authors_remove', {'authorId': item.id}) }}" class="icon"></a>
+                            </div>
+                        </div>                             
+                        {{ item.name }}
+                        {% if item.description %}
+                            <div>
+                                <small>
+                                    {{ item.description }}
+                                </small>
+                            </div>
+                        {% endif %}
+                   
+                    </td>
+                    <td>{{ item.articles|length }}</td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="4">
+                        Тут пусто.
+                    </td>
+                </tr>
+            {% endfor %}                    
+        </tbody>
+    </table>    
+{% endblock %}

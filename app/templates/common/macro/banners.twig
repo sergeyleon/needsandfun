@@ -1,0 +1,196 @@
+{% macro itemPicture(icon, type, gallery) %}    
+    {% if icon.picture.filename %}
+        {% if gallery %}
+            <a class="fancybox" rel="gallery" href="{{ path('item_img', {'filename': icon.picture.filename, 'type': 'full'}) }}">
+        {% endif %}
+            <img src="{{ path('item_img', {'filename': icon.picture.filename, 'type': type}) }}" />            
+        {% if gallery %}            
+            </a>
+        {% endif %}
+    {% else %}
+        <img src="{{ defaults.common }}/img/noimg.gif" width="40px" height="40px" />
+    {% endif %}
+{% endmacro %}
+
+{% macro big(banners) %}
+    <div class="bigbanners">
+        {% for banner in banners %}
+            {{ _self.bigBanner(banner, loop.first) }}
+        {% endfor %}
+        <div class="bigbanner-pager">
+            {% for page in 1..banners|length %}
+                <div class="bigbanner-page{% if loop.first %} selected{% endif %}">
+                    {{ page }}
+                </div>
+            {% endfor %}
+        </div>
+        <div class="clear"></div>
+    </div>
+{% endmacro %}
+
+{% macro bigBanner(banner, selected) %}
+    <div class="bigbanner-item{% if selected %} selected{% endif %}">
+        <div class="bigbanner-pic">
+            {% if banner.link %}
+                <a href="{{ banner.link }}">
+            {% endif %}
+                {{ _self.itemPicture(banner.getIcon, 'big_banner') }}
+            {% if banner.link %}
+                </a>
+            {% endif %}
+        </div>
+
+        <div class="banner-link">
+            {% if banner.link %}
+                <a href="{{ banner.link }}">
+            {% endif %}
+                {{ banner.title }}
+            {% if banner.link %}
+                </a>
+            {% endif %}
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro today(banner) %}
+    <div class="todayBanner">
+        <div class="todayBanner-wrap">
+            <div class="todayBanner-header"></div>
+            <div class="todayBanner-pic">
+                {% if banner.link %}
+                    <a href="{{ banner.link }}">
+                {% endif %}
+                    {{ _self.itemPicture(banner.getIcon, 'today_banner') }}
+                {% if banner.link %}
+                    </a>
+                {% endif %}
+            </div>
+            <table class="todayBanner-title">
+                <tr>
+                    <td>
+                        <a href="{{ banner.link }}">{{ banner.title }}</a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro shop(banners) %}
+    <div class="main-body-wrap">
+        <div class="goods-title">
+            В магазине
+        </div>
+
+        {% for banner in banners %}
+            <div class="banner-item{% if loop.last %} last{% endif %}">
+                <div class="banner-pic">
+                    {% if banner.link %}
+                            <a href="{{ banner.link }}">
+                    {% endif %}
+                        {{ _self.itemPicture(banner.getIcon, 'shop_banner') }}
+                    {% if banner.link %}
+                        </a>
+                    {% endif %}
+                </div>
+                {% if banner.title %}
+                    <div class="banner-title">
+                        {% if banner.link %}
+                            <a href="{{ banner.link }}">
+                        {% endif %}
+                            {{ banner.title }}
+                        {% if banner.link %}
+                            </a>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>        
+{% endmacro %}
+
+{% macro partners(partners) %}
+    <div class="partners main-body-wrap">
+        <div class="goods-title">
+            Наши друзья
+        </div>
+
+        <div class="partners-items" data-type="slidebanner">
+            <div class="partners-uis">
+                <div class="partners-ui left" data-type="control"></div>
+                <div class="partners-ui right" data-type="control" data-dir="right"></div>
+            </div>
+
+            <div class="partners-items-wrap">
+                {% for partner in partners %}
+                    <div class="partners-item{% if loop.first %} active{% endif %}" data-type="slide">
+                        <div class="partners-item-pic">
+                            {{ _self.itemPicture(partner.getIcon, 'shop_banner') }}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="partners-all">
+            <a href="{{ path('partners') }}">
+                Все друзья
+            </a>
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro places(items) %}
+    <div class="places-banner">
+        <div class="places-banner-items" data-type="slidebanner">
+            <div class="partners-banner-uis">
+                <div class="partners-banner-ui left" data-type="control"></div>
+                <div class="partners-banner-ui right" data-type="control" data-dir="right"></div>
+            </div>
+
+            <div class="places-banner-items-wrap">
+                {% for item in items %}
+                    <div class="places-item{% if loop.first %} active{% endif %}" data-type="slide">
+                        <div class="places-item-pic">
+                            <a href="{{ item.url }}">
+                                {{ _self.itemPicture(item.getIcon, 'place_banner') }}
+                            </a>
+                        </div>
+                        <div class="places-item-info">
+                            <div class="places-item-date">
+                                {{ item.created|date('d.m.Y') }}
+                            </div>
+
+                            <div class="places-item-announce">
+                                {{ item.announce|truncate(100) }}
+                            </div>
+
+                            <div class="places-item-metro">
+                                <div class="places-item-icon"></div>
+                                {{ item.metro.name }}
+                            </div>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro article(item) %}
+    <div class="article-banner">
+        <div class="article-banner-date">
+            {{ item.created|date('d.m.Y') }}
+        </div>
+        <div class="article-banner-title">
+            <a href="{{ item.url }}">
+                {{ item.name }}
+            </a>
+        </div>
+
+        <div class="article-banner-announce">
+            {{ item.announce|truncate(100) }}
+        </div>
+    </div>
+{% endmacro %}

@@ -1,0 +1,57 @@
+{% macro property(typeproperty, context) %}
+    <tr{% if 'new' == typeproperty %} data-type="sample"{% else %} data-id="{{ typeproperty.id }}"{% endif %} class="type-property{% if 'new' == typeproperty %} onEmpty{% endif %}">
+        <td>
+            <select data-name="type">
+                {% for type in context.propertyTypes %}
+                <option value="{{ type.id }}"{% if type.id == typeproperty.property.property_type_id %} selected="selected"{% endif %}>{{ type.name }}</option>
+                {% endfor %}
+            </select>                        
+        </td>
+        <td>
+            <div class="autocomplete input-wrap">
+                <input type="text" data-name="name" data-type="source" autocomplete="off" value="{{ typeproperty.property.name }}" />
+                <div class="autocomplete-wrap">
+                    {% for property in context.goodProperties %}
+                        <div class="autocomplete-item" data-property_id="{{ property.id }}">
+                            {{ property.name }}
+                        </div>
+                    {% endfor %}
+                </div> 
+                <input type="hidden" data-name="property_id" value="{{ typeproperty.property.id }}" />
+                <input type="hidden" data-name="typeproperty_id" value="{{ typeproperty.id }}" />
+            </div>
+        </td>
+        <td class="relative">
+            <div class="tools">
+                <div class="tools-item delete" data-type="delete" data-confirm="confirm">
+                    <div class="icon"></div>
+                </div>
+            </div>
+            <div class="input-wrap">
+                <input type="text" data-name="value" value="{{ typeproperty.property.getValues }}" />
+            </div>                                                
+        </td>
+    </tr>   
+{% endmacro %}
+
+{% macro size(size) %}
+    <tr{% if 'new' == size %} data-type="sample"{% else %} data-id="{{ size.id }}"{% endif %} class="type-property{% if 'new' == size %} onEmpty{% endif %}">
+        <td>
+            <div class="input-wrap">
+                <input type="text" data-name="name" value="{{ size.name }}" />
+            </div>                                
+            <input type="hidden" data-name="id" value="{{ size.id }}" />                                
+        </td>
+        <td class="relative">
+            <div class="tools">
+                <div class="tools-item delete" data-type="delete" data-confirm="confirm">
+                    <div class="icon"></div>
+                </div>
+            </div>
+        
+            <div class="input-wrap">
+                <input type="text" data-name="price" value="{{ size.price }}" />
+            </div>                            
+        </td>
+    </tr>
+{% endmacro %}

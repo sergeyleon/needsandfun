@@ -1,0 +1,33 @@
+{% macro review(review) %}
+	{% import defaults.macros ~ '/markup.twig' as markup %}
+
+	<div class="good-review-item">
+		<div class="good-review-client">
+			{{ review.client.name|default('Клиент') }}, <span>{{ review.created|hdate }}</span>
+		</div>
+
+		<div class="good-review-rate">
+			{{ markup.rating({'selected': review.rating, 'static': true}) }}
+		</div>
+
+		<div class="clear"></div>
+
+		{% if review.pros %}
+			<div class="good-review-row">
+				<span class="good-review-heading">Достоинства: </span>{{ review.pros }}
+			</div>
+		{% endif %}
+
+		{% if review.contras %}
+			<div class="good-review-row">
+				<span class="good-review-heading">Недостатки: </span>{{ review.contras }}
+			</div>
+		{% endif %}
+
+		{% if review.comment %}
+			<div class="good-review-row">
+				<span class="good-review-heading">Комментарий: </span>{{ review.comment }}
+			</div>
+		{% endif %}
+	</div>
+{% endmacro %}

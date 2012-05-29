@@ -1,0 +1,63 @@
+{% extends defaults.layouts ~ '/manage.twig' %}
+
+{% block title %}
+    {% if item.id %}
+        Правка станции метро &laquo;{{ item.name }}&raquo;
+    {% else %}
+        Новая станция метро
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <link rel="stylesheet" media="screen" type="text/css" href="{{ defaults.common }}/js/mylibs/colorpicker/farbtastic.css" />
+    <script type="text/javascript" src="{{ defaults.common }}/js/mylibs/colorpicker/farbtastic.js"></script>
+    <div class="header-title">{{ block('title') }}</div>
+    
+    <form method="post">
+        {% if item.id %}
+            <input type="hidden" name="id" value="{{ item.id }}">
+        {% endif %}
+                
+        <table class="form-table lefted">
+            <tr>
+                <td width="100px">
+                    Название
+                </td>
+                <td width="300px">
+                    <div class="input-wrap">
+                        <input type="text" name="name" value="{{ item.name }}">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td width="100px">
+                    Линия
+                </td>
+                <td width="300px">
+                    <select name="metroline">
+                        {% for line in metrolines %}
+                            <option value="{{ line.id }}"{% if item.metroline_id == item.id %} selected="selected"{% endif %}>{{ line.name }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+            </tr>            
+            <tr>
+                <td></td>
+                <td>
+                    <div class="form-submit">
+                        <button type="submit" name="saveMetro">
+                            Сохранить
+                        </button>
+                    </div>                
+                </td>
+            </tr>
+        </table>
+        
+        <div class="clear"></div>
+    </form> 
+    <script type="text/javascript">
+        $(function() {
+            $.farbtastic($('#colorpicker')).linkTo('#colorplaceholder');   
+        });
+    </script>
+{% endblock %}

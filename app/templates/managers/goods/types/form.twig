@@ -1,0 +1,165 @@
+{% extends defaults.layouts ~ '/manage.twig' %}
+{% import defaults.macros ~ '/manage.twig' as manage %}
+
+{% block title %}
+    {% if item.id %}
+        Тип товара &laquo;{{ item.name }}&raquo;
+    {% else %}
+        Новый тип товара
+    {% endif %}    
+{% endblock %}
+
+{% block content %}
+    <div class="header-title">
+        {{ block('title') }}
+    </div>
+    
+    <form method="post">
+        {% if item.id %}
+            <input type="hidden" name="id" value="{{ item.id }}" />
+        {% endif %}
+        
+        <table class="form-table lefted">
+            <tr>
+                <td width="100px">
+                    Название
+                </td>
+                <td width="300px">
+                    <div class="input-wrap">
+                        <input type="text" name="name" value="{{ item.name }}" />
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="top">
+                    Описание
+                </td>
+                <td>
+                    <div class="input-wrap">
+                        <textarea name="description">{{ item.description }}</textarea>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <div class="form-submit">
+                        <button type="submit" name="proceed">
+                            {% if item.id %}
+                                Сохранить
+                            {% else %}
+                                Добавить
+                            {% endif %}
+                        </button>
+                    </div>                
+                </td>
+            </tr>
+        </table>
+        
+        <div class="type-properties-wrap">
+            <table class="type-properties items-table multipleInputs{% if item.typeproperties|length %} notEmpty{% endif %}" data-name="properties">
+                <thead>
+                    <tr>
+                        <td colspan="3">
+                            <div class="inform">
+                                Будьте внимательны, удаляя поля!<br />Изменения, сделанные после сохранения результатов необратимы.
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="60px"><div>Тип</div></th>
+                        <th width="200px"><div>Свойство</div></th>                                
+                        <th width="200px"><div>Значение</div></th>
+                    </tr>
+                </thead>                
+                <tbody>
+                    {% for typeproperty in item.typeproperties %}
+                        {{ manage.property(typeproperty, _context)}}
+                    {% endfor %}
+                    {{ manage.property('new', _context) }}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="3">
+                            <div class="multipleInputs-add" data-type="add">
+                                Добавить
+                            </div>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>  
+        </div>
+        <div class="clear"></div>
+    </form>
+{% endblock %}
+
+{#
+                {% for typeproperty in item.typeproperties %}
+                    <tr data-id="{{ typeproperty.id }}" class="type-property">
+                        <td>
+                            <select name="properties[{{ typeproperty.id }}][type]">
+                                {% for type in propertyTypes %}
+                                    <option value="{{ type.id }}"{% if type.id == typeproperty.property.property_type_id %} selected="selected"{% endif %}>{{ type.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                    
+                        <td>
+                            <div class="input-wrap">
+                                <select name="properties[{{ typeproperty.id }}][id]" class="type-property">                     
+                                    {% for property in goodProperties %}
+                                        <option value="{{ property.id }}"{% if property.id == typeproperty.property.id %} selected="selected"{% endif %}>{{ property.name }}</option>
+                                    {% endfor %}
+                                </select>
+                                
+                                <input type="text" name="properties[{{ typeproperty.id }}][name]" value="{{ typeproperty.property.name }}" />
+                                
+                            </div>
+                        </td>
+                        <td class="tools-wrap">
+                            <div class="tools">                            
+                                <div class="tools-item delete" data-type="delete">
+                                    <div class="icon"></div>
+                                </div>
+                            </div>
+                        
+                            <div class="input-wrap">
+                                <input type="text" name="properties[{{ typeproperty.id }}][value]" value="{{ typeproperty.property.getValues }}" />
+                            </div>
+                        </td>     
+                    </tr>                              
+                {% endfor %}
+                <tr data-id="new" class="type-property new">
+                    <td>
+                        <select name="properties[new][type]">
+                            {% for type in propertyTypes %}
+                                <option value="{{ type.id }}">{{ type.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td>
+                        <div class="input-wrap">
+                            <select name="properties[new][id]" class="type-property">
+                                <option value="new">Новое свойство</option>                            
+                                {% for property in goodProperties %}
+                                    <option value="{{ property.id }}"{% if property.id == typeproperty.property.id %} selected="selected"{% endif %}>{{ property.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </td>                                
+                    <td class="tools-wrap">
+                        <div class="tools">
+                            <div class="tools-item copy" data-type="copy">
+                                <div class="icon"></div>
+                            </div>
+                        
+                            <div class="tools-item delete" data-type="delete">
+                                <div class="icon"></div>
+                            </div>
+                        </div>
+                        <div class="input-wrap">
+                            <input type="text" name="properties[new][value]" />
+                        </div>                        
+                    </td>   
+                </tr>        
+#}

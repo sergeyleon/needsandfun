@@ -1,0 +1,89 @@
+{% extends defaults.layouts ~ '/basic.twig' %}
+{% import defaults.macros ~ '/ratings.twig' as ratings %}
+{% import defaults.macros ~ '/banners.twig' as banners %}
+{% import defaults.macros ~ '/markup.twig'  as markup %}
+{% import defaults.macros ~ '/places.twig'  as places %}
+
+{% block title %}
+    Отзывы о событии &laquo;{{ item.name }}&raquo;
+{% endblock %}
+
+{% block content %}
+    <div class="page short">
+        <div class="event{% if isMembered %} membered{% endif %}"{% if loggedUser %} id="event" data-id="{{ item.id }}" data-url="{{ path('events_actions', {'eventId': item.id }) }}"{% endif %}>
+            <div class="event-head">
+                <div class="event-pic">
+                    {{ common.itemPicture(item.getIcon, 'event') }}
+                </div>
+
+                <div class="event-head-info">
+                    <div class="event-head-date">{{ item.held_date|hdate }}</div>
+                    <div class="event-head-time">{{ item.held_date|date('H:i') }}</div>
+
+                    <div class="event-head-metro">
+                        <div class="event-head-metro-wrap">
+                            <div class="metro-icon"></div>
+                            {{ item.place.metro.name }}
+                        </div>
+                    </div>
+
+                    <div class="clear"></div>
+
+                    <div class="event-head-confirm" data-type="confirm"></div>
+
+                    <div class="event-head-cancel" data-type="cancel">
+                        <span>передумали</span>
+                    </div>
+
+                    <div class="event-members">
+                        <div class="event-members-text">уже идут</div>
+                        <div class="event-members-number" data-type="total">{{ item.members|length }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="place-info-wrap reviews">
+                <h1>
+                    <a href="{{ item.url }}">{{ item.name }}</a>
+                </h1>
+
+
+                <div class="tabs">
+                    <div class="tabs-items" data-type="items">
+                        <div class="tabs-item selected">Отзывы ({{ reviews|length }})</div>
+                        <div class="tabs-item">Новый</div>
+                    </div>
+
+                    <div class="clear"></div>
+
+                    <div class="tabs-contents" data-type="contents">
+                        <div class="tabs-content selected">
+                            <div class="good-reviews-items">
+                                {% for review in reviews %}
+                                    {{ ratings.review(review) }}
+                                {% else %}
+                                    <em>Нет ни одного отзыва! Вы можете стать первым!</em>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <div class="tabs-content">
+                            {% include defaults.macros ~ '/review.twig' %}
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+                
+            <div class="clear"></div>
+        </div>
+
+        <div class="page-right">
+            <div class="main-body-right">
+                {{ banners.shop(shopBanners, true) }}
+            </div>
+        </div>
+    </div>
+    
+    <div class="clear"></div>
+{% endblock %}

@@ -1,0 +1,102 @@
+{% extends defaults.layouts ~ '/manage.twig' %}
+
+{% block title %}
+Доставки
+{% endblock %}
+
+{% block content %}
+	<div class="header-title">
+        {{ block('title') }}
+    </div>
+
+    <table class="items-table">
+        <thead>
+            <tr>
+                <th width="130px">
+                    <div>Тип доставки</div>
+                </th>
+
+                <th width="130px">
+                    <div>Дата доставки</div>
+                </th>
+
+                <th width="250px">
+                    <div>Адрес</div>
+                </th>
+
+                <th>
+                    <div>Комментарий</div>
+                </th>
+
+                <th class="left" width="250px">
+                    <div>Клиент</div>
+                </th>
+
+                <th width="80px">
+                    <div>Заказ</div>
+                </th>
+
+                <th width="80px">
+                    <div>Товаров</div>
+                </th>
+
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}        
+                <tr class="items-table-item{% if not item.finished %} forbidden{% else %} finished-delivery{% endif %}">
+                    <td>{{ item.type.name }}</td>
+                    <td>
+                        <a href="{{ path('manage_deliveries_edit', {'deliveryId': item.id}) }}">
+                            {% if item.delivery_date %}
+                                {{ item.delivery_date|date('d.m.Y') }}
+                            {% else %}
+                                <em>не договорились</em>
+                            {% endif %}
+                        </a>
+                    </td>
+                    <td class="left">{% if item.is_metro %}{{ item.metro.name }}{% else %}{{ item.address|default('Не указан') }}{% endif %}</td>
+                    <td class="left">
+                        {{ item.comment }}
+                        <div class="tools">
+                            <div class="tools-item forbid" data-type="forbid">
+                                <a href="{{ path('manage_deliveries_undo', {'deliveryId': item.id}) }}" class="icon"></a>
+                            </div>
+                            <div class="tools-item confirm" data-type="confirm">
+                                <a href="{{ path('manage_deliveries_finish', {'deliveryId': item.id}) }}" class="icon"></a>
+                            </div>
+                            <div class="tools-item edit" data-type="edit">
+                                <a href="{{ path('manage_deliveries_edit', {'deliveryId': item.id}) }}" class="icon"></a>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="left">
+                        <a href="{{ path('manage_clients_edit', {'clientId': item.order.client.id}) }}">
+                            {{ item.order.client.name }}
+                        </a>
+                        <div class="client-contacts">
+                            <div>{{ item.order.client.email|default(item.order.client.user.login) }}</div>
+                            {% if item.order.client.phone %}
+                                <div>{{ item.order.client.phone }}</div>
+                            {% endif %}
+                        </div>
+                    </td>
+                    <td>
+                        <a href="{{ path('manage_orders_edit', {'orderId': item.order.id}) }}">
+                            {{ item.order.id }}
+                        </a>
+                    </td>
+                    <td>
+                        <b>{{ item.order.getItems|length }}
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="7">
+                        Ни одной доставки не найдено!
+                    </td>
+                </tr>
+            {% endfor %}                    
+        </tbody>
+    </table> 
+{% endblock %}

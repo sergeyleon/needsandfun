@@ -1,0 +1,24 @@
+index:
+  pattern: /
+  defaults:
+    controller: Articles:index
+
+add:
+  pattern: /add
+  defaults:
+    controller: Articles:add
+
+edit:
+  pattern: /edit/{articleId}
+  defaults:
+    controller: Articles:edit
+
+remove:
+  pattern: /remove/{articleId}
+  defaults:
+    controller: Articles:remove
+
+authors:
+  pattern: /authors
+  source: routes/manage/authors.yml  
+  appendName: true

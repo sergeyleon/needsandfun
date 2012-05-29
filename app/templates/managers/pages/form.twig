@@ -1,0 +1,91 @@
+{% extends defaults.layouts ~ '/manage.twig' %}
+
+{% block title %}
+    {% if item.id %}
+        Редактирование страницы &laquo;{{ item.name|default(item.pagetype.name) }}&raquo;
+    {% else %}
+        Новая страница
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <div class="header-title">
+        {{ block('title') }}
+    </div>
+    <script type="text/javascript" src="{{ defaults.common }}/js/mylibs/tinymce/jquery.tinymce.js"></script>
+    <script type="text/javascript">
+        $(function() {
+            $('textarea.big-wysiwyg').tinymce({
+                // Location of TinyMCE script
+                script_url : '{{ defaults.common }}/js/mylibs/tinymce/tiny_mce.js',
+                
+                // General options
+                theme : "advanced",
+                plugins : "pagebreak,style,layer,table,save,advhr,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,template",
+                
+                // Theme options
+                theme_advanced_buttons1 : "undo,redo,|,bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,formatselect,fontselect,fontsizeselect",
+                theme_advanced_buttons2 : "cut,copy,paste,pastetext,|,search,replace,|,bullist,numlist,|,outdent,indent,|,link,unlink,anchor,image,cleanup,help,code,fullscreen,|,insertdate,inserttime,preview,|,forecolor,backcolor",
+                theme_advanced_buttons3 : "styleprops,|,cite,abbr,acronym,del,ins,attribs,|,nonbreaking,pagebreak,|,tablecontrols,|,hr,removeformat,visualaid,|,sub,sup,|,print",
+                theme_advanced_buttons4 : "",
+                theme_advanced_toolbar_location : "top",
+                theme_advanced_toolbar_align : "left",
+                theme_advanced_statusbar_location : "none",
+                theme_advanced_resizing : true,
+                
+                // Example content CSS (should be your site CSS)
+                content_css : "{{ defaults.common }}/css/style.css"
+            });
+        });
+    </script>    
+    
+    <form method="post">
+        {% if item.id %}
+            <input type="hidden" name="id" value="{{ item.id }}" />
+        {% endif %}
+        
+        <table class="form-table" width="100%">
+            <tr>
+                <td width="150px">
+                    Название страницы
+                </td>
+                <td width="500px">
+                    <div class="input-wrap">
+                        <input type="text" name="name" value="{{ item.name|default(item.pagetype.name) }}" />
+                    </div>
+                </td>     
+                <td></td>
+            </tr>
+
+            {% if item is not defined or item.deletable %}
+                <tr>
+                    <td>
+                        Ссылка
+                    </td>
+                    <td>
+                        <div class="input-wrap">
+                            <input type="text" name="link" value="{{ item.link }}" />
+                        </div>
+                    </td>     
+                    <td></td>
+                </tr>
+            {% endif %}
+            
+            <tr>
+                <td colspan="3">
+                    <div class="input-wrap">
+                        <textarea class="big-wysiwyg" name="contents">{{ item.contents }}</textarea>
+                    </div>            
+                </td>                
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <div class="form-submit">
+                        <button type="submit" name="proceed">
+                            Сохранить
+                        </button>
+                    </div>                
+                </td>
+        </table>
+        
+{% endblock %}

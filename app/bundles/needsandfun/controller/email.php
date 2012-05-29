@@ -1,0 +1,82 @@
+<?php
+
+namespace Needsandfun\Controller;
+
+class Email extends \Core\Abstracts\Authorized
+{
+	public function userAdded(\Core\Model\User $user, $options = array())
+	{
+		$options = array(
+			'login' 	  => $user->login,
+			'password'    => empty($options['password'])
+				? ''
+				: $options['password'],
+			'client'	  => $user->client,
+			'key'		  => $user->getActivateKey(),
+			'host'		  => $this->router->getHost()
+		);
+
+		$this->env->setByNamespace('Needsandfun');
+
+		\Core\Model\Email::get()->create(array(
+            'to'      => $user->login,
+            'subject' => 'Вы успешно зарегистрировались на сайте needsandfun.ru',
+            'text'    => $this->page->render('email/user/confirm.twig', $options)
+        ));
+	}
+
+	public function activateAccount(\Core\Model\User $user)
+	{
+		$options = array(
+			'client'	  => $user->client,
+			'login' 	  => $user->login,
+			'key'		  => $user->getActivateKey(),
+			'host'		  => $this->router->getHost()
+		);
+
+		\Core\Model\Email::get()->create(array(
+            'to'      => $user->login,
+            'subject' => 'Необходимо подтвердить создание аккаунта на сайте needsandfun.ru',
+            'text'    => $this->page->render('email/user/activation.twig', $options)
+        ));
+	}	
+
+	public function confirmFlushPassword(\Core\Model\User $user)
+	{
+		$options = array(
+			'client'	  => $user->client,
+			'login' 	  => $user->login,
+			'newPassword' => $user->updateNewPassword(),
+			'key'		  => $user->getConfirmKey(),
+			'host'		  => $this->router->getHost()
+		);
+
+		\Core\Model\Email::get()->create(array(
+            'to'      => $user->login,
+            'subject' => 'Восстановление пароля на сайте needsandfun.ru',
+            'text'    => $this->page->render('email/user/forgot.twig', $options)
+        ));
+	}
+
+	public function confirmOrder(\Core\Model\Order $order)
+	{
+		$options = array(
+			'order' => $order,
+			'host'    => $this->router->getHost()
+		);
+		
+		\Core\Model\Email::get()->create(array(
+            'to'      => $order->getClient()->email,
+            'subject' => 'Вы сделали заказ на сайте needsandfun.ru',
+            'text'    => $this->page->render('email/order/confirm.twig', $options)
+        ));
+	}
+
+	public function test()
+    {
+        $this->page['order'] = \Core\Model\Order::find(56);
+        $this->page['host'] = 'http://' . $_SERVER['HTTP_HOST'];
+
+        $this->page->display('email/order/confirm.twig');
+    }	
+}

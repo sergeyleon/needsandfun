@@ -1,0 +1,103 @@
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr>
+		<td bgcolor="#eeeeee">
+			<img src="{{ host }}{{ defaults.common }}/email/dot.gif" width="1px" height="1px" />
+		</td>
+		<td width="800px">
+			<table cellspacing="0" cellpadding="0" bgcolor="white">
+				<tr>
+					<td colspan="3" bgcolor="white">
+						<img src="{{ host }}{{ defaults.common }}/email/dot.gif" width="800px" height="30px" />
+					</td>
+				</tr>
+
+				<tr>
+					<td width="60px" bgcolor="white">
+						<img src="{{ host }}{{ defaults.common }}/email/dot.gif" width="60px" height="30px" />
+					</td>
+
+					<td width="680px" bgcolor="white">
+						<table width="680px" cellspacing="0" cellpadding="0">
+							<tr>
+								<td width="315px">
+									<img src="{{ host }}{{ defaults.common }}/email/logo.png" width="265px" height="75px" />
+								</td>
+								<td width="200px" align="center">
+									<b style="font-size: 13px;font-family: sans-serif; color: #be4619">Магазин детских товаров и афиша главных событий Москвы для детей</b>
+								</td>
+								<td align="right">
+									<b style="font-family: sans-serif; color: #be4619">+7 (495)&nbsp;&shy;724-90-26</b>
+								</td>
+							</tr>
+						</table>
+					</td>
+
+					<td width="60px" bgcolor="white">
+						<img src="{{ host }}{{ defaults.common }}/email/dot.gif" width="60px" height="30px" />
+					</td>					
+				</tr>
+
+				<tr>
+					<td colspan="3" bgcolor="white">
+						<img src="{{ host }}{{ defaults.common }}/email/header.png" width="800px" height="40px" />
+					</td>
+				</tr>	
+
+				<tr>
+					<td colspan="3" bgcolor="white">
+						<img src="{{ host }}{{ defaults.common }}/email/dot.gif" width="800px" height="30px" />
+					</td>
+				</tr>
+			</table>
+
+			<table cellspacing="0" cellpadding="0" bgcolor="white">
+				<tr>
+					<td width="60px" bgcolor="white">
+						<img src="{{ host }}{{ defaults.common }}/email/dot.gif" width="60px" height="30px" />
+					</td>
+
+					<td width="680px" bgcolor="white">
+						<p style="font-family:sans-serif; font-size: 14px">
+							Здравствуйте{% if client.name %}, {{ client.name }}{% endif %}!
+						</p>
+
+
+						<p style="font-family:sans-serif; font-size: 13px">
+							Вы получили это письмо потому, что вы (либо кто-то, выдающий себя за вас) попросили выслать новый пароль к вашей учётной записи на сайте <a style="color: #333" href="http://needsandfun.ru">needsandfun.ru</a>. Если вы не просили выслать пароль, то не обращайте внимания на это письмо, если же подобные письма будут продолжать приходить, обратитесь в <a style="color: #333" href="mailto:tech@needsandfun.ru">службу поддержки</a>.
+						</p>
+
+						<p style="font-family:sans-serif; font-size: 13px">
+							Прежде чем использовать новый пароль, вы должны его активизировать. Для этого перейдите по ссылке: <a style="color: #333" href="{{ url('confirm', {'key': key}) }}">{{ url('confirm', {'key': key}) }}</a>
+						</p>
+
+						<p style="font-family:sans-serif; font-size: 13px; line-height: 1.4em">
+							В случае успешной активизации вы сможете входить в систему, используя следующий пароль:<br />
+							Пароль: <b>{{ newPassword }}</b>
+						</p>
+
+						<p style="font-family:sans-serif; font-size: 12px">
+							Вы сможете сменить этот пароль в личном кабинете. Если у вас возникнут какие-то трудности, обратитесь в <a style="color: #333" href="mailto:tech@needsandfun.ru">службу поддержки</a>.
+						</p>
+					</td>
+
+					<td width="60px" bgcolor="white">
+						<img src="{{ host }}{{ defaults.common }}/email/dot.gif" width="60px" height="30px" />
+					</td>					
+				</tr>
+				<tr>
+					<td colspan="3" bgcolor="white">
+						<img src="{{ host }}{{ defaults.common }}/email/dot.gif" width="800px" height="30px" />
+					</td>
+				</tr>
+				<tr>
+					<td colspan="3" bgcolor="white">
+						<img src="{{ host }}{{ defaults.common }}/email/footer.png" width="800px" height="40px" />
+					</td>
+				</tr>
+			</table>			
+		</td>
+		<td bgcolor="#eeeeee">
+			<img src="{{ host }}{{ defaults.common }}/email/dot.gif" width="1px" height="1px" />
+		</td>
+	</tr>
+</table>

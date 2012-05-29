@@ -1,0 +1,64 @@
+{% extends defaults.layouts ~ '/basic.twig' %}
+{% import defaults.macros ~ '/banners.twig' as banners %}
+{% import defaults.macros ~ '/markup.twig' as markup %}
+{% import defaults.macros ~ '/common.twig' as common %}
+
+{% block title %}
+    {{ item.name }}
+{% endblock %}
+
+{% block content %}
+    <div class="page short">
+        <div class="place">
+            <div class="place-head">
+                <div class="place-head-img">
+                    {{ common.itemPicture(item.getIcon, 'article') }}
+                </div>
+                
+                <div class="place-head-info">
+                    <div class="place-head-wrap">
+                        <div class="article-author">
+                            <div class="article-author-wrap">
+                                {% set author = item.author %}
+                                <div class="article-author-pic">
+                                    {{ common.itemPicture(author.getIcon, 'thumb') }}
+                                </div>
+                                <div class="article-author-name">
+                                    {{ author.name }}
+                                </div>
+
+                                <div class="article-author-desc">
+                                    <noindex>
+                                        {{ author.description }}
+                                    </noindex>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="clear"></div>                
+            </div>
+                    
+            <div class="place-info-wrap">
+                <div class="article-content">
+                    <div class="article-content-links">
+                        {{ markup.addThis() }}
+                    </div>
+
+                    <h1>
+                        <span>{{ item.name }}</span>
+                    </h1>
+                        
+                    {{ item.content|raw }}
+                </div>
+            </div>
+        </div>
+
+        <div class="page-right">
+            <div class="main-body-right">
+                {{ banners.shop(shopBanners, true) }}
+            </div>
+        </div>
+    </div>
+    <div class="clear"></div>    
+{% endblock %}

@@ -1,0 +1,34 @@
+index:
+  pattern: /
+  defaults:
+    controller: Metro:index
+    
+add:
+  pattern: /add
+  defaults:
+    controller: Metro:add
+
+edit:
+  pattern: /edit/{metroId}
+  defaults:
+    controller: Metro:edit
+    
+remove:
+  pattern: /remove/{metroId}
+  defaults:
+    controller: Metro:remove
+    
+line_add:
+  pattern: /line/add
+  defaults:
+    controller: Metro:addLine
+    
+line_edit:
+  pattern: /line/edit/{lineId}
+  defaults:
+    controller: Metro:editLine
+    
+line_remove:
+  pattern: /line/remove/{lineId}
+  defaults:
+    controller: Metro:removeLine    

@@ -1,0 +1,58 @@
+{% extends defaults.layouts ~ '/manage.twig' %}
+{% import defaults.macros ~ '/banners.twig' as banners %}
+
+{% block title 'Баннеры' %}
+
+{% block content %}
+    <div class="header-title">
+        Баннеры [<a href="{{ path('manage_banners_add') }}">+</a>]
+    </div>
+    
+    <table class="items-table">
+        <thead>
+            <tr>
+                <th width="50px">
+                    <div>#</div>
+                </th>
+                <th width="60px">
+                    <div>Иконка</div>
+                </th>
+                <th class="left">
+                    <div>Слоган</div>
+                </th>
+                <th width="250px">
+                    <div>Тип</div>
+                </th>                
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}        
+                <tr class="items-table-item">
+                    <td class="middle">{{ loop.index }}</td>
+                    <td>{{ banners.itemPicture(item.getIcon, 'icon') }}</td>
+                    <td class="left middle">
+                        {{ item.title }}
+                        <div class="tools">
+                            <div class="tools-item edit" data-type="edit">
+                                <a href="{{ path('manage_banners_edit', {'bannerId': item.id}) }}" class="icon"></a>
+                            </div>
+                        
+                            <div class="tools-item delete" data-type="delete" data-confirm="true">
+                                <a href="{{ path('manage_banners_remove', {'bannerId': item.id}) }}" class="icon"></a>
+                            </div>
+                        </div>                        
+                    </td>
+                    <td class="middle">
+                        {{ item.type.name }}
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="4">
+                        Ни одного баннера не найдено!
+                    </td>
+                </tr>
+            {% endfor %}                    
+        </tbody>
+    </table>    
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends defaults.layouts ~ '/basic.twig' %}
+{% import defaults.macros ~ '/shop.twig' as shop %}
+{% import defaults.macros ~ '/cabinet.twig' as cabinet %}
+
+{% block title 'Моя афиша' %}
+
+{% block content %}
+    <div class="page">
+        {% include defaults.templates ~ '/cabinet/menu.twig' %}
+
+        <div class="cabinet-page">
+            Здесь отображаются события, на которые вы собирались сходить
+
+            <div class="tabs">
+                <div class="tabs-items" data-type="items">
+                    <div class="tabs-item-title">
+                        СОБЫТИЯ
+                    </div>
+
+                    <div class="tabs-item selected">
+                        СПИСОК
+                    </div>
+
+                    <div class="tabs-item">
+                        КАЛЕНДАРЬ
+                    </div>
+
+                    <div class="clear"></div>
+                </div>
+                
+                <div class="clear"></div>
+
+                <div class="tabs-contents" data-type="contents">
+                    <div class="tabs-content selected">
+                        {{ cabinet.currentEvents(currentEvents) }}
+                        
+                    </div>
+                    <div class="tabs-content">
+                        {{ cabinet.calendar(calendar) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="clear"></div>
+    </div>
+{% endblock %}

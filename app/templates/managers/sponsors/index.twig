@@ -1,0 +1,56 @@
+{% extends defaults.layouts ~ '/manage.twig' %}
+
+{% block title 'Спонсоры' %}
+
+{% block content %}
+    <div class="header-title">
+        Организаторы [<a href="{{ path('manage_sponsors_add') }}">+</a>]
+    </div>
+
+    <table class="items-table">
+        <thead>
+            <tr>
+                <th width="50px">
+                    <div>#</div>
+                </th>
+                <th class="left">
+                    <div>Организатор</div>
+                </th>
+                <th class="left" width="400px">
+                    <div>Ссылка</div>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in sponsors %}        
+                <tr class="items-table-item">
+                    <td>{{ loop.index }}</td>   
+                    <td class="left">
+                        {{ item.name }}<br />
+                        {% if item.description %}
+                            {{ item.description|striptags|raw|truncate(100) }}
+                        {% endif %}
+                    </td>
+                    <td class="left">
+                        {{ item.link }}
+                        <div class="tools">
+                            <div class="tools-item edit" data-type="edit">
+                                <a href="{{ path('manage_sponsors_edit', {'sponsorId': item.id}) }}" class="icon"></a>
+                            </div>
+                        
+                            <div class="tools-item delete" data-type="delete" data-confirm="true">
+                                <a href="{{ path('manage_sponsors_remove', {'sponsorId': item.id}) }}" class="icon"></a>
+                            </div>
+                        </div>                                  
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="3">
+                        Ни одного организатора не найдено
+                    </td>
+                </tr>
+            {% endfor %}                    
+        </tbody>
+    </table>    
+{% endblock %}

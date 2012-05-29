@@ -1,0 +1,108 @@
+{% extends defaults.layouts ~ '/manage.twig' %}
+
+{% block title %}
+Заказы
+{% endblock %}
+
+{% block content %}
+	<div class="header-title">
+        {{ block('title') }} [<a href="{{ path('manage_orders_add') }}">+</a>]
+    </div>
+
+    <table class="items-table">
+        <thead>
+            <tr>
+                <th width="50px">
+                    <div>№№</div>
+                </th>
+
+                <th width="120px">
+                    <div>Создан</div>
+                </th>
+
+                <th width="150px">
+                	<div>Статус</div>
+                </th>
+
+                <th class="left" width="250px">
+                    <div>Клиент</div>
+                </th>
+
+                <th>
+                    <div>Товары</div>
+                </th>
+
+                <th width="100px">
+                    <div>Сумма</div>
+                </th>
+
+                <th width="100px">
+                    <div>Скидка</div>
+                </th>                
+
+                <th width="200px" class="left">
+                    <div>Доставка</div>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}        
+                {% set status = item.getStatus %}
+
+                <tr class="items-table-item" style="background:#{% if loop.index % 2 %}f5f5f5{% else %}fff{% endif %}">
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.created|date('d.m.Y') }}</td>
+                    <td>
+                        <span class="items-table-item-status"{% if status.color %} style="background-color: #{{ status.color }}"{% endif %}>{{ status.name }}<span>
+                    </td>
+                    <td class="left">{{ item.client.name|default(item.client.user.login) }}</td>
+                    <td class="nopad">
+                    	<table width="100%">
+                    		{% for ordergood in item.getItems %}
+	                    		<tr style="background:#{% if loop.index % 2 %}fff{% else %}f5f5f5{% endif %}">
+	                    			<td class="left">{{ ordergood.size.good.name }}</td>
+	                    			<td{% if loop.index == 1 %} width="100px"{% endif %}>{{ ordergood.size.name|default('—') }}</td>
+	                    			<td{% if loop.index == 1 %} width="100px"{% endif %}>{{ ordergood.size.price|money }}</td>
+	                    		</tr>
+	                    	{% else %}
+	                    		Нет товаров.
+	                    	{% endfor %}
+                    	</table>
+                    </td>
+                    <td>{{ item.price|money }}</td>
+                    <td>
+                        {% if item.discount %}
+                            {{ item.discount|money }}
+                        {% else %}
+                            &mdash;
+                        {% endif %}
+                    </td>
+                    <td class="left">
+                        <div class="tools">
+                            <div class="tools-item edit" data-type="edit">
+                                <a href="{{ path('manage_orders_edit', {'orderId': item.id}) }}" class="icon"></a>
+                            </div>
+                            {#
+                                <div class="tools-item delete" data-type="delete" data-confirm="true">
+                                    <a href="{{ path('manage_banners_remove', {'bannerId': item.id}) }}" class="icon"></a>
+                                </div>
+                            #}
+                        </div>                        
+
+                        {{ item.delivery.getType.name }}{% if item.delivery.metro %} &laquo;{{ item.delivery.metro.name }}&raquo;{% endif %}
+                        
+                        {% if item.delivery.delivery_date %}
+                            <br />{{ item.delivery.delivery_date|date('d.m.Y') }}
+                        {% endif %}
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="4">
+                        Ни одного заказа не найдено!
+                    </td>
+                </tr>
+            {% endfor %}                    
+        </tbody>
+    </table> 
+{% endblock %}

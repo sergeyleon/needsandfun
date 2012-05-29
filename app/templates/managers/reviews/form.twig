@@ -1,0 +1,90 @@
+{% extends defaults.layouts ~ '/manage.twig' %}
+{% import defaults.macros ~ '/markup.twig' as markup %}
+
+{% block title %}
+    {% if item.id %}
+        Правка отзыва на &laquo;{{ item.element.item.name }}&raquo;
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <div class="header-title">{{ block('title') }}</div>
+    
+    <form method="post" enctype="multipart/form-data">
+        {% if item.id %}
+            <input type="hidden" name="id" value="{{ item.id }}">
+        {% endif %}
+                
+        <table class="form-table" width="700px">
+            <tr>
+                <td width="100px">
+                    Автор
+                </td>
+                <td width="500px">
+                    {{ item.client.name }}
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    Оценка
+                </td>
+                <td>
+                    {{ markup.rating({'selected': 4, 'static': true}) }}
+                </td>
+            </tr>    
+
+            <tr>
+                <td>
+                    Модерация
+                </td>
+                <td>
+                    <select name="checked">
+                        <option value="0">На проверке</option>
+                        <option value="1"{% if item.is_checked %} selected="selected"{% endif %}>Пройдена</option>
+                    </select>
+                </td>
+            </tr>   
+
+            <tr>
+                <td>
+                    Достоинства
+                </td>
+                <td>
+                    {{ item.pros|default('Не указаны') }}
+                </td>
+            </tr>            
+
+            <tr>
+                <td>
+                    Недостатки
+                </td>
+                <td>
+                    {{ item.contras|default('Не указаны') }}
+                </td>
+            </tr>    
+
+            <tr>
+                <td>
+                    Комментарий
+                </td>
+                <td>
+                    {{ item.comment|default('Не указан') }}
+                </td>
+            </tr>                
+
+            <tr>
+                <td></td>
+                <td>
+                    <div class="form-submit">
+                        <button type="submit" name="proceed">
+                                Сохранить
+                        </button>
+                    </div>                
+                </td>
+            </tr>
+        </table>
+        
+        <div class="clear"></div>
+    </form>    
+{% endblock %}

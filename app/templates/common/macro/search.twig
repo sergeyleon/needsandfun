@@ -1,0 +1,90 @@
+{% macro form(left, right) %}
+	<div class="search-form">
+		<div class="search-form-left">
+			{{ left }}
+		</div>
+		<div class="search-form-right">
+			{{ right }}
+		</div>
+		<div class="clear"></div>
+	</div>
+{% endmacro %}
+
+{% macro title(title) %}
+	<div class="search-form-title">
+		{{ title }}
+	</div>
+{% endmacro %}
+
+{% macro category(category, type, count, selected) %}
+	{% if count %}
+		<div class="search-form-category{% if 'all' == type %} selected{% endif %}" data-type="filter-item" data-id="{{ type }}">
+			<div class="search-form-category-wrap">
+				{{ category }} <span>(<span>{{ count }}{% if 30 == count %}+{% endif %}</span>)</span>
+			</div>
+		</div>
+	{% endif %}
+{% endmacro %}
+
+{% macro result(result) %}
+	{% import defaults.macros ~ '/common.twig' as common %}
+	<div class="search-form-result" data-type="{{ result.getType }}">
+		<div class="search-form-result-title">
+			<a href="{{ result.url }}">{{ result.name }}</a>
+		</div>
+
+		<div class="search-form-result-pic">
+			{{ common.itemPicture(result.getIcon, 'thumb') }}
+		</div>
+
+		<div class="search-form-result-info">
+			{% if 'article' == result.getType %}
+				{% set description %}
+					{{ result.content }}
+				{% endset %}
+
+			{% elseif 'good' == result.getType %}
+				{% set description %}
+					{{ result.description }}
+				{% endset %}
+
+				{% set category %}
+					{% if result.category.id %}
+						<div class="search-form-result-category">
+							В рубрике &laquo;<a href="{{ result.category.url }}">{{ result.category.name }}</a>&raquo;
+						</div>
+					{% endif %}
+				{% endset %}
+
+			{% elseif 'event' == result.getType %}
+				{% set description %}
+					{{ result.description }}
+				{% endset %}
+
+				{% set category %}
+					<div class="search-form-result-category">
+						В рубрике &laquo;<a href="{{ result.category.url }}">{{ result.category.name }}</a>&raquo;
+					</div>				
+				{% endset %}
+			{% elseif 'place' == result.getType %}
+				{% set description %}
+					{{ result.description }}
+				{% endset %}
+
+				{% set category %}
+					<div class="search-form-result-category">
+						В рубрике &laquo;<a href="{{ result.category.url }}">{{ result.category.name }}</a>&raquo;
+					</div>				
+				{% endset %}				
+			{% endif %}
+
+			{{ description|truncate(200)|raw }}
+
+			{% if category %}
+				{{ category }}
+			{% endif %}
+		</div>
+
+		<div class="clear"></div>
+	</div>
+{% endmacro %}

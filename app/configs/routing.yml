@@ -1,0 +1,198 @@
+index:
+  pattern: /
+  defaults: 
+    controller: Index:show
+
+markets:
+  pattern: /market.xml
+  defaults:
+    controller: Market:clickAndPay
+
+sitemap:
+  pattern: /sitemap.xml
+  defaults:
+    controller: Sitemap:display
+
+# shop ========>
+shop:
+  pattern: /store
+  source: routes/shop.yml
+  appendName: true
+
+shop_delivery:
+  pattern: /delivery
+  defaults:
+    controller: Shop:deliveryPage
+
+shop_payment:
+  pattern: /payment
+  defaults:
+    controller: Shop:paymentPage    
+
+shop_size_chart:
+  pattern: /size_chart
+  defaults:
+    controller: Shop:sizechartPage
+
+shop_about:
+  pattern: /about
+  defaults:
+    controller: Shop:aboutPage
+
+shop_good_ratings:
+  pattern: /good-ratings-{good}
+  source: routes/goods/ratings.yml
+  appendName: true
+
+shop_good:
+  pattern: /good-{good}
+  defaults:
+    controller: Shop:good
+
+shop_cart:
+  pattern: /cart
+  defaults:
+    controller: Cart:index
+
+shop_cart_update:
+  pattern: /cart-update
+  defaults:
+    controller: Cart:update
+# <========    
+
+# events ========>
+events:
+  pattern: /events
+  source: routes/events.yml
+  appendName: true  
+
+events_event:
+  pattern: /event-{event}
+  defaults:
+    controller: Events:event
+
+events_ratings: 
+  pattern: /event-ratings-{event}
+  source: routes/events/ratings.yml
+  appendName: true
+
+events_reporter:
+  pattern: /reporter-{reporter}
+  defaults:
+    controller: Events:reporter    
+
+events_sponsor:
+  pattern: /sponsor-{sponsor}
+  defaults:
+    controller: Events:sponsor
+
+events_actions:
+  pattern: /actions-{eventId}
+  defaults:
+    controller: Events:actions
+# <============
+
+# places ========>
+places:
+  pattern: /places
+  source: routes/places.yml
+  appendName: true
+
+places_place:
+  pattern: /place-{place}
+  defaults:
+    controller: Places:place
+
+places_ratings:
+  pattern: /place-ratings-{place}
+  source: routes/places/ratings.yml
+  appendName: true  
+# <============
+
+# articles ========>
+articles:
+  pattern: /articles
+  source: routes/articles.yml
+  appendName: true  
+
+articles_article:
+  pattern: /article-{article}
+  defaults:
+    controller: Articles:article  
+# <============
+
+# pages ========>
+pages_show:
+  pattern: /page-{link}
+  defaults:
+    controller: Pages:show  
+# <============
+
+
+brands:
+  pattern: /brands
+  defaults:
+    controller: Brands:index
+
+partners:
+  pattern: /friends
+  defaults:
+    controller: Friends:index
+
+# перезвонить мне
+callback:
+  pattern: /callback
+  defaults: 
+    controller: Index:callback    
+
+# внешняя ссылка
+go:
+  pattern: /go/{address}
+  defaults: 
+    controller: Index:go
+
+# поиск по сайту
+search: 
+  pattern: /search
+  source: routes/search.yml
+  appendName: true
+
+# CMS
+manage:
+  pattern: /manage
+  environment: Managers
+  source: routes/manage.yml
+  appendName: true
+
+# изображение товара
+item_img:
+  pattern: /uploads/pics/{type}/{filename}
+  defaults:
+    controller: Image:show
+
+# личный кабинет ========>
+cabinet:
+  pattern: /cabinet
+  source: routes/cabinet.yml
+  appendName: true
+
+register:
+  pattern: /register
+  defaults:
+    controller: Register:show  
+
+activate:
+  pattern: /activate/{key}
+  defaults:
+    controller: Cabinet:activateAccount  
+
+forgot_password:
+  pattern: /remind
+  defaults:
+    controller: Index:forgotPassword
+
+confirm:
+  pattern: /confirm/{key}
+  defaults:
+    controller: Index:confirmFlushPassword
+# <============

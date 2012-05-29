@@ -1,0 +1,82 @@
+{% extends defaults.layouts ~ '/basic.twig' %}
+{% import defaults.macros ~ '/markup.twig' as markup %}
+
+{% block title 'Мои данные' %}
+
+{% block content %}
+    <div class="page">
+        {% include defaults.templates ~ '/cabinet/menu.twig' %}
+
+        <div class="cabinet-page">
+            <form method="post">
+            	<table class="form-table">
+            		<tr>
+                        <th width="224px">Имя</th>
+                        <th width="24px"></th>
+                        <th width="224px">Фамилия</th>
+                        <th width="24px"></th>
+                        <th width="224px">Телефон</th>
+                    </tr>
+            		<tr>
+            			<td>
+							<div class="input-wrap">
+			                    <input type="text" name="first_name" placeholder="Иван" value="{{ client.first_name }}" />
+			                </div>                    
+			            </td>
+			            <td></td>
+			            <td>
+							<div class="input-wrap">
+			                    <input type="text" name="last_name" placeholder="Петров" value="{{ client.last_name }}" />
+			                </div>                    
+			            </td>
+			            <td></td>
+			            <td>
+			        		<div class="input-wrap">
+			                    <input type="text" name="phone" placeholder="+7 (123) 456-78-90" value="{{ client.phone }}" />
+			                </div> 
+			        	</td>
+			        </tr>
+
+			        <tr>
+                        <td colspan="3">
+                            <div class="form-table-spacer"></div>
+                        </td>
+                    </tr>
+
+                    {#
+			        <tr>
+                        <th>Телефон</th>
+                        <th></th>
+                        <th>Email</th>
+                        <th></th>
+                    </tr>
+
+			        <tr>
+			        	
+			        	<td></td>
+			        	<td>
+			        		<div class="input-wrap">
+			                    <input type="text" name="email" disabled="disabled" placeholder="ivan.petrov@gmail.com" value="{{ client.email }}" />
+			                </div> 
+			        	</td>
+			        </tr>
+
+			        <tr>
+                        <td colspan="3">
+                            <div class="form-table-spacer"></div>
+                        </td>
+                    </tr>
+					#}
+			        <tr>
+			        	<td colspan="5">
+			        		{{ markup.submitBlock({'name': 'saveProfile', 'value': 'Обновить данные'}) }}
+			        	</td>
+			        </tr>
+			    </table>
+				
+            </form>
+        </div>
+
+        <div class="clear"></div>
+    </div>
+{% endblock %}

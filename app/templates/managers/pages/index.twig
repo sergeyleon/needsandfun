@@ -1,0 +1,68 @@
+{% extends defaults.layouts ~ '/manage.twig' %}
+
+{% block title %}
+Страницы
+{% endblock %}
+
+{% block content %}
+    <div class="header-title">
+        Страницы [<a href="{{ path('manage_pages_add') }}">+</a>]
+    </div>
+
+
+    <div class="items">
+        <table class="items-table">
+            <thead>
+                <tr>
+                    <th width="50px">
+                        <div>##</div>
+                    </th>
+                    <th width="40%">
+                        <div>Заголовок страницы</div>
+                    </th>
+                    <th>
+                        <div>Ссылка</div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                    <tr class="items-table-item">
+                        <td>
+                            {{ loop.index }}
+                        </td>
+                        
+                        <td class="left">
+                            <div class="item-name">
+                                {% if not item.deletable %}<small>[{{ item.pagetype.name }}]</small>&nbsp;{% endif %}{{ item.name|default(item.pagetype.name) }}
+                            </div>
+                        </td>
+
+                        <td class="left">
+                            <div class="tools">
+                                <div class="tools-item edit" data-type="edit">
+                                    <a href="{{ path('manage_pages_edit', {'pageId': item.id}) }}" class="icon"></a>
+                                </div>
+                                {% if item.deletable %}
+                                    <div class="tools-item remove" data-type="remove">
+                                        <a href="{{ path('manage_pages_remove', {'pageId': item.id}) }}" class="icon"></a>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            {% if item.deletable %}
+                                <a target="_blank" href="{{ url('pages_show', {'link': item.link}) }}">{{ url('pages_show', {'link': item.link}) }}</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="4">
+                            Не найдено ни одной информационной страницы.
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}

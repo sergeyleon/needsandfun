@@ -1,0 +1,87 @@
+{% extends defaults.layouts ~ '/manage.twig' %}
+
+{% block title %}
+    {% if banner.id %}
+        Правка баннера &laquo;{{ banner.title }}&raquo;
+    {% else %}
+        Новый баннер
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <div class="header-title">{{ block('title') }}</div>
+    
+    <form method="post" enctype="multipart/form-data">
+        {% if partner.id %}
+            <input type="hidden" name="id" value="{{ banner.id }}">
+        {% endif %}
+                
+        <table class="form-table lefted">
+            <tr>
+                <td width="100px">
+                    Слоган
+                </td>
+
+                <td width="400px">
+                    <div class="input-wrap">
+                        <input type="text" name="title" value="{{ banner.title }}">
+                    </div>
+                </td>
+                
+            </tr>
+            <tr>
+                <td>
+                    Тип баннера
+                </td>
+                <td>
+                    <select name="type">
+                        {% for type in types %}
+                            <option value="{{ type.id }}"{% if banner.type_id == type.id %} selected="selected"{% endif %}>{{ type.name }} ({{ type.key }})</option>
+                        {% endfor %}
+                    </select>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    Ссылка
+                </td>
+                <td>
+                    <div class="input-wrap">
+                        <input type="text" name="link" value="{{ banner.link }}">
+                    </div>
+                </td>
+            </tr>            
+
+            <tr>
+                <td></td>
+                <td>
+                    <div class="form-submit">
+                        <button type="submit" name="proceed">
+                            Сохранить
+                        </button>
+                    </div>                
+                </td>
+            </tr>
+        </table>
+        
+        <div class="row lefted">
+            <div class="gallery">
+                {% if banner.getIcons|length %}
+                    <div class="gallery-wrap" data-url="{{ path('manage_processPictures') }}" data-type="banner">
+                    {% for pic in banner.getIcons %}
+                        <div class="gallery-item" data-id="{{ pic.id }}">
+                            <div class="gallery-item-delete"></div>
+                            <img width="40px" height="40px" src="{{ pic.picture.icon }}" />
+                        </div>
+                    {% endfor %}
+                        <div class="clear"></div>
+                    </div>
+                {% endif %}
+                <input type="file" name="pictures[]" multiple="multiple" min="1" max="5" />
+            </div>
+        </div>        
+        
+        <div class="clear"></div>
+    </form>    
+{% endblock %}

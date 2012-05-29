@@ -1,2 +1,3 @@
 uploads/*
 app/uploads/*
+app/templates/cache/*

@@ -1,0 +1,19 @@
+index:
+  pattern: /
+  defaults:
+    controller: Sponsors:index
+        
+add:
+  pattern: /add
+  defaults:
+    controller: Sponsors:add
+    
+edit:
+  pattern: /edit/{sponsorId}
+  defaults:
+    controller: Sponsors:edit
+    
+remove:
+  pattern: /remove/{sponsorId}
+  defaults:
+    controller: Sponsors:remove

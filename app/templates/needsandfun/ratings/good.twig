@@ -1,0 +1,63 @@
+{% extends defaults.layouts ~ '/basic.twig' %}
+{% import defaults.macros ~ '/ratings.twig' as ratings %}
+{% import defaults.macros ~ '/shop.twig'    as shop %}
+{% import defaults.macros ~ '/markup.twig'  as markup %}
+{% import defaults.macros ~ '/common.twig'  as common %}
+
+{% block title %}
+    Отзывы о товаре &laquo;{{ item.name }}&raquo;
+{% endblock %}
+
+{% block content %}
+    {{ ratings.addForm() }}
+
+	<div class="shop">
+        <div class="categories">
+            <div class="categories-padder">
+                <div class="categories-title">
+                    Каталог
+                </div>
+                {% for item in shopCategories %}
+                    {{ shop.categoryItem(item) }}
+                {% endfor %}
+            </div>
+        </div>
+        
+        <div class="good-reviews lefted">
+        	<h1 class="good-reviews-title">
+        		Отзывы о товаре <a href="{{ item.url }}">{{ item.name }}</a>
+        	</h1>
+
+        	<div class="tabs">
+        		<div class="tabs-items" data-type="items">
+        			<div class="tabs-item selected">Отзывы ({{ reviews|length }})</div>
+        			<div class="tabs-item">Новый</div>
+        		</div>
+
+        		<div class="clear"></div>
+
+        		<div class="tabs-contents" data-type="contents">
+        			<div class="tabs-content selected">
+        				<div class="good-reviews-items">
+			        		{% for review in reviews %}
+			        			{{ ratings.review(review) }}
+			        		{% else %}
+			        			<em>Нет ни одного отзыва! Вы можете стать первым!</em>
+			        		{% endfor %}
+			        	</div>
+
+
+        			</div>
+
+
+        			<div class="tabs-content">
+	        			{% include defaults.macros ~ '/review.twig' %}
+        			</div>
+        			
+        		</div>
+        	</div>
+        </div>
+        <div class="clear"></div>
+    </div>    
+    
+{% endblock %}

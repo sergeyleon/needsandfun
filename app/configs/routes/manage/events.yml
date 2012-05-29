@@ -1,0 +1,49 @@
+index:
+  pattern: /
+  defaults:
+    controller: Events:index
+        
+add:
+  pattern: /add
+  defaults:
+    controller: Events:add
+
+edit:
+  pattern: /edit/{eventId}
+  defaults:
+    controller: Events:edit
+
+remove:
+  pattern: /remove/{eventId}
+  defaults:
+    controller: Events:remove
+
+action:
+  pattern: /action
+  defaults:
+    controller: Events:action 
+
+category_add:
+  pattern: /category/add
+  defaults:
+    controller: Events:addCategory
+
+category_edit:
+  pattern: /category/edit/{categoryId}
+  defaults:
+    controller: Events:editCategory    
+
+category_remove:
+  pattern: /category/remove
+  defaults:
+    controller: Events:removeCategory
+
+category_visibility:
+  pattern: /category/visibility
+  defaults:
+    controller: Events:categoryVisibility    
+
+category_weight:
+  pattern: /category/weight
+  defaults:
+    controller: Events:categoryWeight    

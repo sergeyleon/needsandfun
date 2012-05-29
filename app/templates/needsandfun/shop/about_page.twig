@@ -1,0 +1,102 @@
+{% extends defaults.layouts ~ '/basic.twig' %}
+{% import defaults.macros ~ '/banners.twig' as banners %}
+{% import defaults.macros ~ '/pages.twig' as pages %}
+
+{% block title %}
+{{ item.name|default(item.pagetype.name) }}
+{% endblock %}
+
+{% block content %}
+	<div class="page short">
+		<div class="place about-page">
+		    {{ markup.formRow('Что такое «Нужно и весело»', item.contents.about|raw, true) }}
+            {{ markup.formRow('Часы работы', item.contents.hours|raw, true) }}
+            {{ markup.formRow('Контактная информация', item.contents.contacts|raw, true) }}
+
+            {% set form %}
+                <form method="post">
+                    <table class="form-table">
+                        <tr>
+                            <th width="200px">Имя</th>
+                            <th width="40px"></th>
+                            <th>Письмо</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="input-wrap">
+                                    <input type="text" name="name" tabindex="1" />
+                                </div>
+                            </td>
+                            <td></td>
+                            <td rowspan="7" class="td-relative">
+                                <div class="input-wrap textarea">
+                                    <textarea name="content" tabindex="4"></textarea>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="2">
+                                <div class="form-table-spacer"></div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th>Электроящик для ответа</th>
+                            <th></th>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <div class="input-wrap">
+                                    <input type="text" name="email" tabindex="2" />
+                                </div>                    
+                            </td>
+                            <td></td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="2">
+                                <div class="form-table-spacer"></div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th>Тема</th>
+                            <th></th>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <div class="input-wrap">
+                                    <input type="text" name="subject" tabindex="3" />
+                                </div>                    
+                            </td>
+                            <td></td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="3">
+                                <div class="form-table-spacer"></div>
+                            </td>
+                        </tr>                        
+                    </table>
+
+                    {{ markup.submitBlock({'name': 'contact', 'value': 'Улетай письмо!'}) }}
+                </form>
+            {% endset %}
+
+            {{ markup.formRow('Форма для официального письма', form) }}
+
+            {{ pages.actual(actual) }}
+		</div>
+
+    	<div class="page-right">
+            <div class="main-body-right">
+                {{ banners.shop(shopBanners, true) }}
+            </div>
+        </div>
+
+        <div class="clear"></div>
+	</div>
+{% endblock %}

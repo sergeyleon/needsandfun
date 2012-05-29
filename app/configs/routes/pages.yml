@@ -1,0 +1,4 @@
+show:
+  pattern: /{link}
+  defaults:
+    controller: Pages:show

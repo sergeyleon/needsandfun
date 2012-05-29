@@ -1,0 +1,9 @@
+index:
+  pattern: 
+  defaults:
+    controller: Articles:index
+
+category:
+  pattern: -{category}
+  defaults:
+    controller: Articles:category

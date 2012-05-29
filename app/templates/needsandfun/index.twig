@@ -1,0 +1,90 @@
+{% extends defaults.layouts ~ '/basic.twig' %}
+{% import defaults.macros ~ '/banners.twig' as banners %}
+{% import defaults.macros ~ '/markup.twig' as markup %}
+{% import defaults.macros ~ '/events.twig' as events %}
+
+{% block title '' %}
+
+
+{% block content %}
+    <div class="main-banners index">
+    	<div class="main-banner big">
+	        {{ banners.big(bigBanners) }}
+	    </div>
+
+       	<div class="main-banner today">
+       		{{ banners.today(todayBanner) }}
+       	</div>
+
+       	<div class="clear"></div>
+    </div>
+
+    <div class="main-body">
+        <div class="main-body-left">
+        	{{ banners.shop(shopBanners) }}
+            {{ banners.partners(partners) }}
+        </div>
+
+    	<div class="main-body-content">
+            <div class="tabs">
+                <div class="tabs-items" data-type="items">
+                    <div class="tabs-title">
+                        Мир детей на этой неделе
+                    </div>
+                    <div class="tabs-item selected">
+                        Список
+                    </div>
+                    <div class="tabs-item">
+                        Календарь
+                    </div>
+                    <div class="tabs-item">
+                        Разместить объявление
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div class="clear"></div>
+
+                <div class="tabs-contents" data-type="contents">
+                    <div class="tabs-content selected">
+                        {{ events.list(actualEvents) }}
+                    </div>
+
+                    <div class="tabs-content">
+                        {% if loggedUser %}
+                            {{ events.calendar(loggedUser.client.calendar) }}
+                        {% else %}
+                            {{ markup.needToRegister }}
+                        {% endif %}
+                    </div>
+
+                    <div class="tabs-content">
+                        {% if loggedUser %}
+                            {% include 'needsandfun/cabinet/event_form.twig' %}
+                        {% else %}
+                            {{ markup.needToRegister }}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="bottom-banners">
+                <div class="bottom-banners-places">
+                    <div class="goods-title">
+                        Новые места
+                    </div>
+                    {{ banners.places(places) }}
+                </div>
+                <div class="bottom-banners-articles">
+                    <div class="goods-title">
+                        Свежие статьи
+                    </div>
+                    
+                    {{ banners.article(articleBanner) }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="clear"></div>
+{% endblock %}

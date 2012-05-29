@@ -1,0 +1,4 @@
+index:
+  pattern: 
+  defaults:
+    controller: RatingsPlace:index

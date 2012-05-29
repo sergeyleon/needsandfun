@@ -1,0 +1,46 @@
+{% extends defaults.layouts ~ '/basic.twig' %}
+{% import defaults.macros ~ '/places.twig' as places %}
+
+{% block title %}
+Места
+{% endblock %}
+
+{% block content %}
+    
+    <div class="shop">
+        <div class="categories places">
+            <div class="categories-padder">
+                <div class="categories-title">
+                    Каталог мест
+                </div>
+                
+                {{ places.filter(filter, _context) }}
+
+                {% if currentCategory %}
+                    {{ places.category() }}
+                {% else %}
+                    {{ places.category({'current': 1}) }}
+                {% endif %}
+
+                {% for category in categories %}
+                    {{ places.category(category) }}
+                {% endfor %}
+            </div>
+        </div>
+        
+        <div class="shop-body">
+            {{ places.sorter(sort, _context) }}
+            {% if items %}
+                {{ places.printPlaces(items, pager) }}
+            {% else %}
+                <div class="goods-empty">
+                    Данная категория пуста
+                </div>
+            {% endif %}            
+            {##}
+        </div>
+        
+        <div class="clear"></div>            
+    </div>
+    
+{% endblock %}

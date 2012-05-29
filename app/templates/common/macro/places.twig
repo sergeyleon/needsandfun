@@ -1,0 +1,184 @@
+{% macro coming(list) %}
+    {% import defaults.macros ~ '/events.twig' as events %}
+
+    {% if list %}
+        <div class="goods-title">Скоро на этой площадке</div>
+        <div class="coming-events">
+            {{ events.list(list, false, true) }}
+        </div>
+    {% endif %}
+{% endmacro %}
+
+{% macro past(list) %}
+    {% import defaults.macros ~ '/events.twig' as events %}
+
+    {% if list %}
+        <div class="goods-title">Ранее на этой площадке</div>
+        <div class="past-events">
+            {{ events.list(list, true, true) }}
+        </div>
+    {% endif %}
+{% endmacro %}
+
+{% macro rating(item, url) %}
+    {% import defaults.macros ~ '/common.twig' as common %}
+
+    {{ common.rating(item, url) }}
+{% endmacro %}
+
+{% macro category(item) %}
+    <div class="category-item{% if item.current %} selected{% endif %}">
+        {% if item.current %}
+            <div class="category-item-link">        
+        {% else %}
+            {% if item %}
+                <a class="category-item-link" href="{{ item.url }}">
+            {% else %}
+                <a class="category-item-link" href="{{ path('places_index') }}">            
+            {% endif %}
+        {% endif %}
+        
+            {{ item.name|default('Все места') }}
+            
+        {% if item.current %}
+            </div>
+        {% else %}
+            </a>
+        {% endif %}
+    </div>
+{% endmacro %}
+
+{% macro itemPicture(icon, type, gallery) %}
+    {% if icon.picture.filename %}
+        {% if gallery %}
+            <a class="fancybox" rel="gallery" href="{{ path('item_img', {'filename': icon.picture.filename, 'type': 'full'}) }}">
+        {% endif %}
+            <img src="{{ path('item_img', {'filename': icon.picture.filename, 'type': type}) }}" />            
+        {% if gallery %}            
+            </a>
+        {% endif %}
+    {% else %}
+        <img src="{{ defaults.common }}/img/noimg.gif" />
+    {% endif %}
+{% endmacro %}
+
+{% macro printPlaces(items, pager) %}
+    {% import defaults.macros ~ '/common.twig' as common %}
+    <div class="goods">
+        {% for item in items %}
+            {{ _self.place(item) }}
+            {% if 0 == loop.index % 4%}
+                <div class="clear"></div>
+            {% endif %}
+        {% endfor %}
+        <div class="clear"></div>
+
+        {% if pager %}
+            {{ common.pager(pager) }}
+        {% endif %}
+    </div>
+{% endmacro %}
+
+
+{% macro place(place) %}
+    <a href="{{ place.url }}" class="good-item">
+        <div class="good-item-pic">
+            {{ _self.itemPicture(place.getIcon, 'small') }}
+        </div>
+        
+        <div class="good-item-title">
+            {{ place.name }}            
+        </div>
+        
+        {{ _self.rating(place) }}
+    </a>
+{% endmacro %}
+
+{% macro sorter(sort, context) %}
+    {% import defaults.macros ~ '/markup.twig' as markup %}
+
+    <form>
+        <div class="sorter">
+            <div class="sorter-item">
+                <select name="sort[type]">
+                    <option value="abc"    {% if 'abc' == sort.type %} selected="selected"{% endif %}>По алфавиту</option>
+                    <option value="rating" {% if 'rating' == sort.type %} selected="selected"{% endif %}>По рейтингу</option>
+                    <option value="date"   {% if 'date'   == sort.type %} selected="selected"{% endif %}>По дате поступления</option>
+                </select>
+            </div>
+
+            {#
+            <div class="sorter-item">
+                <select name="sort[dir]">
+                    <option value="asc"  {% if 'asc'  == sort.dir %} selected="selected"{% endif %}>По возрастанию</option>
+                    <option value="desc" {% if 'desc' == sort.dir %} selected="selected"{% endif %}>По убыванию</option>
+                </select>
+            </div>
+            #}
+
+            <div class="sorter-item">
+                {{ markup.button({'value': 'Ok', 'small': true}) }}
+            </div>
+
+            <div class="sorter-item show-all">
+                <div class="sorter-item-icon"></div>
+                <a href="{{ context.clearFilter }}">Показать все</a>
+            </div>
+
+            <div class="clear"></div>
+        </div>
+    </form>
+{% endmacro %}
+
+{% macro filter(filter, context) %}
+    {% import defaults.macros ~ '/markup.twig' as markup %}
+    <div class="filter">
+        <form data-type="filter">
+            <div class="filter-item">
+                <div class="filter-item-title">Стания метро</div>
+
+                <div class="multiple removable" data-type="multiple" data-name="metros">
+                    {% for metro in filter.metros %}
+                        {{ _self.filterMetro(context.metros, metro) }}
+                    {% endfor %}
+                    {{ _self.filterMetro(context.metros) }}
+                </div>
+            </div>
+
+            {{ markup.button({'value': 'Фильтровать'}) }}
+
+        </form>
+    </div>
+{% endmacro %}
+
+{% macro filterMetro_lines(metroslines, metroId) %}
+    <div class="multiple-item{% if not metroId %} sample{% endif %}" data-type="item">
+        <div class="multiple-item-remove" data-type="remove">&times;</div>
+        <div class="multiple-item-content">
+            <select data-type="handle"{% if not metroId %} data-sample="1"{% endif %}>
+                <option value="0">Любая</option>
+                {% for line in metroslines %}
+                    <optgroup label="{{ line.name }}">
+                        {% for metro in line.metros %}
+                            <option value="{{ metro.id }}"{% if metro.id == metroId %} selected="selected"{% endif %}>{{ metro.name }}</option>
+                        {% endfor %}
+                    </optgroup>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro filterMetro(metros, metroId) %}
+    <div class="multiple-item{% if not metroId %} sample{% endif %}" data-type="item">
+        <div class="multiple-item-remove" data-type="remove">&times;</div>
+        <div class="multiple-item-content">
+            <select data-type="handle"{% if not metroId %} data-sample="1"{% endif %}>
+                <option value="0">Любая</option>
+                {% for metro in metros %}
+                    <option value="{{ metro.id }}"{% if metro.id == metroId %} selected="selected"{% endif %}>{{ metro.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+{% endmacro %}

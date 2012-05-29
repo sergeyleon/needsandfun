@@ -1,0 +1,195 @@
+{% extends defaults.layouts ~ '/manage.twig' %}
+
+{% block title %}
+    {% if item.id %}
+        Правка места &laquo;{{ item.name }}&raquo;
+    {% else %}
+        Новое место
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <div class="header-title">{{ block('title') }}</div>
+    
+    <form method="post" enctype="multipart/form-data">
+        {% if item.id %}
+            <input type="hidden" name="id" value="{{ item.id }}">
+        {% endif %}
+                
+        <table class="form-table lefted">
+            <tr>
+                <td width="100px">
+                    Название
+                </td>
+                <td width="400px">
+                    <div class="input-wrap">
+                        <input type="text" name="name" value="{{ item.name }}">
+                    </div>
+                </td>
+                <td width="200px"></td>
+            </tr>
+
+            <tr>
+                <td>
+                    Краткое описание
+                </td>
+                <td>
+                    <div class="input-wrap">
+                        <input type="text" name="announce" value="{{ item.announce }}">
+                    </div>
+                </td>
+            </tr>            
+
+            <tr>
+                <td>
+                    Адрес
+                </td>
+                <td>
+                    <div class="input-wrap">
+                        <input type="text" name="address" value="{{ item.address }}">
+                    </div>
+                </td>
+            </tr>
+            
+            <tr>
+                <td>
+                    Карты.Яндекс
+                </td>
+                <td>
+                    <div class="input-wrap">
+                        <input type="text" name="maps_yandex" value="{{ item.maps_yandex }}">
+                    </div>
+                </td>
+            </tr>                        
+            
+            <tr>
+                <td>
+                    Карты.Google
+                </td>
+                <td>
+                    <div class="input-wrap">
+                        <input type="text" name="maps_google" value="{{ item.maps_google }}">
+                    </div>
+                </td>
+            </tr>                                    
+            
+            <tr>
+                <td>
+                    Телефон
+                </td>
+                <td>
+                    <div class="input-wrap">
+                        <input type="text" name="phone" value="{{ item.phone }}">
+                    </div>
+                </td>
+            </tr>                                    
+            
+            <tr>
+                <td>
+                    Email
+                </td>
+                <td>
+                    <div class="input-wrap">
+                        <input type="text" name="email" value="{{ item.email }}">
+                    </div>
+                </td>
+            </tr>            
+            
+            <tr>
+                <td>
+                    Www-страница
+                </td>
+                <td>
+                    <div class="input-wrap">
+                        <input type="text" name="www" value="{{ item.www }}">
+                    </div>
+                </td>
+            </tr>                        
+            
+            <tr>
+                <td>
+                    Модерация
+                </td>
+                <td>
+                    <select name="moderation">
+                        <option value="0">На проверке</option>                    
+                        <option value="1"{% if item.is_checked == 1 %} selected="selected"{% endif %}>Пройдена</option>
+                    </select>
+                </td>
+            </tr>            
+            
+            
+            <tr>
+                <td>
+                    Категория
+                </td>
+                <td>
+                    <select name="category">
+                        {% for category in categories %}
+                            <option value="{{ category.id }}"{% if category.id == item.category_id %} selected="selected"{% endif %}>{{ category.name }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+            </tr>            
+            
+            <tr>
+                <td width="100px">
+                    Ближайшее метро
+                </td>
+                <td width="300px">
+                    <select name="metro">
+                        <option value="0">Отсутствует</option>
+                        {% for line in metrolines %}
+                            <optgroup label="{{ line.name }}" style="background-color:{{ line.color }}">
+                            {% for metro in line.metros %}
+                                <option value="{{ metro.id }}"{% if metro.id == item.metro_id %} selected="selected"{% endif %}>{{ metro.name }}</option>
+                            {% endfor %}
+                            
+                            </optgroup>
+                        {% endfor %}
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Описание
+                </td>
+                <td colspan="2">
+                    <div class="input-wrap">
+                        <textarea name="description" class="wysiwyg" data-common="{{ defaults.common }}">{{ item.description }}</textarea>
+                    </div>
+                </td>
+            </tr>            
+                    
+            <tr>
+                <td></td>
+                <td>
+                    <div class="form-submit">
+                        <button type="submit" name="savePlace">
+                            Сохранить
+                        </button>
+                    </div>                
+                </td>
+            </tr>
+        </table>
+        
+        <div class="row lefted">
+            <div class="gallery">
+                {% if item.getIcons|length %}
+                    <div class="gallery-wrap" data-url="{{ path('manage_processPictures') }}" data-type="place">
+                    {% for pic in item.getIcons %}
+                        <div class="gallery-item" data-id="{{ pic.id }}">
+                            <div class="gallery-item-delete"></div>
+                            <img width="40px" height="40px" src="{{ pic.picture.icon }}" />
+                        </div>
+                    {% endfor %}
+                        <div class="clear"></div>
+                    </div>
+                {% endif %}
+                <input type="file" name="pictures[]" multiple="multiple" min="1" max="5" />
+            </div>
+        </div>        
+        
+        <div class="clear"></div>
+    </form> 
+{% endblock %}

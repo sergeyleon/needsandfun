@@ -1,0 +1,21 @@
+{% macro coming(list) %}
+    {% import defaults.macros ~ '/events.twig' as events %}
+
+    {% if list %}
+        <div class="goods-title">Скоро на этой площадке</div>
+        <div class="coming-events">
+            {{ events.list(list, false, true) }}
+        </div>
+    {% endif %}
+{% endmacro %}
+
+{% macro past(list) %}
+    {% import defaults.macros ~ '/events.twig' as events %}
+
+    {% if list %}
+        <div class="goods-title">Ранее на этой площадке</div>
+        <div class="past-events">
+            {{ events.list(list, true, true) }}
+        </div>
+    {% endif %}
+{% endmacro %}

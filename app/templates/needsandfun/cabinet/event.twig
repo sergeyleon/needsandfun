@@ -1,0 +1,17 @@
+{% extends defaults.layouts ~ '/basic.twig' %}
+
+{% block title 'Разместить объявление' %}
+
+{% block content %}
+    <div class="page">
+        {% include defaults.templates ~ '/cabinet/menu.twig' %}
+
+        <div class="cabinet-page">
+            Пожалуйста, заполните все поля. После отправки формы наш менеджер свяжется с вами и уточнит данные. Рассмотрение заявки на размещение объявление происходит от 2 дней.
+
+            {% include 'needsandfun/cabinet/event_form.twig' %}
+        </div>
+
+        <div class="clear"></div>
+    </div>
+{% endblock %}

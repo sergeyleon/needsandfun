@@ -1,0 +1,46 @@
+{% extends defaults.layouts ~ '/manage.twig' %}
+
+{% block title %}
+    {% if item.id %}
+        Правка места &laquo;{{ item.name }}&raquo;
+    {% else %}
+        Новое место
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <div class="header-title">{{ block('title') }}</div>
+    
+    <form method="post">
+        {% if item.id %}
+            <input type="hidden" name="id" value="{{ item.id }}">
+        {% endif %}
+                
+        <table class="form-table lefted">
+            <tr>
+                <td width="100px">
+                    Название
+                </td>
+                <td width="400px">
+                    <div class="input-wrap">
+                        <input type="text" name="name" value="{{ item.name }}">
+                    </div>
+                </td>
+                <td width="200px"></td>
+            </tr>
+
+            <tr>
+                <td></td>
+                <td>
+                    <div class="form-submit">
+                        <button type="submit" name="saveCategory">
+                            Сохранить
+                        </button>
+                    </div>                
+                </td>
+            </tr>
+        </table>
+        
+        <div class="clear"></div>
+    </form> 
+{% endblock %}

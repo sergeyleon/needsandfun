@@ -1,0 +1,96 @@
+{% extends defaults.layouts ~ '/basic.twig' %}
+{% import defaults.macros ~ '/events.twig' as events %}
+{% import defaults.macros ~ '/banners.twig' as banners %}
+{% import defaults.macros ~ '/markup.twig' as markup %}
+
+{% block title %}
+    {{ item.name }} {{ item.held_date|date('d.m.Y') }}
+{% endblock %}
+
+{% block metaKeywords %}{{ item.meta_keywords }}{% endblock %}
+{% block metaDescription %}{{ item.meta_description }}{% endblock %}
+
+{% block content %}
+    <div class="page short">
+        <div class="event{% if isMembered %} membered{% endif %}"{% if loggedUser %} id="event" data-id="{{ item.id }}" data-url="{{ path('events_actions', {'eventId': item.id }) }}"{% endif %}>
+            <div class="event-head">
+                <div class="event-pic">
+                    {{ common.itemPicture(item.getIcon, 'event') }}
+                </div>
+
+                <div class="event-title"></div>
+
+                <div class="event-head-info">
+                    <div class="event-head-date">{{ item.held_date|hdate }}</div>
+                    <div class="event-head-time">{{ item.held_date|date('H:i') }}</div>
+
+                    <div class="event-head-metro">
+                        <div class="event-head-metro-wrap">
+                            <div class="metro-icon"></div>
+                            {{ item.place.metro.name }}
+                        </div>
+                    </div>
+
+                    <div class="clear"></div>
+                    {% if item.isFresh %}
+                        <div class="event-head-confirm" data-type="confirm"></div>
+
+                        <div class="event-head-cancel" data-type="cancel">
+                            <span>передумали</span>
+                        </div>
+
+                        <div class="event-members">
+                            <div class="event-members-text">уже идут</div>
+                            <div class="event-members-number" data-type="total">{{ item.members|length }}</div>
+                        </div>
+                    {% else %}
+                        <div class="event-head-message">
+                            К сожалению, данное событие уже прошло и вы не можете принять в нем участие
+                        </div>
+                        <div class="event-members">
+                            <div class="event-members-text">Участвовало</div>
+                            <div class="event-members-number" data-type="total">{{ item.members|length }}</div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="event-body">
+                <div class="event-description">
+                    <h1>
+                        <span>{{ item.name }}</span>
+                    </h1>
+
+                    {{ item.description|raw }}
+                </div>
+                <div class="event-info">
+                    {{ events.info(events.ages(item),                   'Возраст') }}
+                    {{ events.info(item.price,                          'Стоимость') }}
+                    {{ events.info(events.place(item.place),            'Место проведения') }}
+                    {% if item.eventsponsors %}
+                        {{ events.info(events.sponsors(item.eventsponsors), 'Организаторы') }}
+                    {% endif %}
+                    {{ events.info(events.reporter(item.creator), 'Информация от') }}
+
+                    {{ events.rating(item, path('events_ratings_index', {'event': item.encoded_key})) }}
+
+                    {{ markup.addThis() }}
+                </div>
+                <div class="clear"></div>
+            </div>
+
+            <div class="clear"></div>
+
+            {{ events.thisWeek(thisWeek) }}
+
+        </div>
+
+        <div class="page-right">
+            <div class="main-body-right">
+                {{ banners.shop(shopBanners, true) }}
+            </div>
+        </div>
+    </div>
+    
+    <div class="clear"></div>
+{% endblock %}

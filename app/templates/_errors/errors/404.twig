@@ -1,0 +1,14 @@
+{% extends defaults.templates ~ '/_layout.twig' %}
+
+{% block title %}
+Страница не существует!
+{% endblock %}
+
+{% block modal '' %}
+
+{% block container %}
+<div class="syserror">
+   <strong>Произошла ошибка: страница, на которую вы пытаетесь попасть, не существует.</strong><br />
+   Если вы уверены, что проблема с нашей стороны — сообщите нам об этом!
+</div>
+{% endblock %}

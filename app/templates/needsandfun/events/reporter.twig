@@ -1,0 +1,87 @@
+{% extends defaults.layouts ~ '/basic.twig' %}
+{% import defaults.macros ~ '/banners.twig' as banners %}
+{% import defaults.macros ~ '/markup.twig' as markup %}
+{% import defaults.macros ~ '/common.twig' as common %}
+{% import defaults.macros ~ '/clients.twig' as clients %}
+
+{% block title %}
+    {{ item.name }}
+{% endblock %}
+
+{% block content %}
+    <div class="page short">
+        <div class="place">
+            <div class="place-head">
+                <div class="place-head-img">
+                    {{ common.itemPicture(item.getIcon, 'place') }}
+                </div>
+                
+                <div class="place-head-info">
+                    <div class="place-head-wrap">
+                        <div class="place-name">
+                            <h1>{{ item.name }}</h1>
+                        </div>
+                    </div>
+                </div>
+                <div class="clear"></div>                
+            </div>
+                    
+            <div class="place-info-wrap">
+                <div class="place-info-desc">
+                    {{ item.description|raw }}
+                </div>
+                {#
+                {% if item.phone or emails or wwws %}
+                #}
+                    <div class="place-info">
+                        <div class="place-info-title">Как связаться?</div>
+                        
+                        <div class="place-info-wrap">
+                            {% if item.phone %}
+                                <div class="place-info-item">{{ item.phone }}</div>
+                            {% endif %}
+                            
+                            {% if emails %}
+                                {% for email in emails %}
+                                    <div class="place-info-item-wrap">                            
+                                        <a href="{{ mail(email) }}" class="place-info-item">{{ email|truncate(25) }}</a>
+                                    </div>
+                                {% else %}
+                                    <div class="place-info-item-wrap">                        
+                                        <a href="{{ mail(item.email) }}" class="place-info-item">{{ item.email|truncate(25) }}</a>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                            
+                            {% if wwws %}
+                                {% for www in wwws %}
+                                    <div class="place-info-item-wrap">
+                                        <a href="{{ go(www) }}" class="place-info-item" target="_blank">{{ www|truncate(25) }}</a>
+                                    </div>
+                                {% else %}
+                                    <div class="place-info-item-wrap">
+                                        <a href="{{ go(item.www) }}" class="place-info-item" target="_blank">{{ item.www|truncate(30) }}</a>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+
+                        {{ markup.addThis() }}
+                    </div>
+                {#
+                {% endif %}
+                #}
+            </div>
+
+            <div class="clear"></div>
+            {{ clients.past(pastEvents) }}
+        </div>
+
+        <div class="page-right">
+            <div class="main-body-right">
+                {{ banners.shop(shopBanners, true) }}
+            </div>
+        </div>
+    </div>
+    <div class="clear"></div>    
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends defaults.layouts ~ '/manage.twig' %}
+
+{% block title 'Обновление всех ссылок' %}
+
+{% block content %}
+	<div class="header-title">
+        {{ block('title') }}
+    </div>
+	<table class="items-table">
+		<tr>
+			<th><div>#</div></th>
+			<th><div>Имя</div></th>
+			<th><div>Ссылка</div></th>
+		</tr>
+	{% for key, group in results %}
+		<tr>
+			<th colspan="3">{{ key }}</th>
+		</tr>
+		{% for item in group %}
+			<tr>
+				<th>{{ loop.index }}</th>
+				<td class="left">{{ item.name }}</td>
+				<td class="left">{{ item.link }}</td>
+			</tr>
+		{% endfor %}
+	{% endfor %}
+</table>
+{% endblock %}

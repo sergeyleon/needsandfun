@@ -1,0 +1,63 @@
+{% import defaults.macros ~ '/common.twig' as common %}
+<!doctype html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8 oldie" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>{% if block('title') %}{{ block('title') }} — {% endif %}Администраторская</title>
+  <meta name="description" content="">
+  <meta name="author" content="Ilya Doroshin <ilya.doroshin@gmail.com>">
+
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <!-- CSS concatenated and minified via ant build script-->
+  <link rel="stylesheet" href="{{ defaults.common }}/css/style.css">
+  <link rel="stylesheet" href="{{ defaults.common }}/css/jqueryui/jqueryui.css">  
+  <link rel="stylesheet" href="{{ defaults.common }}/css/normalize.css/normalize.css">  
+  <!-- end CSS-->
+  
+  <script src="{{ defaults.common }}/js/jquery/jquery.js"></script>
+  <script src="{{ defaults.common }}/js/jquery/jqueryui.js"></script>
+  <script src="{{ defaults.common }}/js/jquery/jquery.livequery.min.js"></script>  
+  <script src="{{ defaults.common }}/js/jquery/jquery.nested.js"></script>
+  <script src="{{ defaults.common }}/js/jquery/timepicker.js"></script>
+
+  <script src="{{ defaults.common }}/js/libs/modernizr-2.0.6.min.js"></script>
+  <script src="/common/managers/js/mylibs/tinymce/jquery.tinymce.js"></script>  
+</head>
+
+<body>
+  {% if popupMessages %}
+    <div class="popup-messages">
+      {% for message in popupMessages %}
+        <div class="popup-message">
+          <div class="popup-message-close">&times;</div>
+          <div class="popup-message-text">{{ message }}</div>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  {% block container %}
+      <header>
+          <div class="head-menu">
+              {{ common.getMenu(manageMenu) }}
+          </div>
+      </header>
+      <div class="main{% if block('absolute') %} absolute{% endif %}" role="main">
+          {{ block('content') }}
+      </div>
+      <footer></footer>
+    </div> <!--! end of #container -->
+  {% endblock %}  
+
+  <!-- scripts concatenated and minified via ant build script-->
+  <script defer src="{{ defaults.common }}/js/plugins.js"></script>
+  <script defer src="{{ defaults.common }}/js/script.js"></script>
+  <!-- end scripts-->
+</body>
+</html>

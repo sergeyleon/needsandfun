@@ -1,0 +1,90 @@
+{% macro rating(options) %}
+    <div class="rating-active{% if options.static %} static{% endif %}">
+        {% for rate in 1..5 %}
+            <div class="rating-active-item rate-{{ rate }}{% if options.selected == rate %} selected{% endif %}" data-value="{{ rate }}"></div>
+        {% endfor %}
+        <input type="hidden" name="rate" data-type="input" value="0" />
+    </div>
+{% endmacro %}
+
+{% macro formRowTitle(name) %}
+    <div class="form-row-title">
+        {{ name }}
+    </div>
+{% endmacro %}
+
+{% macro formRow(name, content, isRaw) %}
+    <div class="form-row">
+        {{ _self.formRowTitle(name) }}
+        <div class="form-row-content{% if isRaw %} is-raw{% endif %}">
+            {% if isRaw %}
+                {{ content|raw }}
+            {% else %}
+                {{ content }}
+            {% endif %}
+        </div>
+        <div class="clear"></div>
+    </div>        
+{% endmacro %}
+
+{% macro submitBlock(options) %}
+    <div class="submit-block">            
+        <div class="submit-block-wrap">
+            {{ _self.button(options) }}          
+        </div>
+        <div class="clear"></div>
+    </div>
+{% endmacro %}
+
+{% macro button(options) %}
+    <div class="submit-block-item{% if options.small %} submit-block-small{% endif %}{% if options.disabled %} disabled{% endif %}" data-type="submit">
+        {% if options.link %}
+            <a class="submit-block-btn" href="{{ options.link }}">{{ options.value }}</a>
+        {% else %}
+            <button class="submit-block-btn" {% if options.disabled %} disabled="disabled"{% endif %}
+                {% if options.name %} name="{{ options.name }}"{% endif %}
+                type="submit">
+                    {{ options.value|default('Отправить') }}
+            </button>                
+        {% endif %}
+        <div class="submit-block-bg"></div>
+        <div class="submit-block-side left"></div>
+        <div class="submit-block-side right"></div>
+    </div>  
+{% endmacro %}
+
+{% macro needToRegister() %}
+    <div class="access-error">
+        Данная функция доступна только зарегистрированным пользователям.
+    </div>
+{% endmacro %}
+
+{% macro addThis() %}
+<!-- AddThis Button BEGIN -->
+<div class="addthis_toolbox addthis_default_style ">
+    <a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+    <div class="clear"></div>
+    <a class="addthis_button_tweet"></a>
+    <div class="clear"></div>
+    <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    <div class="clear"></div>
+    <a class="addthis_counter addthis_pill_style"></a>
+    <div class="clear"></div>
+</div>
+<script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=ra-4f56e9107bedcd2d"></script>
+<!-- AddThis Button END -->
+{% endmacro %}
+
+{% macro addThisBar() %}
+<!-- AddThis Button BEGIN -->
+<div class="addthis_toolbox addthis_default_style ">
+<a class="addthis_button_preferred_1"></a>
+<a class="addthis_button_preferred_2"></a>
+<a class="addthis_button_preferred_3"></a>
+<a class="addthis_button_preferred_4"></a>
+<a class="addthis_button_compact"></a>
+<a class="addthis_counter addthis_bubble_style"></a>
+</div>
+<script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4f8fe45d42b6e73d"></script>
+<!-- AddThis Button END -->
+{% endmacro %}

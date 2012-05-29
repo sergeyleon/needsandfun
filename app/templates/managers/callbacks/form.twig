@@ -1,0 +1,68 @@
+{% extends defaults.layouts ~ '/manage.twig' %}
+
+{% block title %}
+    Заявка на звонок
+{% endblock %}
+
+{% block content %}
+    <div class="header-title">{{ block('title') }}</div>
+    
+    <form method="post" enctype="multipart/form-data">
+        {% if item.id %}
+            <input type="hidden" name="id" value="{{ item.id }}">
+        {% endif %}
+                
+        <table class="form-table">
+            <tr>
+                <td width="100px">
+                    Дата
+                </td>
+                <td width="500px">
+                    {{ item.call_at|date('H:i d.m.Y') }}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Телефон
+                </td>
+                <td>
+                    {{ item.phone }}
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    Статус
+                </td>
+                <td>
+                    <div class="input-wrap">
+                        <select name="is_called">
+                            <option value="0">Не созвонились</option>
+                            <option value="1"{% if item.is_called %} selected="selected"{% endif %}>Созвонились</option>
+                        </select>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Комментарий
+                </td>
+                <td>
+                    <div class="input-wrap">
+                        <textarea name="comment">{{ item.comment }}</textarea>
+                    </div>                
+                </td>
+            </tr>            
+            <tr>
+                <td></td>
+                <td>
+                    <div class="form-submit">
+                        <button type="submit" name="proceed">
+                                Сохранить
+                        </button>
+                    </div>                
+                </td>
+            </tr>
+        </table>
+    </form>    
+{% endblock %}

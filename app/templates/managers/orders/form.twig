@@ -1,0 +1,119 @@
+{% extends defaults.layouts ~ '/manage.twig' %}
+
+{% block title %}
+    {% if item.id %}
+        Правка заказа №&laquo;{{ item.id }}&raquo;
+    {% else %}
+        Новый заказ
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <div class="header-title">{{ block('title') }}</div>
+    
+    <form method="post">
+        {% if item.id %}
+            <input type="hidden" name="id" value="{{ item.id }}">
+        {% endif %}
+                
+        <table class="form-table lefted">
+            <tr>
+                <td width="100px">
+                    Статус
+                </td>
+                <td width="300px">
+                    <select name="status">
+                        {% for status in statuses %}
+                            <option value="{{ status.id }}"{% if item.getStatus.id == status.id %} selected="selected"{% endif %}>{{ status.name }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+                <td width="200px"></td>
+            </tr>            
+            
+            <tr>
+                <td>
+                    Доставка
+                </td>
+                <td>
+                    {{ item.delivery.getType.name }}{% if item.delivery.metro %} &laquo;{{ item.delivery.metro.name }}&raquo;{% endif %}
+                    <div class="tools">
+                        <div class="tools-item edit" data-type="edit">
+                            <a href="{{ path('manage_deliveries_edit', {'deliveryId': item.delivery.id}) }}" class="icon"></a>
+                        </div>
+                    </div>     
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    Клиент
+                </td>
+                <td>
+                    <div class="tools">
+                        <div class="tools-item edit" data-type="edit">
+                            <a href="{{ path('manage_clients_edit', {'clientId': item.client.id}) }}" class="icon"></a>
+                        </div>
+                    </div>   
+
+                    <div>
+                        {{ item.client.name|default(item.client.user.login) }}
+                    </div>
+                    {% if item.client.phone %}
+                        <div>
+                            {{ item.client.phone }}
+                        </div>
+                    {% endif %}
+                    <div>
+                        <a href="mailto:{{ item.client.email|default(item.client.user.login) }}">
+                            {{ item.client.email|default(item.client.user.login) }}
+                        </a>
+                    </div>
+
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    Товары
+                </td>
+                <td colspan="2">
+                    <table class="items-table" width="100%">
+                        <thead>
+                            <th class="left"><div>Наименование</div></th>
+                            <th width="100px"><div>Размер</div></th>
+                            <th width="100px"><div>Цена</div></th>
+                        </thead>
+                        <tbody>
+                            {% for ordergood in item.getItems %}
+                                <tr class="items-table-item">
+                                    <td class="left">
+                                        {{ ordergood.size.good.name }}
+                                    </td>
+                                    <td>
+                                        {{ ordergood.size.name }}
+                                    </td>
+                                    <td>
+                                        {{ ordergood.size.price|money }}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <div class="form-submit">
+                        <button type="submit" name="saveOrder">
+                            Сохранить
+                        </button>
+                    </div>                
+                </td>
+            </tr>
+        </table>
+        
+        <div class="clear"></div>
+    </form> 
+{% endblock %}
