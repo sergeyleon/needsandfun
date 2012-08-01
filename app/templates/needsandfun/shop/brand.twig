@@ -1,0 +1,111 @@
+{% extends defaults.layouts ~ '/basic.twig' %}
+{% import defaults.macros ~ '/shop.twig' as shop %}
+{% import defaults.macros ~ '/banners.twig' as banners %}
+
+{% block title %}
+{% if currentCategory %}
+
+  {% if currentCategory.title %}
+    {{ currentCategory.title }}
+  {% else %}
+    {{ currentCategory.name }}
+  {% endif %}
+
+{% else %}
+Все товары
+{% endif %}
+{% endblock %}
+
+{% block meta_keywords %}
+{% if currentCategory %}
+{{ currentCategory.meta_keywords }}
+{% else %}
+{{ item.meta_keywords }}
+{% endif %}
+{% endblock %}
+
+{% block meta_description %}
+{% if currentCategory %}
+{{ currentCategory.meta_description }}
+{% else %}
+{{ item.meta_description }}
+{% endif %}
+{% endblock %}
+
+{% block content %}
+
+    {% if currentCategory.top_description %}
+        <div style="padding:10px">{{ currentCategory.top_description|raw }}</div>
+    {% endif %}
+
+    <div class="shop">
+        <div class="categories">
+            <div class="categories-padder">
+                <div class="categories-title">
+                    Каталог
+                </div>
+
+
+                {{ shop.filter(filter, _context) }}
+
+                {% for item in shopCategories %}
+                    {{ shop.categoryItem(item) }}
+                {% endfor %}
+
+                <div class="shop-info">
+                    <div class="shop-info-item">
+                        <div class="shop-info-pic"></div>
+                        <a href="{{ path('shop_size_chart') }}" class="shop-info-text">Таблица размеров</a>
+                    </div>
+
+                    <div class="shop-info-item">
+                        <div class="shop-info-pic"></div>
+                        <a href="{{ path('brands') }}" class="shop-info-text">Наши бренды</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="shop-body">
+            
+            
+        
+            {% if goods %}
+                {% if newGoods %}
+                    {% set index = 1 %}
+                {% else %}
+                    {% set index = 0 %}
+                {% endif %}
+                
+                {{ shop.brandbreadcrumbs(brandbreadcrumbs) }}<br />
+                
+                {{ shop.sorter(sort, _context) }}
+                
+                {{ shop.categories(categories) }}
+                
+                
+                
+                {{ shop.goods(goods, pager) }}
+            {% elseif not newGoods %}
+                <div class="goods-empty">
+                    Данная категория пуста
+                </div>
+            {% elseif newGoods %}
+                <div class="goods-title">
+                    Новые поступления
+                </div>
+                {{ shop.goods(newGoods) }}
+            {% endif %}
+        
+            
+            
+
+            {% if currentCategory.description %}
+                <div class="clear"></div>
+                {{ currentCategory.description|raw }}
+            {% endif %}
+        </div>
+        <div class="clear"></div>            
+    </div>
+
+{% endblock %}

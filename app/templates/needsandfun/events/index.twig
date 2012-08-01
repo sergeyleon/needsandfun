@@ -49,6 +49,11 @@
                     <div class="tabs-content selected">
                         {% if items %}
                             {{ events.list(items) }}
+
+                            {% if pager %}
+                                {{ common.pager(pager) }}
+                            {% endif %}
+                        
                         {% else %}
                             К сожалению, эта категория пуста.
                         {% endif %}

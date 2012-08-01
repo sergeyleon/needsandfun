@@ -1,0 +1,19 @@
+index:
+  pattern: /
+  defaults:
+    controller: Suppliers:index
+    
+add:
+  pattern: /add
+  defaults:
+    controller: Suppliers:add
+    
+edit:
+  pattern: /edit/{supplierId}
+  defaults:
+    controller: Suppliers:edit
+    
+remove:
+  pattern: /remove/{supplierId}
+  defaults:
+    controller: Suppliers:remove

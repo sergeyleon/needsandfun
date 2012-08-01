@@ -8,7 +8,6 @@ class Places extends \Core\Abstracts\Authorized
     {
         parent::__construct();
         Index::filters('places');
-        $this->page['clearFilter'] = $this->router->generate('places_index');
     }
 
     public function index($page = false) 
@@ -59,8 +58,15 @@ class Places extends \Core\Abstracts\Authorized
             ? $this->page['sort']
             : array('type' => 'rating', 'dir' => 'desc');
 
+        $this->page['clearFilter'] = $this->router->generate($route, array('category' => $category, 'page' => 'all'));
+
         $this->page['items']           = \Core\Model\Place::getPage($page, $categoryId, $filter, $sorter);
-        $this->page['pager']           = \Core\Model\Place::getPager($page, $category, $route, $filter);
+
+        if (is_numeric($page))
+        {
+            $this->page['pager'] = \Core\Model\Place::getPager($page, $category, $route, $filter);
+        }
+        
 
         $this->page['categories']      = \Core\Model\Placecategory::getAll($categoryId);
         $this->page['metros']          = \Core\Model\Metro::getAll();

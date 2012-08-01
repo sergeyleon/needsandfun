@@ -35,7 +35,15 @@ class Brands extends \Core\Abstracts\Singleton
     
     public function index()
     {
-        $this->page['brands'] = \Core\Model\Brand::all(array('order' => 'name'));
+        if(isset($_POST['item_search'])) { 
+        
+          $query = $_POST['query'];
+          $this->page['brands'] = \Core\Model\Brand::all(array('conditions' => array('name like ?', '%'.$query.'%' )));
+          
+        }
+        else {
+          $this->page['brands'] = \Core\Model\Brand::all(array('order' => 'name'));
+        }
         $this->page->display('brands/index.twig');
     }
     
@@ -52,6 +60,14 @@ class Brands extends \Core\Abstracts\Singleton
         
         $brand->name        = $values['name'];
         $brand->description = $values['description'];
+        
+        $brand->link = str_replace(' ', '-', strtolower($values['link']));
+        
+        if($values['link'] == '') {
+          $brand->link = str_replace(' ', '-', strtolower($brand->name));
+        }
+        
+        
         $brand->save();
         
         $picture = new \Core\Model\Brandpicture();

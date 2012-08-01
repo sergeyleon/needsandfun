@@ -23,7 +23,6 @@
                 <th width="150px">
                 	<div>Статус</div>
                 </th>
-
                 <th class="left" width="250px">
                     <div>Клиент</div>
                 </th>
@@ -55,6 +54,7 @@
                     <td>
                         <span class="items-table-item-status"{% if status.color %} style="background-color: #{{ status.color }}"{% endif %}>{{ status.name }}<span>
                     </td>
+
                     <td class="left">{{ item.client.name|default(item.client.user.login) }}</td>
                     <td class="nopad">
                     	<table width="100%">
@@ -82,11 +82,12 @@
                             <div class="tools-item edit" data-type="edit">
                                 <a href="{{ path('manage_orders_edit', {'orderId': item.id}) }}" class="icon"></a>
                             </div>
-                            {#
-                                <div class="tools-item delete" data-type="delete" data-confirm="true">
-                                    <a href="{{ path('manage_banners_remove', {'bannerId': item.id}) }}" class="icon"></a>
+
+                            
+                                <div class="tools-item remove" data-type="remove" data-confirm="true">
+                                    <a href="{{ path('manage_orders_remove', {'orderId': item.id}) }}" class="icon"></a>
                                 </div>
-                            #}
+                            
                         </div>                        
 
                         {{ item.delivery.getType.name }}{% if item.delivery.metro %} &laquo;{{ item.delivery.metro.name }}&raquo;{% endif %}

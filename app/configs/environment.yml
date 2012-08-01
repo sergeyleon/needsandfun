@@ -1,5 +1,5 @@
 shop_dev:
-  hosts:       nf.balticit.ru
+  hosts:       needsandfun.dev
   namespace:   Needsandfun
   rewrite:     false
   paths:
@@ -9,7 +9,7 @@ shop_dev:
     DB_ENGINE: MYSQL
     MYSQL:  
       DB_USER: root
-      DB_PASSWORD: password
+      DB_PASSWORD: 123qwe
       DB_HOST: 127.0.0.1    
       DB_NAME:   needsandfun
     TWIG:
@@ -58,7 +58,7 @@ shop_prod:
       vkontakte:  http://vk.com/club35939180
     
 manager_dev:
-  hosts:       nf.balticit.ru
+  hosts:       needsandfun.dev
   namespace:   Managers
   rewrite:     false
   paths:

@@ -9,7 +9,9 @@
 {% endblock %}
 
 {% block content %}
-    <div class="header-title">{{ block('title') }}</div>
+    <div class="header-title">{{ block('title') }} <a href="{{ path('manage_orders_remove', {'orderId': item.id}) }}" >Удалить</a></div>
+    
+    
     
     <form method="post">
         {% if item.id %}

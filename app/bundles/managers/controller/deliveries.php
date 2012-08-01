@@ -45,10 +45,10 @@ class Deliveries extends \Core\Abstracts\Singleton
         $this->router->go($this->router->generate('manage_deliveries_index'));
     }
     
-    public function remove($orderId)
+    public function remove($deliveryId)
     {
-        \Core\Model\Order::find($orderId)->delete();
-        $this->router->go($this->router->generate('manage_orders_index'));        
+        \Core\Model\Delivery::find($deliveryId)->delete();
+        $this->router->go($this->router->generate('manage_deliveries_index'));        
     }
     
     

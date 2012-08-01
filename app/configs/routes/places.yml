@@ -4,7 +4,7 @@ index_page:
     page: 1
     controller: Places:index
   requirements:
-    page: (\d+)
+    page: (\d+|all)
 
 index:
   pattern: 
@@ -18,7 +18,7 @@ category_page:
     page: 1
     controller: Places:category
   requirements:
-    page: (\d+)
+    page: (\d+|all)
 
 category:
   pattern: -{category}

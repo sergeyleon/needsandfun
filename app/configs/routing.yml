@@ -134,6 +134,25 @@ brands:
   defaults:
     controller: Brands:index
 
+
+brand_page:
+  pattern: /brand/{brand}-page-{page}
+  defaults:
+    page: 1
+    controller: Brands:brand
+  requirements:
+    page: (\d+|all)
+
+brand:
+  pattern: /brand/{brand}
+  defaults:
+    controller: Brands:brand
+
+suppliers:
+  pattern: /suppliers
+  defaults:
+    controller: Suppliers:index
+
 partners:
   pattern: /friends
   defaults:

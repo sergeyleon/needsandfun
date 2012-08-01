@@ -40,18 +40,20 @@
                                 </div>
                             </td>
                         </tr>
-
+                        
+                      
+                        
                         <tr>
                             <td>
                                 Родительская категория
                             </td>
                             <td>
-                                <select name="parent">
-                                    <option value="root">Корень сайта</option>                    
-                                    {% for category in categories %}
-                                        <option value="{{ category.id }}"{% if category.id == item.parent_id %} selected="selected"{% endif %}>{{ category.name }}</option>
-                                    {% endfor %}
-                                </select>
+                              <select name="parent">
+                                  <option value="root">Корень</option>
+                                  {% for category in categories %}
+                                      {{ common.optionCategory(category, item.parent_id, item.id) }}
+                                  {% endfor %}
+                              </select>
                             </td>
                         </tr>
 
@@ -66,14 +68,48 @@
                                 </select>
                             </td>
                         </tr>
+                        
+                        <tr>
+                            <td>
+                                Ссылка
+                            </td>
+                            <td>
+                                <div class="input-wrap">
+                                    <input type="text" name="link" value="{{ item.link }}" />
+                                </div>
+                            </td>                
+                        </tr>
+                        
                     </table>
                 </div>
 
                 <div class="tabs-content">
                     <table class="form-table">
+                    
+                        <tr>
+                            <td width="120px">
+                                Тайтл категории
+                            </td>
+                            <td width="300px">
+                                <div class="input-wrap">
+                                    <input type="text" name="title" value="{{ item.title }}">
+                                </div>
+                            </td>
+                        </tr>
+                    
                         <tr>
                             <td width="120px" class="top">
-                                Описание в низу страницы
+                                Описание вверху страницы
+                            </td>
+                            <td width="300px">
+                                <div class="input-wrap">
+                                    <textarea class="wysiwyg" name="top_description" data-common="{{ defaults.common }}">{{ item.top_description }}</textarea>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="120px" class="top">
+                                Описание внизу страницы
                             </td>
                             <td width="300px">
                                 <div class="input-wrap">

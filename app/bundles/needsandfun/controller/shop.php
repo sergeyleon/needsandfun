@@ -8,11 +8,11 @@ class Shop extends \Core\Abstracts\Authorized
     {
         parent::__construct();
         Index::filters();
-        $this->page['clearFilter'] = $this->router->generate('shop_index');
     }
 
     private function _getGoods($page = 1, $categories = false, $category = false)
     {
+    
         $conditions = array(
             'goods.is_available = 1',
             'goods.deleted is null',
@@ -25,7 +25,6 @@ class Shop extends \Core\Abstracts\Authorized
         
         if (!empty($_GET['filter'])) 
         {
-
             $result = array('conditions' => array(), 'variables' => array());
             $filter = $_GET['filter'];
             $this->page['filter'] = $filter;
@@ -80,13 +79,18 @@ class Shop extends \Core\Abstracts\Authorized
             $options['conditions'] = array_merge($options['conditions'], $variables);
         }
 
-        $total = \Core\Model\Good::all($options);
-        $this->page['pager']   = \Core\Model\Good::getPager($page, $category, $categories ? 'shop_category_page' : 'shop_index_page', $total);
+        $this->page['clearFilter'] = $this->router->generate($categories ? 'shop_category_page' : 'shop_index_page', array('page' => 'all', 'category' => $category));
+        
+        if (is_numeric($page))
+        {
+            $total = \Core\Model\Good::all($options);
 
-        // echo count($total);
+            $options['limit']  = \Core\Model\Good::$perPage;
+            $options['offset'] = \Core\Model\Good::$perPage * ($page - 1);
 
-        $options['limit']  = \Core\Model\Good::$perPage;
-        $options['offset'] = \Core\Model\Good::$perPage * ($page - 1);
+            $this->page['pager']   = \Core\Model\Good::getPager($page, $category, $categories ? 'shop_category_page' : 'shop_index_page', $total);
+        }
+        
         $options['order']  = 'name';
 
         if (isset($this->page['sort']))
@@ -125,8 +129,9 @@ class Shop extends \Core\Abstracts\Authorized
         }
 
         $goods = \Core\Model\Good::all($options);
+        
 
-        if (count($total) > 0 && count($goods) == 0 && $page > 1)
+        if (isset($total) && count($total) > 0 && count($goods) == 0 && $page > 1)
         {
             $this->router->go($this->router->generate($categories ? 'shop_category_page' : 'shop_index_page', array('page' => 1)));
         }
@@ -143,6 +148,14 @@ class Shop extends \Core\Abstracts\Authorized
      */
     public function index($page = 1)
     {
+      
+      //Baltic It fix
+        $link = 'store';
+        $page = \Core\Model\Page::find(array('conditions' => array('link = ?', $link)));
+        $this->page['item'] = $page;
+      //End Baltic It fix
+
+    
         $this->_categories();
         
         $this->page['bigBanners']  = \Core\Model\Banner::big();
@@ -156,11 +169,13 @@ class Shop extends \Core\Abstracts\Authorized
     
     public function category($category, $page = 1) 
     {
-        $this->page['currentCategory'] = \Core\Model\Category::from_url($category); 
+        $this->page['currentCategory'] = \Core\Model\Category::from_url($category);
         $category = $this->page['currentCategory']->encoded_key;
 
         $this->page['breadcrumbs']     = \Core\Model\Category::$breadcrumbs;
-        $this->page['brands']          = \Core\Model\Brand::all(array('conditions' => 'deleted is null'));
+        //$this->page['brands']          = \Core\Model\Brand::all(array('conditions' => 'deleted is null'));
+
+
 
         $categoryId = $this->page['currentCategory']->id;
 
@@ -170,9 +185,81 @@ class Shop extends \Core\Abstracts\Authorized
             
         $categories = $this->page['currentCategory']->getChildren();
         
+        
+       // var_dump( $categories);
+        
         $this->page['goods'] = $this->_getGoods($page, $categories, $category);
+        
+        //////////////////////////////////////// Brands in category
+        foreach ($this->_getGoods($page, $categories, $category) as $good) 
+        {
+          $brandArray[] = ' id = '.$good->brand_id;
+        }
+        $brandArray = array_unique($brandArray);
+        
+        $options =  implode(' OR ', $brandArray);
+
+        $this->page['brands'] = \Core\Model\Brand::all(array('conditions' => array($options)));
+        ////////////////////////////////////////
+        
+        //////////////////////////////////////// Child in category
+        foreach ($categories as $categorie) 
+        {
+          $categoriesArray[] = ' id = '.$categorie;
+        }
+        $options2 =  implode(' OR ', $categoriesArray);
+
+        $this->page['categories'] = \Core\Model\Category::all(array('conditions' => array($options2)));
+        ////////////////////////////////////////
+        
+        // Crumbs
+        $parentId = $this->page['currentCategory']->parent_id;
+        $crumbsArray[] = $categoryId;
+        
+        if($parentId != '') {
+        
+        $this->page['crumbs'] = $this->crumbs($parentId, $crumbsArray);
+          foreach ($this->page['crumbs'] as $crumb) 
+          {
+            $cArray[] = ' id = '.$crumb;
+          }
+        
+          $options3 =  implode(' OR ', $cArray);
+        }
+        
+        else { $options3 = ' id = '.$categoryId; }
+
+        $this->page['breadcrumbs'] = \Core\Model\Category::all(array('conditions' => array($options3)));
+        
+
         $this->page->display('shop/index.twig');
     }
+    
+    private function crumbs($pid,$crumbsArray)
+    {
+      $cat = \Core\Model\Category::all(array('conditions' => array('id = ?', $pid)));
+     
+      $crumbsArray[] = $cat[0]->id;
+
+      if(!is_null($cat[0]->parent_id)) {
+        return $this->crumbs($cat[0]->parent_id,$crumbsArray);
+      }
+
+      return $crumbsArray; 
+    }
+    
+    
+    private function _proceed($good, $values)
+    {
+        $message = \Core\Model\Review::add($good, $this->getClient(), $values)
+            ? 'Ваш отзыв добавлен успешно! Он появится на сайте после модерации!'
+            : 'При попытке добавить отзыв произошла ошибка!';
+
+        $this->page->setMessage($message);
+        $this->router->reload();
+    }
+    
+    
     
     public function good($good)
     {
@@ -190,7 +277,43 @@ class Shop extends \Core\Abstracts\Authorized
         
         $this->_categories($categoryId);
         
+        // baltic it
+        if (isset($_POST['proceed']))
+        {
+            $this->_proceed($item, $_POST);
+        }
+        
+        $this->page['reviews'] = $item->reviews;
+        // baltic it
+        
         if (!$item->deleted) $this->page['item'] = $item;
+        
+        
+        // Crumbs
+        
+        $cat = \Core\Model\Category::all(array('conditions' => array('id = ?', $categoryId)));
+        $categoryId = $cat[0]->id;
+        $parentId = $cat[0]->parent_id;
+        
+        $crumbsArray[] = $categoryId;
+        
+        if($parentId != '') {
+        
+        $this->page['crumbs'] = $this->crumbs($parentId, $crumbsArray);
+          foreach ($this->page['crumbs'] as $crumb) 
+          {
+            $cArray[] = ' id = '.$crumb;
+          }
+        
+          $options3 =  implode(' OR ', $cArray);
+        }
+        
+        else { $options3 = ' id = '.$categoryId; }
+
+        $this->page['breadcrumbs'] = \Core\Model\Category::all(array('conditions' => array($options3)));
+        
+        
+        
         $this->page->display('shop/good.twig');
     }
     

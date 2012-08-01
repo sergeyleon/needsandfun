@@ -149,9 +149,9 @@
                                 <select name="place">
                                     {% for place_category in placeCategories %}
                                         <optgroup label="{{ place_category.name }}">
-                                        {% for place in place_category.getPlaces %}
-                                            <option value="{{ place.id }}"{% if place.id == event.place_id %} selected="selected"{% endif %}>{{ place.name }}</option>
-                                        {% endfor %}
+                                            {% for place in place_category.getPlaces %}
+                                                <option value="{{ place.id }}"{% if place.id == event.place_id %} selected="selected"{% endif %}>{{ place.name }}</option>
+                                            {% endfor %}
                                         </optgroup>
                                     {% endfor %}
                                 </select>

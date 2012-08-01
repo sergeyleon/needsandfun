@@ -7,9 +7,9 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-  <title>{% if block('title') %}{{ block('title') }} — {% endif %}Магазин детских товаров «Нужно и весело»</title>
-  <meta name="description" content="{{ block('metaDescription')|default(defaults.environment.META.description) }}">
-  <meta name="keywords" content="{{ block('metaKeywords')|default(defaults.environment.META.keywords) }}">
+  <title>{% if block('title') %}{{ block('title') }} {% else %}Магазин детских товаров «Нужно и весело»{% endif %} </title>
+  <meta name="description" content="{{ block('metaDescription')|default(defaults.environment.META.description) }}{{ main_page.meta_description }}{% if block('meta_description') %}{{ block('meta_description') }}{% endif %}">
+  <meta name="keywords" content="{{ block('metaKeywords')|default(defaults.environment.META.keywords) }}{{ main_page.meta_keywords }}{% if block('meta_keywords') %}{{ block('meta_keywords') }}{% endif %}">
   <meta name="author" content="Ilya Doroshin <ilya.doroshin@gmail.com>">
 
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -130,7 +130,7 @@
                     
                     <div class="header-item phones">
                         <div class="header-phone">
-                            +7 (495)&nbsp;&shy;724-90-26
+                            +7 (495)&nbsp;&shy;724-90-26<br/>Ежедневно с 9 до 21
                         </div>
 
                         <div class="header-callback">
@@ -171,18 +171,18 @@
                         </div>
                         
                         <div class="clear"></div>
-                        
+                        <noindex>
                         <div class="header-social">
                             <div class="header-social-wrap">
                                 {% if defaults.environment.SOCIAL.facebook %}
                                   <div class="header-social-item facebook">
-                                    <a target="_blank" href="{{ defaults.environment.SOCIAL.facebook }}"></a>
+                                    <a target="_blank" href="{{ defaults.environment.SOCIAL.facebook }}" rel="nofollow"></a>
                                   </div>
                                 {% endif %}
 
                                 {% if defaults.environment.SOCIAL.twitter %}
                                   <div class="header-social-item twitter">
-                                    <a target="_blank" href="{{ defaults.environment.SOCIAL.twitter }}"></a>
+                                    <a target="_blank" href="{{ defaults.environment.SOCIAL.twitter }}" rel="nofollow"></a>
                                   </div>
                                 {% endif %}
 
@@ -194,7 +194,7 @@
 
                                 {% if defaults.environment.SOCIAL.vkontakte %}
                                   <div class="header-social-item vkontakte">
-                                    <a target="_blank" href="{{ defaults.environment.SOCIAL.vkontakte }}"></a>
+                                    <a target="_blank" href="{{ defaults.environment.SOCIAL.vkontakte }}" rel="nofollow"></a>
                                   </div>
                                 {% endif %}
 
@@ -209,6 +209,7 @@
                     </div>
                     
                 </div>
+				</noindex>
                 <div class="header-shadow"></div>
                 <div class="header-line"></div>
             </div>
@@ -312,11 +313,15 @@
                       </div>
                     {% else %}
                       <div class="menu-item">
-                          <a href="{{ path('register') }}">Регистрация</a>
+                        <noindex>
+                          <a rel="nofollow" href="{{ path('register') }}">Регистрация</a>
+                        </noindex>
                       </div>
                       
                       <div class="menu-item">
-                          <a href="" id="login-handle">Вход</a>
+                        <noindex>
+                          <a rel="nofollow" href="" id="login-handle">Вход</a>
+                        </noindex>
                       </div>
                     {% endif %}
                     
@@ -369,7 +374,7 @@
           <table class="footer-wrap">
               <tr>
                   <td class="first">
-                      <div class="footer-logo"></div>                      
+                      <div class="footer-logo"><br><br><br><a href="http://www.needsandfun.ru/">Детские спортивные комплексы</a></div>                      
                   </td>
                   <td>
                       &copy; 2012 &laquo;Нужно и весело&raquo;
@@ -378,19 +383,7 @@
                       Нарушение авторских прав грозит большими неприятностями нарушившему наши права
                   </td>
                   <td class="last">
-                      <div class="footer-social">
-                          <div class="footer-social-item facebook">
-                              <div class="footer-social-icon"></div>
-                              <a href="#">Facebook</a>
-                          </div>
-                          <div class="footer-social-item twitter">
-                              <div class="footer-social-icon"></div>                          
-                              <a href="#">Twitter</a>
-                          </div>
-                          <div class="footer-social-item rss">
-                              <div class="footer-social-icon"></div>                          
-                              <a href="">RSS</a>
-                          </div>                          
+                           <div class="footer-logo"><br><br><br><a href="http://www.needsandfun.ru/"></a></div>                           
                       </div>
                   </td>
               </tr>
@@ -422,5 +415,113 @@
     <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
     <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
   <![endif]-->
+  <!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+var yaParams = {/*Здесь параметры визита*/};
+</script>
+
+<script type="text/javascript">
+(function (d, w, c) {
+    (w[c] = w[c] || []).push(function() {
+        try {
+            w.yaCounter15006196 = new Ya.Metrika({id:15006196, enableAll: true,params:window.yaParams||{ }});
+        } catch(e) {}
+    });
+    
+    var n = d.getElementsByTagName("script")[0],
+        s = d.createElement("script"),
+        f = function () { n.parentNode.insertBefore(s, n); };
+    s.type = "text/javascript";
+    s.async = true;
+    s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js";
+
+    if (w.opera == "[object Opera]") {
+        d.addEventListener("DOMContentLoaded", f);
+    } else { f(); }
+})(document, window, "yandex_metrika_callbacks");
+</script>
+<noscript><div><img src="//mc.yandex.ru/watch/15006196" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+
+<br>
+<p align="center"><font color="#949494">Раскрутка и <a href="http://www.promostart.ru" title="продвижение сайта"> продвижение сайта</a>, услуги оптимизации – РА Promostart. Поддержка сайта, дизайн и <a href="http://obsudim.ru" title="разработка сайтов">разработка сайтов</a> - Obsudim.</font></p><br>
+<noindex>
+<p align="center">
+<!--counter--><script type="text/javascript"><!--
+document.write("<img src='http://www.promostart.ru/c.php?c;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";h"+escape(document.title.substring(0,80))+" border='0' width='0' height='0'>")
+//--></script><!--endofcounter-->
+
+<!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='http://www.liveinternet.ru/click' "+
+"target=_blank><img src='//counter.yadro.ru/hit?t18.7;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+
+"' alt='' title='LiveInternet: показано число просмотров за 24"+
+" часа, посетителей за 24 часа и за сегодня' "+
+"border='0' width='88' height='31'><\/a>")
+//--></script><!--/LiveInternet-->
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-33493820-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+<!-- Rating@Mail.ru counter -->
+<a href="http://top.mail.ru/jump?from=2230153">
+<img src="http://d7.c0.b2.a2.top.mail.ru/counter?id=2230153;t=52" style="border:0;"
+height="31" width="88" alt="Рейтинг@Mail.ru" /></a>
+<!-- //Rating@Mail.ru counter -->
+
+<!-- begin of Top100 code -->
+
+<script id="top100Counter" type="text/javascript" src="http://counter.rambler.ru/top100.jcn?2749286"></script>
+<noscript>
+<a href="http://top100.rambler.ru/navi/2749286/">
+<img src="http://counter.rambler.ru/top100.cnt?2749286" alt="Rambler's Top100" border="0" />
+</a>
+
+</noscript>
+<!-- end of Top100 code -->
+
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+(function (d, w, c) {
+    (w[c] = w[c] || []).push(function() {
+        try {
+            w.yaCounter15977440 = new Ya.Metrika({id:15977440, enableAll: true});
+        } catch(e) {}
+    });
+    
+    var n = d.getElementsByTagName("script")[0],
+        s = d.createElement("script"),
+        f = function () { n.parentNode.insertBefore(s, n); };
+    s.type = "text/javascript";
+    s.async = true;
+    s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js";
+
+    if (w.opera == "[object Opera]") {
+        d.addEventListener("DOMContentLoaded", f);
+    } else { f(); }
+})(document, window, "yandex_metrika_callbacks");
+</script>
+<noscript><div><img src="//mc.yandex.ru/watch/15977440" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+</p>
+</noindex>
 </body>
 </html>

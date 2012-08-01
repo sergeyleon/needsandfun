@@ -37,6 +37,10 @@
                             <div class="tools-item edit" data-type="edit">
                                 <a href="{{ path('manage_clients_edit', {'clientId': item.id}) }}" class="icon"></a>
                             </div>
+                            <div class="tools-item remove" data-type="remove" data-confirm="true">
+                                <a href="{{ path('manage_clients_remove', {'clientId': item.id}) }}" class="icon"></a>
+                            </div>
+                            
                         </div>
 
                         <a href="{{ path('manage_clients_edit', {'clientId': item.id}) }}">

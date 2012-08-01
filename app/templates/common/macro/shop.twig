@@ -29,6 +29,13 @@
     {% endif %}
 {% endmacro %}
 
+
+
+
+
+
+
+
 {% macro rating(item, url) %}
     {% import defaults.macros ~ '/common.twig' as common %}
     {{ common.rating(item, url) }}
@@ -50,24 +57,76 @@
     </div>    
 {% endmacro %}
 
-{% macro itemPicture(icon, type, gallery) %}
+
+{% macro categories(categories) %}
+    <div class="categorys">
+
+        {% for category in categories %}
+
+          {% if loop.index == 2 %}
+          Еще категории:
+          {% endif %}
+          
+          {% if loop.index != 1  %}<a class="" href="/store-{{ category.link }}">{{ category.name }}</a>{% endif %}
+          
+          {% if 0 == loop.index % 4%}
+              <div class="clear"></div>
+          {% endif %}  
+ 
+        {% endfor %}
+        
+    </div>
+    <br /> 
+{% endmacro %}
+
+{% macro breadcrumbs(breadcrumbs) %}
+    <div class="crumbs">
+    Вы здесь: <a class="" href="/store">Магазин</a>
+        {% for crumb in breadcrumbs %}
+            
+            &raquo;
+            
+            <a class="" href="/store-{{ crumb.link }}">{{ crumb.name }}</a> 
+               
+        {% endfor %}
+    
+    </div>    
+{% endmacro %}
+
+{% macro brandbreadcrumbs(brandbreadcrumbs) %}
+    <div class="crumbs">
+    Вы здесь: <a class="" href="/store">Магазин</a>
+    &raquo;<a class="" href="/brands">Бренды</a> 
+        {% for crumb in brandbreadcrumbs %}
+            
+            &raquo;
+            
+            <a class="" href="/brand/{{ crumb.link }}">{{ crumb.name }}</a> 
+               
+        {% endfor %}
+    
+    </div>    
+{% endmacro %}
+
+
+{% macro itemPicture(icon, type, gallery, name) %}
     {% if icon.picture.filename %}
         {% if gallery %}
             <a class="fancybox" rel="gallery" href="{{ path('item_img', {'filename': icon.picture.filename, 'type': 'full'}) }}">
         {% endif %}
-            <img src="{{ path('item_img', {'filename': icon.picture.filename, 'type': type}) }}" />            
+            <img alt="{{name}}" src="{{ path('item_img', {'filename': icon.picture.filename, 'type': type}) }}" />            
         {% if gallery %}            
             </a>
         {% endif %}
     {% else %}
-        <img src="{{ defaults.common }}/img/noimg.gif" />
+        <img src="{{ defaults.common }}/img/noimg.gif" alt="" />
     {% endif %}
 {% endmacro %}
 
 {% macro good(good) %}
     <a href="{{ good.url }}" class="good-item">
         <div class="good-item-pic">
-            {{ _self.itemPicture(good.getIcon, 'small') }}
+            {{ _self.itemPicture(good.getIcon, 'small','',good.name) }}
         </div>
         
         <div class="good-item-title">
@@ -89,6 +148,10 @@
         {% endif %}
     </a>
 {% endmacro %}
+
+
+
+
 
 {% macro orderItem(ordergood) %}
     <a href="{{ ordergood.size.good.url }}" class="good-item">
@@ -149,6 +212,7 @@
     <div class="filter">
         <form data-type="filter">
             <div>
+                <noindex>
                 <div class="filter-item filter-item-right">
                     <div class="filter-item-title">Пол</div>
                     <div class="radio" data-type="fakeradio"{% if filter.gender %} data-value="{{ filter.gender }}"{% endif %}>
@@ -177,7 +241,7 @@
                         <option value="9"{% if 9 == filter.age %} selected="selected"{% endif %}>9 – 12</option>
                     </select>
                 </div>
-
+                </noindex>
                 <div class="clear"></div>
             </div>
 

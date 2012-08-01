@@ -57,7 +57,7 @@ add:
   pattern: /add
   defaults:
     controller: Goods:add
-    
+
 edit:
   pattern: /edit/{goodId}
   defaults:

@@ -4,6 +4,8 @@ namespace Core\Model;
 
 class Event extends \ActiveRecord\Model implements Itemswithpics, Reviewable, Searchable, Humanizeurl
 {
+    static $perPage = 24;
+
     static $age_ranges = array(
         0 => array(0, 3),
         3 => array(3, 5),
@@ -419,13 +421,16 @@ class Event extends \ActiveRecord\Model implements Itemswithpics, Reviewable, Se
             $options['limit'] = $data['limit'];
         }
 
+        if (!empty($data['page']) && is_numeric($data['page']))
+        {
+            $options['limit']  = self::$perPage;
+            $options['offset'] = self::$perPage * ($data['page'] - 1);
+        }
+
         if (!empty($variables))
         {
             $options['conditions'] = array_merge($options['conditions'], $variables);
         }
-
-        // print_r($options);
-        // die();
 
         return self::all($options);
     }
@@ -612,5 +617,42 @@ class Event extends \ActiveRecord\Model implements Itemswithpics, Reviewable, Se
         
         return self::all($options);
     }    
-    
+
+    static function getPager($page, $category = false, $route, $filter = false, $sorter = false)
+    {
+        $options = array();
+        $routeParams['current'] = $page;
+
+        if ($category)
+        {
+            $options['categories'] = $category->getChildren();
+            $routeParams['category'] = $category->encoded_key;
+        }
+
+        if ($filter)
+        {
+            $options['filter'] = $filter;
+        }
+
+        if ($sorter)
+        {
+            $options['sorter'] = $sorter;
+        }
+
+        $events = self::getAll($options);
+
+        $pager = array(
+            'total'   => ceil(count($events)/self::$perPage),
+            'current' => $page,
+            'route'   => $route,
+            'routeParams' => $routeParams
+        );
+
+        if ($pager['total'] == 1)
+        {
+            $pager = false;
+        }
+
+        return $pager;
+    }  
 }

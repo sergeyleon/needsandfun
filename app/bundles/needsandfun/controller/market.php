@@ -8,6 +8,7 @@ class Market extends \Core\Abstracts\Singleton
 	{
 		$options = array(
 			'conditions' => 'deleted is null 
+				and is_available=1
 				and id in (
 					select 
 						good_id 

@@ -2,7 +2,7 @@
 
 {% block title %}
     {% if item.id %}
-        Правка клиента &laquo;{{ item.name }}&raquo;
+        Правка клиента &laquo;{{ item.name }}&raquo; <a href="{{ path('manage_clients_remove', {'clientId': item.id}) }}" >Удалить</a>
     {% else %}
         Новый клиент
     {% endif %}

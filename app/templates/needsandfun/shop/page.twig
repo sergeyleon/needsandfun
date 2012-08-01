@@ -6,6 +6,16 @@
 {{ item.name|default(item.pagetype.name) }}
 {% endblock %}
 
+{% block meta_keywords %}
+{{ item.meta_description|default(item.pagetype.name) }}
+{% endblock %}
+
+
+{% block meta_description %}
+{{ item.meta_description|default(item.pagetype.name) }}
+{% endblock %}
+
+
 {% block content %}
 	<div class="page short">
 		<div class="place">

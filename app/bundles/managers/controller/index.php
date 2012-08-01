@@ -203,6 +203,14 @@ class Index extends \Core\Abstracts\Singleton
                     array(
                         'name'  => 'Партнеры',
                         'route' => 'manage_partners_index'
+                    ),
+                    array(
+                        'name'  => 'Поставщики',
+                        'route' => 'manage_suppliers_index'
+                    ),
+                    array(
+                        'name'  => 'Работа с массивами',
+                        'route' => 'manage_goods_exp'
                     )
                 )
             ),

@@ -132,7 +132,7 @@ class Place extends \ActiveRecord\Model implements Itemswithpics, Reviewable, Se
                 (select id from place_categories where deleted is null)';
         }
 
-        if (!empty($_options['page']))
+        if (!empty($_options['page']) && is_numeric($_options['page']))
         {
             $options['limit']  = self::$perPage;
             $options['offset'] = self::$perPage * ($_options['page'] - 1);

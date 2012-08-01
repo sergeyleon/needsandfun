@@ -27,7 +27,7 @@ class Cart extends \Core\Abstracts\Authorized
             $this->page['shopCategories'] = \Core\Model\Category::getAll();
             
             $this->page['cartDefaults'] = array(
-                'pickupAddress' => 'Москва, Красная площадь',
+                'pickupAddress' => 'Москва, м. Третьяковская, Б. Толмачевский пер., д. 5, корп. 1, территория института "Гиредмет". Перед приездом за заказом не забудьте убедиться в том, что товар у нас в офисе :)',
                 'metrolines'        => \Core\Model\Metroline::all(array('order' => 'name'))
             );
 
@@ -67,6 +67,8 @@ class Cart extends \Core\Abstracts\Authorized
             );
 
             Email::confirmOrder($order);
+            
+            Email::confirmOrderAdmin($order);
 
             $this->page->setMessage('Заказ оформлен успешно! В ближайшее время наши менеджеры свяжутся с вами для подтверждения заказа.');
             $this->router->go($this->router->generate('index'));

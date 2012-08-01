@@ -12,10 +12,8 @@ class Events extends \Core\Abstracts\Authorized
         {
             Cabinet::addEvent($_POST);
         }
-
         Index::filters('events');
 
-        $this->page['clearFilter'] = $this->router->generate('events_index');
     }
 
     public function actions($eventId)
@@ -84,7 +82,7 @@ class Events extends \Core\Abstracts\Authorized
         $this->page['comingEvents'] = \Core\Model\Event::sponsorComing($sponsor);
         $this->page['shopBanners']  = \Core\Model\Banner::shop(4);
 
-        $this->page['wwws']   = explode(',', $this->page['item']->link);
+        $this->page['wwws']   = explode(',', $this->page['item']->href);
 
         $this->page->display('events/sponsor.twig');
     }
@@ -108,6 +106,7 @@ class Events extends \Core\Abstracts\Authorized
 
     public function category($category, $page = 1) 
     {   
+
         $this->page['currentCategory'] = \Core\Model\Eventcategory::from_url($category); 
         $categoryId = $this->page['currentCategory']->id;
 
@@ -125,10 +124,19 @@ class Events extends \Core\Abstracts\Authorized
             : array('type' => 'date', 'dir' => 'desc');
 
         $options = array(
+            'page'       => $page,
             'categories' => $categories,
             'filter'     => $filter,
             'sort'       => $sorter
         );
+
+        $route = 'events_category_page';
+        $this->page['clearFilter'] = $this->router->generate($route, array('category' => $category, 'page' => 'all'));
+
+        if (is_numeric($page))
+        {
+            $this->page['pager'] = \Core\Model\Event::getPager($page, $this->page['currentCategory'], $route, $filter);
+        }
 
         $this->page['items']      = \Core\Model\Event::getAll($options);
         $this->page['metros']     = \Core\Model\Metro::getAll();

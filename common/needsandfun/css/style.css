@@ -373,19 +373,21 @@ body {
 }
 
 .header-item.phones {
-    float: right;
-    position: relative;
+    display: block;
     z-index: 30;
-    margin-top: 40px;
+		    height: 112px;
+    margin-top: 20px;
 }
 
 .header-phone {
+    display: block;
+    position: relative;
+	height: 50px;
+	width: 200px;
     color: #fff;
     font-weight: bold;
-    font-size: 16px;
-    float: left;
-    text-shadow: 0 -1px 0 #8c3800;
-    margin-right: 10px;
+    font-size: 19px;
+    text-shadow: 0 -2px 0 #8c3800;
 }
 
 .header-callback {
@@ -393,9 +395,8 @@ body {
     float: left;
     padding: 5px;
     margin: -5px;
-    font-size: 9px;
+    font-size: 12px;
     line-height: 1.1;
-    text-transform: uppercase;
     font-weight: bold;
     color: #6a1d00;
     text-shadow: 0 -1px 0 #ffab73;
@@ -432,7 +433,7 @@ body {
     display: block;
     box-shadow: 0 0 20px #666;
     margin: -5px;
-    top: 28px;
+    top: 67px;
     right: 0;
     padding: 20px 20px 15px;
     background: #fff;
@@ -769,7 +770,7 @@ table.footer-wrap td.last {
     display: none;
 }
 
-.category-item.selected .category-children {
+.category-item.selected > .category-children {
     display: block;
 }
 
@@ -878,6 +879,11 @@ a.good-item:hover .good-item-title {
     width: 100%;
 }
 
+.shop-body .categorys  { text-align:center}
+
+.shop-body .crumbs { font-size:14px;} 
+.shop-body .crumbs a { font-size:14px;} 
+
 .goods-empty {
     margin-top: 30px;
     font-size: 16px;
@@ -898,7 +904,7 @@ a.good-item:hover .good-item-title {
 }
 .good-gallery-main { text-align: center;}
 .good-gallery-main img {
-    height: 455px;text-align: center;
+   text-align: center;
    /* box-shadow: 0 1px 3px #999; */
 }
 
@@ -913,7 +919,7 @@ a.good-item:hover .good-item-title {
 }
 
 .good-gallery-thumb img {
-    width: 87px;
+   /* width: 87px; */
     height: 87px;    
 }
 
@@ -1052,12 +1058,13 @@ a.good-info-brand-name:hover {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;    
     font-weight: bold;
-    padding: 5px 15px 6px 15px;
+    padding: 5px 10px 6px 10px;
 }
 
 .buy-size-frame {
     border-top: 1px solid #999;
     border-bottom: 1px solid #999;
+	padding: 5px 10px 6px 0;
 }
 
 /*

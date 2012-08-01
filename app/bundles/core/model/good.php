@@ -27,14 +27,17 @@ class Good extends \ActiveRecord\Model implements Itemswithpics, Reviewable, Sea
     
     static $belongs_to = array(
         array('type'),
-        array('brand')
+        array('brand'),
+        array('supplier')
     );
 
     static $before_save = array('updateLink');
 
     public function updateLink()
     {
+      if($this->link == '') {
         $this->link = \Core\Url::encode($this->name);
+      }
     }
 
     public function get_url()
@@ -132,6 +135,7 @@ class Good extends \ActiveRecord\Model implements Itemswithpics, Reviewable, Sea
 
         return $pager;
     }    
+        
     
     public function getBindId()
     {
@@ -236,7 +240,7 @@ class Good extends \ActiveRecord\Model implements Itemswithpics, Reviewable, Sea
         
         foreach ($this->goodcategories as $_category)
         {
-            if ($_category->category->is_visible && $_category->category->deleted == null)
+            if (@$_category->category->is_visible && @$_category->category->deleted == null)
             {
                 array_push($categories, $_category->category_id);    
             }

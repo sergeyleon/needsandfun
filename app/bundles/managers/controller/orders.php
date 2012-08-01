@@ -29,6 +29,32 @@ class Orders extends \Core\Abstracts\Singleton
     
     public function remove($orderId)
     {
+
+        // CHECK AND DELETE
+        $delivers = \Core\Model\Delivery::all(array('conditions' => array('order_id = ? ', $orderId)));
+        
+        foreach ($delivers as $deliver)
+        {
+          $deliver->delete(); 
+        }
+        
+        // CHECK AND DELETE
+        $goods = \Core\Model\Ordergood::all(array('conditions' => array('order_id = ? ', $orderId)));
+        
+        foreach ($goods as $good)
+        {
+          $good->delete(); 
+        }
+        
+        // CHECK AND DELETE
+        $stats = \Core\Model\Orderstatus::all(array('conditions' => array('order_id = ? ', $orderId)));
+        
+        foreach ($stats as $stat)
+        {
+          $stat->delete(); 
+        }
+    
+    
         \Core\Model\Order::find($orderId)->delete();
         $this->router->go($this->router->generate('manage_orders_index'));        
     }

@@ -91,13 +91,13 @@ var PopupMessages = {
             message.mouseover(function() {
                 clearInterval(closeInterval);
             });
-
+            /*
             message.mouseout(function() {
                 closeInterval = setTimeout(function() {
                     closeBtn.click();
                 }, 5000);
             });
-
+            */
             closeBtn.click(function() {
                 clearInterval(closeInterval);
                 message.fadeOut(200, function() {

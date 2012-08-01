@@ -23,7 +23,7 @@ class Sponsors extends \Core\Abstracts\Singleton
             : \Core\Model\Sponsor::find($values['id']);
             
         $sponsor->name = $values['name'];
-        $sponsor->link = $values['link'];
+        $sponsor->href = $values['href'];
         $sponsor->description = $values['description'];
         
         $sponsor->save();

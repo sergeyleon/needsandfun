@@ -6,7 +6,7 @@ class Placecategory extends \ActiveRecord\Model implements Humanizeurl
 {
     static $table = 'place_categories';
     static $has_many = array(
-        array('places', 'foreign_key' => 'category_id', 'conditions' => 'deleted is null', 'order' => 'name')
+        array('places', 'foreign_key' => 'category_id' , 'conditions' => 'deleted is null', 'order' => 'name')
     );
 
     public $current = false;
@@ -17,6 +17,10 @@ class Placecategory extends \ActiveRecord\Model implements Humanizeurl
     {
         $this->link = \Core\Url::encode($this->name);
     }
+
+   public function __toString() {
+    return "";
+   }
 
     public function get_url()
     {
@@ -57,7 +61,7 @@ class Placecategory extends \ActiveRecord\Model implements Humanizeurl
     
     public function getPlaces()
     {
-        $places = Place::getAll($this->id);
+        $places = Place::getAll(array('category' => $this->id));
         return $places;
     }
 }

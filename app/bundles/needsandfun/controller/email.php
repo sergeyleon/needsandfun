@@ -71,6 +71,68 @@ class Email extends \Core\Abstracts\Authorized
             'text'    => $this->page->render('email/order/confirm.twig', $options)
         ));
 	}
+	public function confirmOrderAdmin(\Core\Model\Order $order)
+	{
+		$options = array(
+			'order' => $order,
+			'host'    => $this->router->getHost()
+		);
+		
+		\Core\Model\Email::get()->create(array(
+            'to'      => 'info@needsandfun.ru',
+            'cc'      => 'shop@needsandfun.ru',
+            'subject' => 'Заказ с сайта needsandfun.ru',
+            'text'    => $this->page->render('email/order/confirmadmin.twig', $options)
+        ));
+        
+    \Core\Model\Email::get()->create(array(
+            'to'      => 'bazzy@yandex.ru',
+            'subject' => 'Заказ с сайта needsandfun.ru',
+            'text'    => $this->page->render('email/order/confirmadmin.twig', $options)
+        ));
+	}
+	
+	public function confirmAddEvent($values)
+	{
+		$options = array(
+			'host'    => $this->router->getHost()
+		);
+		
+		\Core\Model\Email::get()->create(array(
+            'to'      => 'info@needsandfun.ru',
+            'cc'      => 'shop@needsandfun.ru',
+            'subject' => 'Событие на сайте',
+            'text'    => 'Пользователь добавил событие: '.$values[title]
+        ));
+		
+		\Core\Model\Email::get()->create(array(
+            'to'      => 'bazzy@yandex.ru',
+            'subject' => 'Событие на сайте',
+            'text'    => 'Пользователь добавил событие: '.$values[title]
+        ));
+	}
+	
+	public function confirmAddCallback($values)
+	{
+		$options = array(
+			'host'    => $this->router->getHost()
+		);
+		
+		\Core\Model\Email::get()->create(array(
+            'to'      => 'info@needsandfun.ru',
+            'cc'      => 'shop@needsandfun.ru',
+            'subject' => 'Заказ звонка',
+            'text'    => 'Пользователь заказал звонок на номер: '.$values
+        ));
+		
+		\Core\Model\Email::get()->create(array(
+            'to'      => 'bazzy@yandex.ru',
+            'subject' => 'Заказ звонка',
+            'text'    => 'Пользователь заказал звонок на номер: '.$values
+        ));
+        
+	}
+	
 
 	public function test()
     {

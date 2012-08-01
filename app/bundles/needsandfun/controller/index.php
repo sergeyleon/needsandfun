@@ -31,6 +31,13 @@ class Index extends \Core\Abstracts\Authorized
 
     public function show()
     {
+
+      //Baltic It fix
+        $link = 'index';
+        $page = \Core\Model\Page::find(array('conditions' => array('link = ?', $link)));
+        $this->page['main_page'] = $page;
+      //End Baltic It fix
+    
         $this->page['bigBanners']    = \Core\Model\Banner::big();
         $this->page['todayBanner']   = \Core\Model\Banner::todayInShop();
         $this->page['shopBanners']   = \Core\Model\Banner::shop();
@@ -163,8 +170,11 @@ class Index extends \Core\Abstracts\Authorized
                             $dt = new \DateTime('tomorrow 15:00');
                             break;
                     }
-
+                    
+                    
                     \Core\Model\Callback::create($_POST['phone'], $dt);
+                    
+                    Email::confirmAddCallback($_POST['phone']);
 
                     if (empty($_POST['ajax']))
                     {

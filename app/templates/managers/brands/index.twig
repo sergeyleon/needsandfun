@@ -5,12 +5,19 @@
 {% block content %}
     <div class="header-title">
         Бренды [<a href="{{ path('manage_brands_add') }}">+</a>]
+        <form method="post" class="search_form">
+          <input type="text" name="query" value="" /><input type="submit" name="item_search" value="Ok" /> 
+        </form>
+        <a href="{{ path('manage_brands_index') }}">Все</a>
     </div>
     <table class="items-table">
         <thead>
             <tr>
                 <th width="50px">
                     <div>#</div>
+                </th>
+                <th width="50px">
+                    <div>ID</div>
                 </th>
                 <th class="left">
                     <div>Название бренда</div>
@@ -24,6 +31,7 @@
             {% for brand in brands %}        
                 <tr class="items-table-item">
                     <td>{{ loop.index }}</td>   
+                    <td>{{ brand.id }}</td>   
                     <td class="left">
                         {{ brand.name }}
                         <div class="tools">

@@ -9,7 +9,12 @@
 
 {% block content %}
     <div class="header-title">
-        Товары [<a href="{{ path('manage_goods_add') }}">+</a>]
+        Товары [<a href="{{ path('manage_goods_add') }}">+</a>] 
+        
+        <form method="post" class="search_form" action="{{ path('manage_goods_index') }}" >
+          <input type="text" name="query" value="" /><input type="submit" name="item_search" value="Ok" /> 
+        </form>
+        <a href="{{ path('manage_goods_index') }}">Все</a>
     </div>
     
     <div class="window">   
@@ -28,7 +33,7 @@
 
             <ol class="sortable categories-wrap" data-url="{{ path('manage_goods_category_weight')}}">
                 {% for item in categories %}
-                    {{ common.sortableCategory(item, selectedCategory) }}
+                    {{ common.sortableCategoryItem(item, selectedCategory) }}
                 {% endfor %}
             </ol>
             
@@ -38,13 +43,24 @@
                         <input type="text" name="categoryName" placeholder="Добавить категорию" />
                     </div>
                 </form>
+                <form class="category-find" method="post""> 
+                    <input type="text" name="query" value="" /><input type="submit" name="category_search" value="Ok" /> 
+                </form>
                 <div class="category-add-link">
                     [Добавить категорию]
                 </div>
-            </div>            
+            </div>    
+            
+            
+            <div style="position:absolute">
+                
+
+            </div>   
+            
+                    
         </div>
         
-        <div class="goods" data-url="{{ path('manage_goods_action') }}">
+        <div class="goods module_item" data-url="{{ path('manage_goods_action') }}">
             {% for good in goods %}
                 <div class="good-item{% if not good.isAvailable %} notAvailable{% endif %}" data-id="{{ good.id }}" data-category="{{ good.getCategories }}">
                     <div class="good-item-pic">
@@ -74,8 +90,18 @@
                         <a href="{{ path('manage_goods_edit', {'goodId': good.id}) }}">{{ good.name|default('Товар') }}</a>
                     </div>
                 </div>
+                
             {% endfor %}
+
+            
+           
             <div class="clear"></div>
+            {% if pager %}
+              {{ common.pager(pager) }}
+            {% endif %}
         </div>
+        
+        
+        
     </div>
 {% endblock %}

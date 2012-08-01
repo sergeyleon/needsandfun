@@ -2,8 +2,18 @@
 {% import defaults.macros ~ '/shop.twig' as shop %}
 {% import defaults.macros ~ '/markup.twig' as markup %}
 
+{% import defaults.macros ~ '/ratings.twig' as ratings %}
+{% import defaults.macros ~ '/common.twig'  as common %}
+
+
 {% block title %}
+
+  {% if item.title %}
+    {{ item.title }}
+  {% else %}
     {{ item.name }}
+  {% endif %}
+    
 {% endblock %}
 
 {% block metaKeywords %}{{ item.meta_keywords }}{% endblock %}
@@ -38,14 +48,18 @@
 
         <div id="good" class="good-info lefted" data-id="{{ item.id }}">
             <div class="good-info-wrap">
+                {{ shop.breadcrumbs(breadcrumbs) }}
+                <h1 class="good-name">{{ item.name }}</h1>
                 <div class="good-gallery">
+                
                     <div class="good-gallery-main">
-                        {{ shop.itemPicture(item.getIcon, 'full', 'gallery') }}
+                        {{ shop.itemPicture(item.getIcon, 'full', 'gallery', item.name) }}
                     </div>
                     
                     <div class="good-gallery-thumbs">
                         {% for icon in item.getIcons %}
                             {% if loop.index > 1 %}
+                            
                             <div class="good-gallery-thumb">
                                 {{ shop.itemPicture(icon, 'small', 'gallery') }}
                             </div>
@@ -56,14 +70,7 @@
                 </div>
                 
                 <div class="good-info-row">
-                    <div class="good-article-wrap">
-                        <div class="good-article">
-                            Арт. {{ item.article }}
-                        </div>
-                        <h1 class="good-name">
-                            {{ item.name }}
-                        </h1>
-                    </div>
+                   
                     
                     {{ shop.rating(item, path('shop_good_ratings_index', {'good': item.encoded_key})) }}
                     
@@ -96,7 +103,7 @@
                                 <tr class="good-info-size" data-id="{{ size.id }}">
                                     <td>
                                         <div class="buy-price-frame">
-                                        {{ size.getDiscountedPrice|money }}
+                                        Цена:&nbsp;{{ size.getDiscountedPrice|money }}
                                         </div>
                                     </td>
                                     <td class="good-size">
@@ -135,11 +142,62 @@
                         </div>
                     {% endif %}
                     
+      
+                    <div class="good-info-brand">
+                        <div class="good-info-brand-title">
+                            Арт: {{ item.article }}
+                        </div>
+                    </div>
+                    
+                    <div class="good-info-brand">
+                        <div class="good-info-brand-title">
+                          <b>Возраст:</b><br />
+                          от: 
+                          {% if item.age_from == 0.25 %}
+                            3 месяцев
+                          {% elseif item.age_from == 0.5 %}
+                            6 месяцев
+                          {% elseif item.age_from == 0.75 %}
+                            9 месяцев
+                          {% elseif item.age_from == 1 %}
+                            12 месяцев
+                          {% elseif item.age_from == 1.25 %}
+                            15 месяцев
+                          {% elseif item.age_from == 1.5 %}
+                            18 месяцев
+                          {% elseif item.age_from == 1.75 %}
+                            21 месяца
+                          {% else %}
+                            {{ item.age_from }} лет
+                          {% endif %}
+                          <br />
+                          до:
+                          {% if item.age_to == 0.25 %}
+                            3 месяцев
+                          {% elseif item.age_to == 0.5 %}
+                            6 месяцев
+                          {% elseif item.age_to == 0.75 %}
+                            9 месяцев
+                          {% elseif item.age_to == 1 %}
+                            12 месяцев
+                          {% elseif item.age_to == 1.25 %}
+                            15 месяцев
+                          {% elseif item.age_to == 1.5 %}
+                            18 месяцев
+                          {% elseif item.age_to == 1.75 %}
+                            21 месяца
+                          {% else %}
+                            {{ item.age_to }} лет
+                          {% endif %}
+
+                        </div>
+                    </div>
+                    
                     <div class="good-info-brand">
                         <div class="good-info-brand-title">
                             Производитель: 
                         </div>
-                        <a href="{{ path('brands') }}#{{ item.brand.name|lower }}" class="good-info-brand-name">
+                        <a href="{{ path('brand') }}{{ item.brand.link|lower }}" class="good-info-brand-name">
                             {{ item.brand.name }}
                         </a>
                     </div>
@@ -154,6 +212,44 @@
                 <div class="good-info-desc">
                     {{ item.description|raw }}
                 </div>
+                
+<!--КОМЕНТЫ-->
+<div class="good-reviews lefted">
+	<h1 class="good-reviews-title">
+		Отзывы о товаре <a href="{{ item.url }}">{{ item.name }}</a>
+	</h1>
+
+	<div class="tabs">
+		<div class="tabs-items" data-type="items">
+			<div class="tabs-item selected">Отзывы ({{ reviews|length }})</div>
+			<div class="tabs-item">Новый</div>
+		</div>
+
+		<div class="clear"></div>
+
+		<div class="tabs-contents" data-type="contents">
+			<div class="tabs-content selected">
+				<div class="good-reviews-items">
+      		{% for review in reviews %}
+      			{{ ratings.review(review) }}
+      		{% else %}
+      			<em>Нет ни одного отзыва! Вы можете стать первым!</em>
+      		{% endfor %}
+      	</div>
+
+
+			</div>
+
+
+			<div class="tabs-content">
+  			{% include defaults.macros ~ '/review.twig' %}
+			</div>
+			
+		</div>
+	</div>
+</div>   
+ <!--КОМЕНТЫ--> 
+                
             </div>
 
             <div class="clear"></div>
@@ -166,6 +262,13 @@
                 </div>
                 {{ shop.goods(additionalGoods) }}    
             {% endif %}
+            
+            
+            
         </div>
     </div>
+    
+    
+    
+  
 {% endblock %}

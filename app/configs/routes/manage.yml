@@ -37,6 +37,11 @@ brands:
   pattern: /brands
   source: routes/manage/brands.yml  
   appendName: true  
+  
+suppliers:
+  pattern: /suppliers
+  source: routes/manage/suppliers.yml  
+  appendName: true
 
 reviews:
   pattern: /reviews

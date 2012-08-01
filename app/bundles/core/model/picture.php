@@ -13,7 +13,7 @@ class Picture extends \ActiveRecord\Model
     
     static $sizes = array(
         'originals'     => array(800, 800),
-        'full'          => array(800, 800),
+        'full'          => array(455, 455),
         'image'         => array(500, 500),
         'big_banner'    => array(640, 260),
         'today_banner'  => array(250, 150),
@@ -117,12 +117,17 @@ class Picture extends \ActiveRecord\Model
                     ($image->image_src_x < $min_x 
                   || $image->image_src_y < $min_y))
             {
-                $page = \Core\Page::get();
-                $message = 'Ошибка! ' . $image->file_src_name . ' не был загружен, т.к. ширина или высота меньше ' . $min_x . 'x' . $min_y . ' пикселей';
-                $page->setMessage($message);
+              //  $page = \Core\Page::get();
+              //  $message = 'Ошибка! ' . $image->file_src_name . ' не был загружен, т.к. ширина или высота меньше ' . $min_x . 'x' . $min_y . ' пикселей';
+              //  $page->setMessage($message);
+                
+              //  $min_x = $image->image_src_x;
+             //   $min_y = $image->image_src_y;
+                
             }
-            else 
-            {
+            
+            //else 
+           // {
 
                 if (isset(self::$sizes[$type]))
                 {
@@ -183,7 +188,7 @@ class Picture extends \ActiveRecord\Model
                 {
                     return $image;
                 } 
-            }
+          //  }
         }
 
         if ($image->error)

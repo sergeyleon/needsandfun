@@ -74,6 +74,8 @@ class Pages extends \Core\Abstracts\Singleton
             : \Core\Model\Page::find($values['id']);    
         
         $page->name     = $values['name'];
+        $page->meta_keywords     = $values['meta_keywords'];
+        $page->meta_description     = $values['meta_description'];
 
         if ($page->deletable())
         {
@@ -88,6 +90,8 @@ class Pages extends \Core\Abstracts\Singleton
         else
         {
             $page->contents = $values['contents'];
+            $page->meta_keywords     = $values['meta_keywords'];
+            $page->meta_description     = $values['meta_description'];
         }
 
         $page->save();

@@ -1,0 +1,30 @@
+{% import defaults.macros ~ '/market.twig' as market %}
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE yml_catalog SYSTEM "shops.dtd">
+
+<yml_catalog date="{{ ''|date('Y-m-d h:i') }}">
+	<shop>
+	    <name>Нужно и весело</name>
+	    <company>Магазин и афиша событий для детей</company>
+	    <url>www.needsandfun.ru</url>
+	    <email>shop@needsandfun.ru</email>
+
+		<currencies>
+			<currency id="RUR" rate="1" />
+		</currencies>
+
+		<categories>
+			{% for category in categories %}
+				{{ market.categoryItem(category) }}
+			{% endfor %}
+		</categories>
+
+		<offers>
+			{% for good in goods %}	
+				{{ market.good(good) }}
+			{% endfor %}
+		</offers>
+	</shop>
+</yml_catalog>
+
+

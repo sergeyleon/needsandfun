@@ -10,7 +10,7 @@ index_page:
     page: 1
     controller: Shop:index
   requirements:
-    page: (\d+)
+    page: (\d+|all)
 
 
 category_page:
@@ -19,7 +19,7 @@ category_page:
     page: 1
     controller: Shop:category
   requirements:
-    page: (\d+)
+    page: (\d+|all)
 
 category:
   pattern: -{category}

@@ -1,0 +1,55 @@
+{% extends defaults.layouts ~ '/manage.twig' %}
+
+{% block title %}
+    {% if brand.id %}
+        Правка поставщика &laquo;{{ supplier.name }}&raquo;
+    {% else %}
+        Новый поставщик
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <div class="header-title">{{ block('title') }}</div>
+    
+    <form method="post" enctype="multipart/form-data">
+        {% if brand.id %}
+            <input type="hidden" name="id" value="{{ supplier.id }}">
+        {% endif %}
+                
+        <table class="form-table lefted">
+            <tr>
+                <td width="100px">
+                    Название
+                </td>
+                <td width="500px">
+                    <div class="input-wrap">
+                        <input type="text" name="name" value="{{ supplier.name }}">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Описание
+                </td>
+                <td>
+                    <div class="input-wrap">
+                        <textarea name="description" class="wysiwyg" data-common="{{ defaults.common }}">{{ supplier.description }}</textarea>                    
+                    </div>                
+                </td>
+            </tr>            
+            <tr>
+                <td></td>
+                <td>
+                    <div class="form-submit">
+                        <button type="submit" name="proceed">
+                                Сохранить
+                        </button>
+                    </div>                
+                </td>
+            </tr>
+        </table>
+            
+        
+        <div class="clear"></div>
+    </form>    
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends defaults.layouts ~ '/manage.twig' %}
+{% import defaults.macros ~ '/shop.twig' as shop %}
+
+{% block title %}
+Товары
+{% endblock %}
+
+{% block absolute %}absolute{% endblock %}
+
+{% block content %}
+    <div class="header-title">
+
+    </div>
+    
+    <div class="window">   
+        
+        
+        <div class="goods" data-url="{{ path('manage_goods_action') }}">
+            {% for good in goods %}
+                <div class="good-item{% if not good.isAvailable %} notAvailable{% endif %}" data-id="{{ good.id }}" data-category="{{ good.getCategories }}" style="display:block">
+                    <div class="good-item-pic">
+                        {{ shop.itemPicture(good.getIcon, 'thumb') }}
+                        
+                        {% if good.discount %}
+                            <div class="good-item-oldprice">
+                                {{ good.old_price|money }}
+                            </div>
+                        {% endif %}
+                        <div class="good-item-price">
+                            {{ good.price|money }}
+                        </div>
+                        <div class="tools">
+                            <div class="tools-item show" data-action="show">
+                                <div class="icon"></div>
+                            </div>
+                            <div class="tools-item hide" data-action="hide">
+                                <div class="icon"></div>
+                            </div>                            
+                            <div class="tools-item delete" data-action="delete">
+                                <div class="icon"></div>                        
+                            </div>
+                        </div>
+                    </div>
+                    <div class="good-item-name">
+                        <a href="{{ path('manage_goods_edit', {'goodId': good.id}) }}">{{ good.name|default('Товар') }}</a>
+                    </div>
+                </div>
+            {% endfor %}
+            <div class="clear"></div>
+        </div>
+    </div>
+{% endblock %}

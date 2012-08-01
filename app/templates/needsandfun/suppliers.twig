@@ -1,0 +1,30 @@
+{% extends defaults.layouts ~ '/basic.twig' %}
+{% import defaults.macros ~ '/shop.twig' as shop %}
+
+{% block title 'Поставщики' %}
+
+{% block content %}
+    <div class="page">
+        <div class="column">
+            <div class="brands">
+                {% for brand in brands %}
+                    <div class="brand-item">
+                        <a name="{{ brand.name|lower }}"></a>
+                        <div class="brand-img">
+                            {{ shop.itemPicture(brand.getIcon, 'brand_preview') }}
+                        </div>
+                        <div class="brand-content">
+                            <div class="brand-title">
+                                <h2>{{ brand.name }}<h2>
+                            </div>
+                            <div class="brand-desc">{{ brand.description|raw }}</div>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <div class="clear"></div>
+    </div>
+{% endblock %}

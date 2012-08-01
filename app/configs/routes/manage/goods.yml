@@ -8,6 +8,28 @@ index:
   defaults:
     controller: Goods:index
     
+index_page: 
+  pattern: -page-{page}
+  defaults:
+    page: 1
+    controller: Goods:index
+  requirements:
+    page: (\d+|all)
+    
+
+category_page:
+  pattern: /category/{category}-page-{page}
+  defaults:
+    page: 1
+    controller: Goods:category_index
+  requirements:
+    page: (\d+|all)
+    
+category:
+  pattern: /category/{category}
+  defaults:
+    controller: Goods:category_index
+ 
 category_add:
   pattern: /category/add
   defaults:
@@ -62,3 +84,14 @@ edit:
   pattern: /edit/{goodId}
   defaults:
     controller: Goods:edit
+
+exp: 
+  pattern: /exp
+  defaults:
+    controller: Goods:exp
+
+search:
+  pattern: /search
+  defaults:
+    controller: Goods:search
+    

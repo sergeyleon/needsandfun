@@ -74,6 +74,19 @@
                         </tr>
                         
                         <tr>
+                            <td width="120px">
+                                Поставщик
+                            </td>
+                            <td width="400px">
+                                <select name="supplier">
+                                    {% for supplier in suppliers %}
+                                        <option value="{{ supplier.id }}"{% if supplier.id == item.supplier_id %} selected="selected"{% endif %}>{{ supplier.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </td>                
+                        </tr>
+                        
+                        <tr>
                             <td>
                                 Тип товара
                             </td>
@@ -96,10 +109,12 @@
                                 </div>
                             </td>                
                         </tr>
-
+                        
+                        
+                        
                         <tr>
                             <td>
-                                Артикул
+                                Артикул товара
                             </td>
                             <td>
                                 <div class="input-wrap">
@@ -107,7 +122,47 @@
                                 </div>
                             </td>                
                         </tr>
-                                    
+                        <tr>
+                            <td>
+                                Артикул производителя
+                            </td>
+                            <td>
+                                <div class="input-wrap">
+                                    <input type="text" name="product_sku" value="{{ item.product_sku }}" />
+                                </div>
+                            </td>                
+                        </tr>
+
+                        <tr>
+                            <td>
+                                Кол-во проданных товаров
+                            </td>
+                            <td>
+                                <div class="input-wrap">
+                                  <input type="text" name="sell_amount" value="{{ item.sell_amount }}" />
+                                </div>
+                            </td>                
+                        </tr>
+                        <tr>
+                            <td>
+                                Кол-во на складе
+                            </td>
+                            <td>
+                                <div class="input-wrap">
+                                  <input type="text" name="in_stock" value="{{ item.in_stock }}" />
+                                </div>
+                            </td>                
+                        </tr>
+                        <tr>
+                            <td>
+                                Закупочная цена
+                            </td>
+                            <td>
+                                <div class="input-wrap small">
+                                    <input type="text" name="p_price" value="{{ item.p_price }}" />
+                                </div>
+                            </td>                
+                        </tr>        
                         <tr>
                             <td>
                                 Товар для
@@ -151,14 +206,50 @@
                         
                         <tr>
                             <td>
-                                Скидка
+                                Скидка %
                             </td>
                             <td>
                                 <div class="input-wrap small">
                                     <input type="text" name="discount" value="{{ item.discount }}" />
                                 </div>
                             </td>                
-                        </tr>         
+                        </tr>
+                        
+                        <tr>
+                            <td>
+                                Распродажа
+                            </td>
+                            <td>
+                                <div class="input-wrap small">
+                                    <input type="checkbox" name="sale" value="1" 
+                                                    {% if item.sale == '1' %}
+                                                         checked="checked"
+                                                    {% endif %} />
+                                </div>
+                            </td>                
+                        </tr>
+                        
+                        <tr>
+                            <td>
+                                Срок действия скидки
+                            </td>
+                            <td>
+                                <div class="input-wrap small">
+                                    <input type="text" name="discount_date" value="{{ item.discount_date|date("d-m-Y") }}" />
+                                </div>
+                            </td>                
+                        </tr>
+                        
+                        <tr>
+                            <td>
+                                Ссылка
+                            </td>
+                            <td>
+                                <div class="input-wrap">
+                                    <input type="text" name="link" value="{{ item.link }}" />
+                                </div>
+                            </td>                
+                        </tr>      
                         
                         <tr>
                             <td class="top">
@@ -185,6 +276,18 @@
                 </div>
                 <div class="tabs-content">
                     <table class="form-table">
+                        
+                        <tr>
+                            <td width="120px">
+                                Тайтл товара
+                            </td>
+                            <td width="300px">
+                                <div class="input-wrap">
+                                    <input type="text" name="title" value="{{ item.title }}">
+                                </div>
+                            </td>
+                        </tr>
+                    
                         <tr>
                             <td width="120px" class="top">
                                 META-keywords

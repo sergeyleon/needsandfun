@@ -1,3 +1,18 @@
-User-Agent: *
-Disallow:
+User-Agent: Yandex
+Disallow: /*_openstat
+Disallow: /*from=adwords
 Host: www.needsandfun.ru
+
+User-Agent: Googlebot
+Disallow: /*_openstat
+Disallow: /*from=adwords
+
+User-Agent: *
+Disallow: 
+
+Sitemap: http://www.needsandfun.ru/sitemap.xml 
+
+
+
+
+

@@ -1,0 +1,89 @@
+{% extends defaults.layouts ~ '/manage.twig' %}
+{% import defaults.macros ~ '/shop.twig' as shop %}
+
+{% block title %}
+Товары
+{% endblock %}
+
+{% block absolute %}absolute{% endblock %}
+
+{% block content %}
+    <div class="header-title">
+        Товары [<a href="{{ path('manage_goods_add') }}">+</a>] 
+        
+        <form action="{{ path('manage_goods_search') }}" method="post" >
+            <input type="text" name="name" value="" />
+            <input type="text" name="article" value="" />
+            <input type="text" name="description" value="" />
+            <button type="submit" name="search">sds</button>
+        </form>
+        <br />
+    </div>
+    
+    <div class="window">   
+        <div class="categories" data-selected="{{ selectedCategory }}" data-action-delete="{{ path('manage_goods_category_remove') }}" data-action-visibility="{{ path('manage_goods_category_visibility') }}"> 
+            <div class="category-item" data-id="all">
+                <div class="category-name">            
+                    Все товары
+                </div>
+            </div>
+        
+            <div class="category-item" data-id="new">
+                <div class="category-name">            
+                    Новые товары
+                </div>
+            </div>
+
+            <ol class="sortable categories-wrap" data-url="{{ path('manage_goods_category_weight')}}">
+                {% for item in categories %}
+                    {{ common.sortableCategory(item, selectedCategory) }}
+                {% endfor %}
+            </ol>
+            
+            <div class="category-add form">
+                <form class="category-add-form" method="post" action="{{ path('manage_goods_category_add') }}"> 
+                    <div class="input-wrap">
+                        <input type="text" name="categoryName" placeholder="Добавить категорию" />
+                    </div>
+                </form>
+                <div class="category-add-link">
+                    [Добавить категорию]
+                </div>
+            </div>            
+        </div>
+        
+        <div class="goods" data-url="{{ path('manage_goods_action') }}">
+            {% for good in goods %}
+                <div class="good-item{% if not good.isAvailable %} notAvailable{% endif %}" data-id="{{ good.id }}" data-category="{{ good.getCategories }}">
+                    <div class="good-item-pic">
+                        {{ shop.itemPicture(good.getIcon, 'thumb') }}
+                        
+                        {% if good.discount %}
+                            <div class="good-item-oldprice">
+                                {{ good.old_price|money }}
+                            </div>
+                        {% endif %}
+                        <div class="good-item-price">
+                            {{ good.price|money }}
+                        </div>
+                        <div class="tools">
+                            <div class="tools-item show" data-action="show">
+                                <div class="icon"></div>
+                            </div>
+                            <div class="tools-item hide" data-action="hide">
+                                <div class="icon"></div>
+                            </div>                            
+                            <div class="tools-item delete" data-action="delete">
+                                <div class="icon"></div>                        
+                            </div>
+                        </div>
+                    </div>
+                    <div class="good-item-name">
+                        <a href="{{ path('manage_goods_edit', {'goodId': good.id}) }}">{{ good.name|default('Товар') }}</a>
+                    </div>
+                </div>
+            {% endfor %}
+            <div class="clear"></div>
+        </div>
+    </div>
+{% endblock %}

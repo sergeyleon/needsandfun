@@ -59,7 +59,12 @@ class Cabinet extends \Core\Abstracts\Authorized
 	{
 		if (\Core\Model\Event::add($values))
 		{
+		
+		  
 			$this->page->setMessage('Объявление добавлено успешно! В ближайшее время наши менеджеры свяжутся с вами для уточнения указанной информации.');
+			
+			Email::confirmAddEvent($values);
+			
 			$this->router->go($this->router->generate('cabinet_index'));
 		}
 		else

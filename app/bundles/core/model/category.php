@@ -27,7 +27,9 @@ class Category extends \ActiveRecord\Model implements Humanizeurl
 
     public function updateLink()
     {
+      if($this->link == '') {
         $this->link = \Core\Url::encode($this->name);
+      }
     }
 
     public function get_url()
