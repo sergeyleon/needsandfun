@@ -9,6 +9,7 @@ class Market extends \Core\Abstracts\Singleton
 		$options = array(
 			'conditions' => 'deleted is null 
 				and is_available=1
+				and supplier_id=13 or supplier_id=3
 				and id in (
 					select 
 						good_id 
