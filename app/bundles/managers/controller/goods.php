@@ -528,17 +528,17 @@ private function _getGoods($page = 1, $categories = false, $category = false)
 
        // Если файл загружен успешно, перемещаем его
        // из временной директории в конечную
-       move_uploaded_file($_FILES["excel"]["tmp_name"], $_SERVER['DOCUMENT_ROOT']."/app/uploads/".$_FILES["excel"]["name"]);
+       move_uploaded_file($_FILES["excel"]["tmp_name"], $_SERVER['DOCUMENT_ROOT']."/uploads/".$_FILES["excel"]["name"]);
 
       require_once $_SERVER['DOCUMENT_ROOT'].'/app/library/Classes/PHPExcel.php';
       require_once $_SERVER['DOCUMENT_ROOT'].'/app/library/Classes/PHPExcel/IOFactory.php';   
       
-      if (!file_exists($_SERVER['DOCUMENT_ROOT']."/app/uploads/".$_FILES["excel"]["name"])) {
+      if (!file_exists($_SERVER['DOCUMENT_ROOT']."/uploads/".$_FILES["excel"]["name"])) {
       	exit("Please run 05featuredemo.php first.\n");
       }
       
       $objReader = \PHPExcel_IOFactory::createReader('Excel2007');
-      $objPHPExcel = $objReader->load($_SERVER['DOCUMENT_ROOT']."/app/uploads/".$_FILES["excel"]["name"]);
+      $objPHPExcel = $objReader->load($_SERVER['DOCUMENT_ROOT']."/uploads/".$_FILES["excel"]["name"]);
       
       $error_pic = '';
       $error_category = '';
