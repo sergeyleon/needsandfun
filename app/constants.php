@@ -22,7 +22,7 @@ define('MODELS',  BUNDLES . '/Core/model');        # модели
 
 
 define('SITE',        $_SERVER['DOCUMENT_ROOT']);      # корень сайта
-define('WWW',         '/var/www/needsandfun.ru/current/');                             # www-корень
+define('WWW',         '');                             # www-корень
 define('COMMON',      WWW . '/common');                # фронтенд
 define('WWW_UPLOADS', WWW . '/uploads/pics');      # папка загрузок
 
