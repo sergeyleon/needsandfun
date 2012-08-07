@@ -1,6 +1,6 @@
 <?php
 phpinfo();
-die();
-require_once 'app/bootstrap.php';
+//die();
+//require_once 'app/bootstrap.php';
 
 
