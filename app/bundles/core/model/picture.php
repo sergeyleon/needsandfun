@@ -4,7 +4,7 @@ require_once LIBRARY . '/Upload/class.upload.php';
 
 class Picture extends \ActiveRecord\Model
 {
-    static $PATH      = '';
+    static $PATH      = UPLOADS;
     static $ORIGINALS = ORIGINALS;    
     static $WWW_PATH  = '/var/www/needsandfun.ru/current/uploads/pics';    
 
