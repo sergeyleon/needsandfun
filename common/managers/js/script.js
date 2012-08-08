@@ -297,7 +297,7 @@ var Good = function(element) {
     this.delete = function() {
         var category = $('.category-item.selected').attr('data-id');
         
-        if ('all' == category) 
+        if ('' != category) 
         {
             this.send('deleteGood');
         }
