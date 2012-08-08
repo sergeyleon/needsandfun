@@ -403,9 +403,8 @@ private function _getGoods($page = 1, $categories = false, $category = false)
     {
     
     
-        if($category == "new") { $is_new = 'goods.is_new  = 1';} else { $is_new ='';} 
+        if($category == "new") { $is_new = 'goods.is_new  = 1';} else { $is_new ='goods.is_new  = 0';} 
         $conditions = array(
-            'goods.is_available = 1',
             'goods.deleted is null',
             $is_new
         );
