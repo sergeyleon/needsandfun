@@ -402,9 +402,12 @@ class Goods extends \Core\Abstracts\Singleton
 private function _getGoods($page = 1, $categories = false, $category = false)
     {
     
+    
+        if($category == "new") { $is_new = 'goods.is_new  = 1';} else { $is_new ='';} 
         $conditions = array(
             'goods.is_available = 1',
             'goods.deleted is null',
+            $is_new
         );
 
         if ($categories)
@@ -436,7 +439,7 @@ private function _getGoods($page = 1, $categories = false, $category = false)
         
         $options['order']  = 'name';
 
-
+        
 
         $goods = \Core\Model\Good::all($options);
         
@@ -457,16 +460,19 @@ private function _getGoods($page = 1, $categories = false, $category = false)
     
     public function category_index($category, $page = 1) 
     {
-        $this->page['currentCategory'] = \Core\Model\Category::from_url($category);
-        $category = $this->page['currentCategory']->encoded_key;
-
-        $categoryId = $this->page['currentCategory']->id;
-
-        $filters = array('categoryId' => $categoryId);
-        $this->getStorage('flash')->setValue('categoryId', $categoryId);
-        $this->_categories($categoryId);
-            
-        $categories = $this->page['currentCategory']->getChildren();
+    
+        if($category != 'new') {
+          $this->page['currentCategory'] = \Core\Model\Category::from_url($category);
+          $category = $this->page['currentCategory']->encoded_key;
+  
+          $categoryId = $this->page['currentCategory']->id;
+  
+          $filters = array('categoryId' => $categoryId);
+          $this->getStorage('flash')->setValue('categoryId', $categoryId);
+          $this->_categories($categoryId);
+              
+          $categories = $this->page['currentCategory']->getChildren();
+        }
         
         $this->page['goods'] = $this->_getGoods($page, $categories, $category);
 
