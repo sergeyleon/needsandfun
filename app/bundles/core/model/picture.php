@@ -6,7 +6,7 @@ class Picture extends \ActiveRecord\Model
 {
     static $PATH      = UPLOADS;
     static $ORIGINALS = ORIGINALS;    
-    static $WWW_PATH  = '/var/www/needsandfun.ru/current/uploads/pics';    
+    static $WWW_PATH  = WWW_UPLOADS;    
 
     const MIN_X = 450;
     const MIN_Y = 290;
