@@ -272,6 +272,11 @@
 
             {{ markup.button({'value': 'Фильтровать'}) }}
 
+            <div class="sorter-item show-all">
+                <div class="sorter-item-icon"></div>
+                <a href="{{ context.clearFilter }}">Показать все</a>
+            </div>
+
         </form>
     </div>
 {% endmacro %}
