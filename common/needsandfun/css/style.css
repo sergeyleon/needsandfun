@@ -3517,6 +3517,7 @@ a.pager-item {
     border-radius: 5px;
     background: #f2f0e6;
     margin-bottom: 30px;
+    display:none
 }
 
 .sorter-item {
