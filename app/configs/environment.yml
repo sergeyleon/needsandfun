@@ -18,8 +18,8 @@ shop_dev:
       host:       smtp.gmail.com
       port:       465
       encryption: ssl
-      user:       noreply@weboshin.ru
-      sender:     noreply@weboshin.ru
+      user:       shop@needsandfun.ru
+      sender:     shop@needsandfun.ru
       reciever:   info@needsandfun.ru
       password:   1tp7mPcO90X_w3JZGrTo
     SOCIAL:
@@ -48,10 +48,10 @@ shop_prod:
       host:       smtp.gmail.com
       port:       465
       encryption: ssl
-      user:       noreply@weboshin.ru
-      sender:     noreply@weboshin.ru
+      user:       shop@needsandfun.ru
+      sender:     shop@needsandfun.ru
       reciever:   info@needsandfun.ru
-      password:   1tp7mPcO90X_w3JZGrTo
+      password:   needs712
     SOCIAL:
       twitter:   https://twitter.com/#!/NeedsAndFun 
       facebook: http://www.facebook.com/pages/%D0%9D%D1%83%D0%B6%D0%BD%D0%BE-%D0%B8-%D0%92%D0%B5%D1%81%D0%B5%D0%BB%D0%BE/337994872909310
@@ -77,10 +77,10 @@ manager_dev:
       host:       smtp.gmail.com
       port:       465
       encryption: ssl
-      user:       noreply@weboshin.ru
-      sender:     noreply@weboshin.ru
+      user:       shop@needsandfun.ru
+      sender:     shop@needsandfun.ru
       reciever:   info@needsandfun.ru
-      password:   1tp7mPcO90X_w3JZGrTo
+      password:   needs712
 
 manager_prod:
   hosts:       test.needsandfun.ru, needsandfun.ru, www.needsandfun.ru
@@ -102,7 +102,7 @@ manager_prod:
       host:       smtp.gmail.com
       port:       465
       encryption: ssl
-      user:       noreply@weboshin.ru
-      sender:     noreply@weboshin.ru
+      user:       shop@needsandfun.ru
+      sender:     shop@needsandfun.ru
       reciever:   info@needsandfun.ru
-      password:   1tp7mPcO90X_w3JZGrTo
+      password:   needs712
