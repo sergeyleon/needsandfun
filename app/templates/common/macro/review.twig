@@ -37,5 +37,50 @@
 	    {{ markup.submitBlock({'value': 'Оставить отзыв', 'name': 'proceed'}) }}
 	</form>
 {% else %}
-	Отзывы могут оставлять только <a href="{{ path('register') }}">клиенты</a>.
+
+
+<form class="reviews-form" method="post">
+		<table width="100%">
+	        <tr class="reviews-form-row">
+	        	<td width="150px">
+	        		Рейтинг
+	        	</td>
+	        	<td>
+	        		{{ markup.rating() }}
+	        	</td>
+	        </tr>
+	        <tr class="reviews-form-row">
+	        	<td width="150px">
+	        		Достоинства
+	        	</td>
+	        	<td>
+	        		<textarea name="pros"></textarea>
+	        	</td>
+	        </tr>
+	        <tr class="reviews-form-row">
+	        	<td>
+	        		Недостатки
+	        	</td>
+	        	<td>
+	        		<textarea name="contras"></textarea>
+	        	</td>
+	        </tr>
+	        <tr class="reviews-form-row">
+	        	<td>
+	        		Комментарий
+	        	</td>
+	        	<td>
+	        		<textarea name="comment"></textarea>
+	        	</td>
+	        </tr>
+	        <tr>
+	         <td><img src="/app/codegen.php" /></td>
+	         <td><input name="code" class="code_text" type="text" /></td>
+	        </tr>
+	    </table>
+	    {{ markup.submitBlock({'value': 'Оставить отзыв', 'name': 'proceed'}) }}
+	</form>
+
+
+	
 {% endif %}

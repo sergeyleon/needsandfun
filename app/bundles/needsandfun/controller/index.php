@@ -45,6 +45,7 @@ class Index extends \Core\Abstracts\Authorized
         $this->page['partners']      = \Core\Model\Partner::banners();
         $this->page['places']        = \Core\Model\Place::banners();
         $this->page['articleBanner'] = current(\Core\Model\Article::banners());
+        $this->page['newsBanner'] = current(\Core\Model\News::banners());
 
         $this->page['actualEvents']  = \Core\Model\Event::actual(6);
         $this->page['categories'] = \Core\Model\Eventcategory::getAll();

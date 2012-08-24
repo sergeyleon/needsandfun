@@ -4,7 +4,7 @@ namespace Needsandfun\Controller;
 
 class Brands extends \Core\Abstracts\Authorized
 {
-	public function index()
+/*	public function index($page = 1)
     {
         $this->page['brands'] = \Core\Model\Brand::all(array(
             'conditions' => 'deleted is null',
@@ -13,6 +13,21 @@ class Brands extends \Core\Abstracts\Authorized
         
         $this->page->display('brands.twig');
     }
+    
+    */
+    public function index($page = 1) 
+    {
+
+
+
+        $this->page['brands'] = $this->_getBrands($page);
+        
+        
+      //  $this->page['brandbreadcrumbs'] = \Core\Model\Brand::all(array('conditions' => array('link = ?', $brand)));
+        
+        $this->page->display('brands.twig');
+    }
+  
     
     static function getPager($page, $category = false, $route, $total = 0)
     {
@@ -40,13 +55,62 @@ class Brands extends \Core\Abstracts\Authorized
         return $pager;
     }
     
+ 
+ 
+ private function _getBrands($page = 1)
+    {
+    
+    
+    
+        $conditions = array(
+            'deleted is null',
+        );
+
+
+     
+        $options = array('conditions' => array(implode(' AND ', $conditions)));
+        
+        if (!empty($variables))
+        {
+            $options['conditions'] = array_merge($options['conditions'], $variables);
+        }    
+    
+
+        $this->page['clearFilter'] = $this->router->generate( 'brands_page', array('page' => 'all'));
+        
+        if (is_numeric($page))
+        {
+            $total = \Core\Model\Brand::all($options);
+
+            $options['limit']  = 10;
+            $options['offset'] = 10 * ($page - 1);
+
+            $this->page['pager']   = \Core\Model\Brand::getPager($page, '', 'brands_page' , $total);
+        }
+        
+        $options['order']  = 'name';
+
+        
+        $brands = \Core\Model\Brand::all($options);
+        
+        
+
+        if (isset($total) && count($total) > 0 && count($brands) == 0 && $page > 1)
+        {
+            $this->router->go($this->router->generate('brands_page', array('page' => 1)));
+        }
+
+        return $brands;
+    }
+ 
+ 
     
     private function _getGoods($page = 1, $brandId, $brand = false)
     {
     
     
     
-$conditions = array(
+        $conditions = array(
             'goods.is_available = 1',
             'goods.deleted is null',
             'goods.brand_id = '.$brandId
@@ -199,4 +263,21 @@ $conditions = array(
         
         $this->page->display('shop/brand.twig');
     }
+    
+    
+    
+    public function brand_detail($brand) 
+    {
+
+
+
+     //   $brand = explode("-page",$brand);
+    //    $brand = $brand[0];
+        $this->page['brands'] = \Core\Model\Brand::all(array('conditions' => array('link = ?', $brand)));
+        
+        
+        $this->page->display('brands-detail.twig');
+    }
+    
+    
 }

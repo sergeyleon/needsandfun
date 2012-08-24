@@ -43,6 +43,7 @@
 
 {% macro goods(goods, pager) %}
     {% import defaults.macros ~ '/common.twig' as common %}
+    <div id="goods-wrap">
     <div class="goods">    
         {% for good in goods %}
             {{ _self.good(good) }}
@@ -54,7 +55,8 @@
         {% if pager %}
             {{ common.pager(pager) }}
         {% endif %}        
-    </div>    
+    </div>
+    </div>
 {% endmacro %}
 
 
@@ -173,9 +175,9 @@
 {% macro sorter(sort, context) %}
     {% import defaults.macros ~ '/markup.twig' as markup %}
 
-    <form>
+    <form >
         <div class="sorter">
-            <div class="sorter-item">
+            {#<div class="sorter-item">
                 <select name="sort[type]">
                     <option value="abc"    {% if 'abc' == sort.type %} selected="selected"{% endif %}>По алфавиту</option>
                     <option value="rating" {% if 'rating' == sort.type %} selected="selected"{% endif %}>По рейтингу</option>
@@ -184,19 +186,19 @@
                 </select>
             </div>
 
-            {#
+            
             <div class="sorter-item">
                 <select name="sort[dir]">
                     <option value="asc"  {% if 'asc'  == sort.dir %} selected="selected"{% endif %}>По возрастанию</option>
                     <option value="desc" {% if 'desc' == sort.dir %} selected="selected"{% endif %}>По убыванию</option>
                 </select>
             </div>
-            #}
+            
 
             <div class="sorter-item">
                 {{ markup.button({'value': 'Ok', 'small': true}) }}
             </div>
-
+            #}
             <div class="sorter-item show-all">
                 <div class="sorter-item-icon"></div>
                 <a href="{{ context.clearFilter }}">Показать все</a>
@@ -241,6 +243,18 @@
                         <option value="9"{% if 9 == filter.age %} selected="selected"{% endif %}>9 – 12</option>
                     </select>
                 </div>
+                
+                
+                <div class="filter-item">
+                    <div class="filter-item-title">Сортировка</div>
+                    <select data-name="sort">
+                        <option value="abc"    {% if 'abc' == filter.sort %} selected="selected"{% endif %}>По алфавиту</option>
+                        <option value="rating" {% if 'rating' == filter.sort %} selected="selected"{% endif %}>По рейтингу</option>
+                        <option value="price"  {% if 'price'  == filter.sort %} selected="selected"{% endif %}>По стоимости</option>
+                        <option value="date"   {% if 'date'   == filter.sort %} selected="selected"{% endif %}>По дате поступления</option>
+                    </select>
+                </div>
+                
                 </noindex>
                 <div class="clear"></div>
             </div>

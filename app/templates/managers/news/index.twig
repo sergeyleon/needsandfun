@@ -1,0 +1,57 @@
+{% extends defaults.layouts ~ '/manage.twig' %}
+
+{% block title 'Новости' %}
+
+{% block content %}
+    <div class="header-title">
+        Новости [<a href="{{ path('manage_news_add') }}">+</a>]
+    </div>
+    <table class="items-table">
+        <thead>
+            <tr>
+                <th width="50px">
+                    <div>#</div>
+                </th>
+                <th class="left" >
+                    <div>Название</div>
+                </th>
+
+                <th class="left" width="10%">
+                    <div>Действия</div>
+                </th>                    
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+                <tr class="items-table-item">
+                    <td>{{ loop.index }}</td>   
+                    <td class="left">
+                        {{ item.name }}
+                        {% if item.announce %}         
+                            <div class="article-announce">
+                                {{ item.announce|truncate(100) }}
+                            </div>
+                        {% endif %}
+                    </td>
+                    <td class="left">
+                        <div class="tools">
+                            <div class="tools-item edit" data-type="edit">
+                                <a href="{{ path('manage_news_edit', {'newsId': item.id}) }}" class="icon"></a>
+                            </div>
+                        
+                            <div class="tools-item delete" data-type="delete" data-confirm="true">
+                                <a href="{{ path('manage_news_remove', {'newsId': item.id}) }}" class="icon"></a>
+                            </div>
+                        </div>                             
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="4">
+                        Тут пусто.
+                    </td>
+                </tr>
+            {% endfor %}                    
+        </tbody>
+    </table>    
+{% endblock %}

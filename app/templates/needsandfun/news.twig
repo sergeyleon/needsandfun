@@ -1,0 +1,59 @@
+{% extends defaults.layouts ~ '/basic.twig' %}
+{% import defaults.macros ~ '/banners.twig' as banners %}
+{% import defaults.macros ~ '/common.twig' as common %}
+
+{% block title %}
+Новости
+{% endblock %}
+
+{% block content %}
+    <div class="main-body-left">
+        {{ banners.shop(shopBanners) }}
+    </div>
+    
+    <div class="shop">
+        <div class="shop-body">
+            <div class="tabs" data-type="class">
+                <div class="tabs-items" data-type="items">
+                    <div class="tabs-item selected">
+                        ВСЕ НОВОСТИ
+                    </div>
+
+
+                </div>
+                <div class="content" data-type="contents">
+                        <div class="news-list">
+                        {% for news_item in news %}
+
+                        <div class="news-item">
+                            <div class="news-img">
+                                <a href="{{ news_item.url }}">{{ common.itemPicture(news_item.getIcon, 'small_article') }}</a>
+                            </div>
+                            <div class="news-content">
+                                <div class="news-item-date">
+                                    {{ news_item.created|date('d.m.Y') }}
+                                </div>
+                                <div class="news-item-title">
+                                    <a href="{{ news_item.url }}">
+                                        {{ news_item.name }}
+                                    </a>
+                                </div>
+                                <div class="news-announce">
+                                    {{ news_item.announce|raw }}
+                                </div>
+                            </div>
+    					             <div class="clear"></div>
+                        </div>
+
+                        {% endfor %}
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="clear"></div>            
+    </div>
+    
+{% endblock %}

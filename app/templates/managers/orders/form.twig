@@ -47,6 +47,26 @@
                 </td>
             </tr>
 
+
+            <tr>
+                <td>
+                    Имя
+                </td>
+                <td>
+                    {{ item.client.first_name|default(item.client.user.login) }} 
+                    {{ item.client.last_name }}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Телефон
+                </td>
+                <td>
+                    {{ item.client.phone }}
+                </td>
+            </tr>
+
+
             <tr>
                 <td>
                     Клиент
@@ -58,14 +78,6 @@
                         </div>
                     </div>   
 
-                    <div>
-                        {{ item.client.name|default(item.client.user.login) }}
-                    </div>
-                    {% if item.client.phone %}
-                        <div>
-                            {{ item.client.phone }}
-                        </div>
-                    {% endif %}
                     <div>
                         <a href="mailto:{{ item.client.email|default(item.client.user.login) }}">
                             {{ item.client.email|default(item.client.user.login) }}

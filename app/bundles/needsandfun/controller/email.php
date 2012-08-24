@@ -58,38 +58,49 @@ class Email extends \Core\Abstracts\Authorized
         ));
 	}
 
-	public function confirmOrder(\Core\Model\Order $order)
+	public function confirmOrder(\Core\Model\Order $order,$options)
 	{
 		$options = array(
 			'order' => $order,
-			'host'    => $this->router->getHost()
+			'host'    => $this->router->getHost(),
+			'delivery' => $options[delivery],
+			'metro' => $options[metro]
 		);
+		
+
 		
 		\Core\Model\Email::get()->create(array(
             'to'      => $order->getClient()->email,
+            'from' => 'Needsandfun.ru <shop@needsandfun.ru>',
             'subject' => 'Вы сделали заказ на сайте needsandfun.ru',
             'text'    => $this->page->render('email/order/confirm.twig', $options)
         ));
 	}
-	public function confirmOrderAdmin(\Core\Model\Order $order)
+	public function confirmOrderAdmin(\Core\Model\Order $order,$options)
 	{
+
 		$options = array(
 			'order' => $order,
-			'host'    => $this->router->getHost()
+			'host'    => $this->router->getHost(),
+			'delivery' => $options[delivery],
+			'metro' => $options[metro]
 		);
-		
+	
 		\Core\Model\Email::get()->create(array(
             'to'      => 'info@needsandfun.ru',
             'cc'      => 'shop@needsandfun.ru',
+            'from' => 'Needsandfun.ru <'.$order->getClient()->email.'>',
             'subject' => 'Заказ с сайта needsandfun.ru',
             'text'    => $this->page->render('email/order/confirmadmin.twig', $options)
         ));
-        
+    
     \Core\Model\Email::get()->create(array(
             'to'      => 'bazzy@yandex.ru',
+            'from' => 'Needsandfun.ru <'.$order->getClient()->email.'>',
             'subject' => 'Заказ с сайта needsandfun.ru',
             'text'    => $this->page->render('email/order/confirmadmin.twig', $options)
         ));
+       
 	}
 	
 	public function confirmAddEvent($values)

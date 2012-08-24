@@ -1,14 +1,567 @@
-{% extends defaults.templates ~ '/_layout.twig' %}
+<!doctype html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8 oldie" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-{% block title %}
-Страница не существует!
-{% endblock %}
+  <title>Страница не существует!</title>
 
-{% block modal '' %}
+  <meta name="author" content="Ilya Doroshin <ilya.doroshin@gmail.com>">
 
-{% block container %}
-<div class="syserror">
-   <strong>Произошла ошибка: страница, на которую вы пытаетесь попасть, не существует.</strong><br />
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <!-- CSS concatenated and minified via ant build script-->
+  <link rel="stylesheet" href="{{ defaults.common }}/css/style.css">
+  <link rel="stylesheet" href="{{ defaults.common }}/css/jqueryui/jqueryui.css">  
+
+  <!-- end CSS-->
+  
+  <script src="{{ defaults.common }}/js/jquery/jquery.js"></script>    
+  <script src="{{ defaults.common }}/js/jquery/jqueryui.js"></script>
+  <script src="{{ defaults.common }}/js/libs/modernizr-2.0.6.min.js"></script>
+  
+  <!-- Fancybox -->
+  <script src="{{ defaults.common }}/js/mylibs/fancybox/lib/jquery.mousewheel-3.0.6.pack.js"></script>    
+  <link rel="stylesheet" href="{{ defaults.common }}/js/mylibs/fancybox/source/jquery.fancybox.css?v=2.0.4" type="text/css" media="screen" />
+  <script type="text/javascript" src="{{ defaults.common }}/js/mylibs/fancybox/source/jquery.fancybox.pack.js?v=2.0.4"></script>  
+</head>
+  {% import defaults.macros ~ '/common.twig' as common %}
+  {% import defaults.macros ~ '/markup.twig' as markup %}
+<body>
+  {% block modal %}
+    <div class="modal closed" id="login-form">
+      <div class="modal-wrap">
+        <div class="login-wrap">
+          <div class="login">
+            <div class="login-padder">
+              <form method="post" action="{{ path('index') }}">
+                <div class="login-close"></div>
+                <table class="login-table">
+                  <tr>
+                    <td colspan="4">
+                      <div class="login-head">
+                        Вход
+                      </div>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td colspan="4">
+                      <div class="login-item-wrap">
+                        <div class="input-wrap">
+                          <input type="text" name="login" placeholder="Имя пользователя" />
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td colspan="4">
+                      <div class="login-item-wrap password">
+                        <div class="input-wrap">
+                          <input type="password" name="password" placeholder="Пароль" />
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <tr class="padder">
+                    <td width="50px">
+                      <a href="{{ path('forgot_password') }}">Забыли пароль?</a>
+                    </td>
+                    <td width="110px">
+                        Вы также можете зайти на сайт через ваш аккаунт в соцсетях
+                    </td>
+                    <td>
+                      
+                    </td>
+                    <td width="156px" class="last">
+                      <div class="login-submit-wrap">
+                        <button type="submit" name="authorize">
+                          Вход
+                        </button>
+                      </div>
+                      <div class="clear"></div>
+                    </td>
+                  </tr>
+                </table>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endblock %}
+
+  
+  <div class="popup-messages">
+    {% for message in popupMessages %}
+      <div class="popup-message">
+        <div class="popup-message-close">&times;</div>
+        <div class="popup-message-text">{{ message|raw }}</div>
+      </div>
+    {% endfor %}
+
+    <div class="popup-message sample" data-type="sample">
+      <div class="popup-message-close">&times;</div>
+      <div class="popup-message-text" data-type="msg"></div>
+    </div>
+
+  </div>
+  
+
+  {% block container %}
+    <div id="container">
+      <header>
+        {% block header %}
+            <div class="header">
+                <div class="header-wrap">
+                    <div class="header-item sparkles"></div>                
+                    <div class="header-item info">
+                        Магазин детских товаров<br />и афиша главных событий<br />Москвы для детей
+                    </div>
+                    <a href="/" class="header-item logo">
+
+                    </a>
+                    
+                    <div class="header-item phones">
+                        <div class="header-phone">
+                            +7 (495)&nbsp;&shy;724-90-26<br/>Ежедневно с 9 до 21
+                        </div>
+
+                        <div class="header-callback">
+                            <div class="header-callback-icon"></div>
+                            <div class="header-callback-text">заказать<br />звонок!</div>
+                        </div>
+
+                        <div class="header-callback-form">
+                          <form method="post" data-type="form" action="{{ path('callback') }}">
+                            <div class="input-wrap">
+                              <input type="text" name="phone" placeholder="+7 (123) 456-78-90" />
+                            </div>
+
+                            <div class="header-callback-labels">
+                              <label>
+                                <input type="radio" name="hours" value="h1" checked="checked" /> Через полчаса
+                              </label>
+
+                              <label>
+                                <input type="radio" name="hours" value="h2" /> Через час
+                              </label>
+
+                              <label>
+                                <input type="radio" name="hours" value="t1" /> Сегодня после обеда
+                              </label>
+
+                              <label>
+                                <input type="radio" name="hours" value="tm1" /> Завтра до обеда
+                              </label>
+
+                              <label>
+                                <input type="radio" name="hours" value="tm2" /> Завтра после обеда
+                              </label>
+                            </div>
+
+                            {{ markup.button({'name': 'recall', 'value': 'Заказать звонок'}) }}
+                          </form>
+                        </div>
+                        
+                        <div class="clear"></div>
+                        <noindex>
+                        <div class="header-social">
+                            <div class="header-social-wrap">
+                                {% if defaults.environment.SOCIAL.facebook %}
+                                  <div class="header-social-item facebook">
+                                    <a target="_blank" href="{{ defaults.environment.SOCIAL.facebook }}" rel="nofollow"></a>
+                                  </div>
+                                {% endif %}
+
+                                {% if defaults.environment.SOCIAL.twitter %}
+                                  <div class="header-social-item twitter">
+                                    <a target="_blank" href="{{ defaults.environment.SOCIAL.twitter }}" rel="nofollow"></a>
+                                  </div>
+                                {% endif %}
+
+                                {% if defaults.environment.SOCIAL.rss %}
+                                  <div class="header-social-item rss">
+                                    <a target="_blank" href="{{ defaults.environment.SOCIAL.rss }}"></a>
+                                  </div>
+                                {% endif %}
+
+                                {% if defaults.environment.SOCIAL.vkontakte %}
+                                  <div class="header-social-item vkontakte">
+                                    <a target="_blank" href="{{ defaults.environment.SOCIAL.vkontakte }}" rel="nofollow"></a>
+                                  </div>
+                                {% endif %}
+
+                                {% if defaults.environment.SOCIAL.gplus %}
+                                  <div class="header-social-item gplus last">
+                                    <a target="_blank" href="{{ defaults.environment.SOCIAL.gplus }}"></a>
+                                  </div>
+                                {% endif %}                                                                                                      
+                            </div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+				</noindex>
+                <div class="header-shadow"></div>
+                <div class="header-line"></div>
+            </div>
+            
+            <div class="header-menu">
+                <div class="menu-group left small">
+                    <div class="menu-item search">
+                        <div class="search-icon" data-type="search-btn"></div>
+
+                        <div class="search-popup" data-type="search-from" style="display: none">
+                          <form action="{{ path('search_index') }}">
+                            <div class="search-popup-item input-wrap">
+                              <input type="text" name="q" />
+                            </div>
+
+{#
+                            <div class="search-popup-item">
+                              <label>
+                                <div class="search-popup-checkbox">
+                                  <input type="checkbox" name="filter[all]" value="1" checked="checked" />
+                                </div>
+                                <div class="search-popup-text">
+                                  Везде
+                                </div>
+                                <div class="clear"></div>
+                              </label>
+                            </div>
+#}                            
+
+                            <div class="search-popup-item">
+                              <label>
+                                <div class="search-popup-checkbox">
+                                  <input type="checkbox" name="filter[goods]" value="1" />
+                                </div>
+                                <div class="search-popup-text">
+                                  Магазин
+                                </div>
+                                <div class="clear"></div>
+                              </label>
+                            </div>
+
+                            <div class="search-popup-item">
+                              <label>
+                                <div class="search-popup-checkbox">
+                                  <input type="checkbox" name="filter[events]" value="1" />
+                                </div>
+                                <div class="search-popup-text">
+                                  События
+                                </div>
+                                <div class="clear"></div>
+                              </label>
+                            </div>
+
+                            <div class="search-popup-item">
+                              <label>
+                                <div class="search-popup-checkbox">
+                                  <input type="checkbox" name="filter[places]" value="1" />
+                                </div>
+                                <div class="search-popup-text">
+                                  Места
+                                </div>
+                                <div class="clear"></div>
+                              </label>
+                            </div>
+
+                            <div class="search-popup-item">
+                              <label>
+                                <div class="search-popup-checkbox">
+                                  <input type="checkbox" name="filter[articles]" value="1" />
+                                </div>
+                                <div class="search-popup-text">
+                                  Статьи
+                                </div>
+                                <div class="clear"></div>
+                              </label>
+                            </div>
+
+                            {{ markup.button({'value': 'Найдись!'}) }}
+                          </form>
+                        </div>
+                    </div>
+                    
+                    <div class="menu-item links">
+                        <a href="{{ path('shop_payment') }}">Оплата</a>
+                        <div class="menu-item-delim">/</div>
+                        <a href="{{ path('shop_delivery') }}">Доставка</a>
+                    </div>
+                    
+                    <div class="menu-item">
+                        <a href="{{ path('shop_about') }}">О нас</a>
+                    </div>
+                </div>
+                
+                <div class="menu-group right small">
+                    {% if loggedUser %}
+                      <div class="menu-item">
+                          <a href="{{ path('cabinet_index') }}">Личный кабинет</a>
+                      </div>
+                      <div class="menu-item">
+                          <a href="{{ path('cabinet_logout') }}">Выход</a>
+                      </div>
+                    {% else %}
+                      <div class="menu-item">
+                        <noindex>
+                          <a rel="nofollow" href="{{ path('register') }}">Регистрация</a>
+                        </noindex>
+                      </div>
+                      
+                      <div class="menu-item">
+                        <noindex>
+                          <a rel="nofollow" href="" id="login-handle">Вход</a>
+                        </noindex>
+                      </div>
+                    {% endif %}
+                    
+                    <div class="menu-item cart" id="cart-icon" data-url="{{ path('shop_cart_update') }}" data-size="{{ cart.size }}">
+                        <a href="{{ path('shop_cart') }}" class="cart-icon">
+                            <div data-type="cart-size" class="cart-number">
+                                {{ cart.getSize }}
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="menu-group-wrap">
+                    <div class="menu-group">
+                        <div class="menu-item big">
+
+                            <a href="{{ path('events_index') }}">СОБЫТИЯ</a>
+                        </div>
+                    
+                        <div class="menu-delimeter">&bull;</div>
+                        
+                        <div class="menu-item big">
+                            <a href="{{ path('places_index') }}">МЕСТА</a>
+                        </div>
+                        
+                        <div class="menu-delimeter">&bull;</div>
+                                        
+                        <div class="menu-item big">
+                            <a href="{{ path('shop_index') }}">МАГАЗИН</a>
+                        </div>
+                        
+                        <div class="menu-delimeter">&bull;</div>
+                                        
+                        <div class="menu-item big">
+                            <a href="{{ path('articles_index') }}">СТАТЬИ</a>
+                        </div>                
+                        
+                        <div class="clear"></div>
+                    </div>
+                </div>
+            </div>
+        {% endblock %}
+      </header>
+      <div class="main" role="main">
+           <strong>Произошла ошибка: страница, на которую вы пытаетесь попасть, не существует.</strong><br />
    Если вы уверены, что проблема с нашей стороны — сообщите нам об этом!
-</div>
-{% endblock %}
+      </div>
+      <footer>
+      
+        <div class="header-menu">
+        <div class="menu-group-wrap">
+            <div class="menu-group">
+                <div class="menu-item big">
+                    <a href="{{ path('events_index') }}">детские спортивные комплексы</a>
+                </div>
+            
+                <div class="menu-delimeter">&bull;</div>
+                
+                <div class="menu-item big">
+                    <a href="{{ path('places_index') }}">коляски детские для кукол</a>
+                </div>
+                
+                <div class="menu-delimeter">&bull;</div>
+                                
+                <div class="menu-item big">
+                    <a href="{{ path('shop_index') }}">детские игровые домики</a>
+                </div>
+                
+                <div class="menu-delimeter">&bull;</div>
+                                
+                <div class="menu-item big">
+                    <a href="{{ path('articles_index') }}">детские карнавальные костюмы</a>
+                </div>    
+                
+                <div class="menu-delimeter">&bull;</div>
+                                
+                <div class="menu-item big">
+                    <a href="{{ path('articles_index') }}">деревянные игрушки</a>
+                </div>                
+                
+                <div class="clear"></div>
+            </div>
+        </div>
+        </div>
+      
+          <div class="footer-line"></div>
+          
+          <table class="footer-wrap">
+              <tr>
+                  <td class="first">
+                      <div class="footer-logo"><br><br><br><a href="http://www.needsandfun.ru/">Детские спортивные комплексы</a></div>                      
+                  </td>
+                  <td>
+                      &copy; 2012 &laquo;Нужно и весело&raquo;
+                  </td>
+                  <td>
+                      Нарушение авторских прав грозит большими неприятностями нарушившему наши права
+                  </td>
+                  <td class="last">
+<a href="http://www.kids-price.ru"><img height="31" width="88" alt="Kids-Price.Ru - цены на детские товары, коляски, автомобильные детские кресла, одежду и обувь." src="http://www.kids-price.ru/i/banner3.gif" border="0" /></a>
+<a href="http://kupitigra.ru" title="Каталог детских товаров"><img src="http://kupitigra.ru/images/buttons/kupitigra-3.png" height="31" width="88" title="Каталог детских товаров" alt="Каталог детских товаров" /></a>                          
+                      </div>
+                  </td>
+              </tr>
+          </table>
+      </footer>
+    </div> <!--! end of #container -->
+  {% endblock %}  
+
+  <!-- scripts concatenated and minified via ant build script-->
+  <script defer src="{{ defaults.common }}/js/plugins.js"></script>
+  <script defer src="{{ defaults.common }}/js/script.js"></script>
+  <!-- end scripts-->
+
+  {% if defaults.environment.GOOGLE_ANALYTICS %}
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', '{{ defaults.environment.GOOGLE_ANALYTICS }}']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+  {% endif %}
+
+  <!--[if lt IE 7 ]>
+    <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+    <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+  <![endif]-->
+  <!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+var yaParams = {/*Здесь параметры визита*/};
+</script>
+
+<script type="text/javascript">
+(function (d, w, c) {
+    (w[c] = w[c] || []).push(function() {
+        try {
+            w.yaCounter15006196 = new Ya.Metrika({id:15006196, enableAll: true,params:window.yaParams||{ }});
+        } catch(e) {}
+    });
+    
+    var n = d.getElementsByTagName("script")[0],
+        s = d.createElement("script"),
+        f = function () { n.parentNode.insertBefore(s, n); };
+    s.type = "text/javascript";
+    s.async = true;
+    s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js";
+
+    if (w.opera == "[object Opera]") {
+        d.addEventListener("DOMContentLoaded", f);
+    } else { f(); }
+})(document, window, "yandex_metrika_callbacks");
+</script>
+<noscript><div><img src="//mc.yandex.ru/watch/15006196" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+
+<br>
+<p align="center"><font color="#949494">Раскрутка и <a href="http://www.promostart.ru" title="продвижение сайта"> продвижение сайта</a>, услуги оптимизации – РА Promostart. Поддержка сайта, дизайн и <a href="http://obsudim.ru" title="разработка сайтов">разработка сайтов</a> - Obsudim.</font></p><br>
+<noindex>
+<p align="center">
+<!--counter--><script type="text/javascript"><!--
+document.write("<img src='http://www.promostart.ru/c.php?c;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";h"+escape(document.title.substring(0,80))+" border='0' width='0' height='0'>")
+//--></script><!--endofcounter-->
+
+<!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='http://www.liveinternet.ru/click' "+
+"target=_blank><img src='//counter.yadro.ru/hit?t18.7;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+
+"' alt='' title='LiveInternet: показано число просмотров за 24"+
+" часа, посетителей за 24 часа и за сегодня' "+
+"border='0' width='88' height='31'><\/a>")
+//--></script><!--/LiveInternet-->
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-33493820-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+<!-- Rating@Mail.ru counter -->
+<a href="http://top.mail.ru/jump?from=2230153">
+<img src="http://d7.c0.b2.a2.top.mail.ru/counter?id=2230153;t=52" style="border:0;"
+height="31" width="88" alt="Рейтинг@Mail.ru" /></a>
+<!-- //Rating@Mail.ru counter -->
+
+<!-- begin of Top100 code -->
+
+<script id="top100Counter" type="text/javascript" src="http://counter.rambler.ru/top100.jcn?2749286"></script>
+<noscript>
+<a href="http://top100.rambler.ru/navi/2749286/">
+<img src="http://counter.rambler.ru/top100.cnt?2749286" alt="Rambler's Top100" border="0" />
+</a>
+
+</noscript>
+<!-- end of Top100 code -->
+
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+(function (d, w, c) {
+    (w[c] = w[c] || []).push(function() {
+        try {
+            w.yaCounter15977440 = new Ya.Metrika({id:15977440, enableAll: true});
+        } catch(e) {}
+    });
+    
+    var n = d.getElementsByTagName("script")[0],
+        s = d.createElement("script"),
+        f = function () { n.parentNode.insertBefore(s, n); };
+    s.type = "text/javascript";
+    s.async = true;
+    s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js";
+
+    if (w.opera == "[object Opera]") {
+        d.addEventListener("DOMContentLoaded", f);
+    } else { f(); }
+})(document, window, "yandex_metrika_callbacks");
+</script>
+<noscript><div><img src="//mc.yandex.ru/watch/15977440" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+</p>
+</noindex>
+</body>
+</html>
+
+

@@ -150,7 +150,7 @@
                                 
                                 <tr>
                                     <td>
-                                        <input type="text" name="delivery[courier][email]" data-required="true" data-name="email" placeholder="mail@mailbox.com"{% if currentEmail %} value="{{ currentEmail }}" readonly="readonly"{% endif %} />
+                                        <input type="text" name="delivery[courier][email]" data-name="email" placeholder="mail@mailbox.com"{% if currentEmail %} value="{{ currentEmail }}" readonly="readonly"{% endif %} />
                                     </td>
                                     <td></td>
                                     <td colspan="3">
@@ -163,8 +163,13 @@
                                 </tr>
                                 
                                 <tr>
-                                    <td colspan="3">
-                                        <div class=""></div>
+                                    <th colspan="9">
+                                        Ваш комментарий
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <td colspan="9">
+                                        <textarea style="width:100%" name="delivery[courier][comment]" data-name="comment" placeholder="Ваш комментарий" ></textarea>
                                     </td>
                                 </tr>
                                 
@@ -190,7 +195,7 @@
                                     <th></th>
                                     
                                     <th>
-                                        Перезвонить подтвердить
+                                        Имя
                                     </th>
                                 </tr>
                                 
@@ -216,7 +221,7 @@
                                     <td></td>
                                     
                                     <td>
-                                        <input type="text" name="delivery[courier][recall]" />
+                                        <input type="text" name="delivery[courier][name]" />
                                     </td>
                                 </tr>                            
                                 
@@ -233,8 +238,12 @@
                                         Электропочта
                                     </th>
                                     <th width="20px"></th>
-                                    <th width="221px" colspan="3">
+                                    <th width="221px" >
                                         Телефон
+                                    </th>
+                                    <th width="20px"></th>
+                                    <th>
+                                        Имя
                                     </th>
                                 </tr>
                                 
@@ -246,11 +255,20 @@
                                     <td>
                                         <input type="text" name="delivery[pickup][phone]" data-name="phone" placeholder="+7 (123) 456-78-90"{% if currentPhone %} value="{{ currentPhone }}" {% endif %}  />
                                     </td>
+                                    <td></td>
+                                    <td>
+                                        <input type="text" name="delivery[pickup][name]" data-required="true" data-name="name" placeholder=""{% if currentName %} value="{{ currentName }}" readonly="readonly"{% endif %} />
+                                    </td>
                                 </tr>
-                                
+
                                 <tr>
-                                    <td colspan="3">
-                                        <div class=""></div>
+                                    <th colspan="5">
+                                        Ваш комментарий
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <td colspan="5">
+                                        <textarea style="width:100%" name="delivery[pickup][comment]" data-name="comment" placeholder="Ваш комментарий" ></textarea>
                                     </td>
                                 </tr>
                             </table>                      
@@ -276,8 +294,12 @@
                                         Электропочта
                                     </th>
                                     <th width="20px"></th>
-                                    <th width="221px" colspan="3">
+                                    <th width="221px">
                                         Телефон
+                                    </th>
+                                    <th width="20px"></th>
+                                    <th>
+                                        Имя
                                     </th>
                                 </tr>
                                 
@@ -289,11 +311,20 @@
                                     <td>
                                         <input type="text" name="delivery[metro][phone]" data-name="phone" placeholder="+7 (123) 456-78-90"{% if currentPhone %} value="{{ currentPhone }}" {% endif %}  />
                                     </td>
+                                    <td></td>
+                                    <td>
+                                        <input type="text" name="delivery[metro][name]" data-name="name" placeholder=""{% if currentName %} value="{{ currentName }}" {% endif %}  />
+                                    </td>
                                 </tr>
                                 
                                 <tr>
-                                    <td colspan="3">
-                                        <div class=""></div>
+                                    <th colspan="5">
+                                        Ваш комментарий
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <td colspan="5">
+                                        <textarea style="width:100%" name="delivery[metro][comment]" data-name="comment" placeholder="Ваш комментарий" ></textarea>
                                     </td>
                                 </tr>
                             </table>                                  

@@ -577,12 +577,12 @@ body {
 }
 
 .menu-group {
-    font-size: 20px;
+    font-size: 18px;
 }
 
 .menu-delimeter, .menu-item {
     float: left;
-    margin-right: 15px;
+    margin-right: 10px;
     padding-top: 30px;    
 }
 
@@ -599,6 +599,14 @@ body {
     height: 85px;
     font-family: "Georgia";
 }
+
+
+footer .header-menu {  height: 25px }
+footer .menu-group { font-size:12px}
+footer .menu-group-wrap { float: none; left: 0; position: relative;}
+footer .menu-group-wrap .menu-group {float: none; left: 0; position: relative; text-align:center}
+footer .menu-item, footer .menu-delimeter { float: none ;  display:inline; margin:0px 2px }
+footer .menu-item a {  display:inline}
 
 .menu-item-delim {
     float: left;
@@ -1036,7 +1044,7 @@ a.good-info-brand-name:hover {
 }
 
 .good-info-buy.hideSize {
-    font-size: 22px;
+    font-size: 17px;
     font-weight: bold;
 }
 
@@ -1058,7 +1066,7 @@ a.good-info-brand-name:hover {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;    
     font-weight: bold;
-    padding: 5px 10px 6px 10px;
+    padding: 8px 8px 9px 8px;
 }
 
 .buy-size-frame {
@@ -1722,6 +1730,15 @@ a.submit-block-btn {
     padding-top: 10px;
 }*/
 
+.news-list { padding-top:40px}
+.news-item { padding:10px 0px; border-bottom:1px solid #ccc}
+.news-item .news-item-title { padding-bottom:5px}
+.news-item .news-item-title a { color:#000; font-size:14px; font-weight:bold}
+.news-item .news-img { width:210px; float:left; text-align:center}
+.news-item .news-content { margin-left:220px}
+.news-item .news-item-date { float:right; color:#ccc;}
+
+
 .brand-img {
     width: 140px;
     padding-right: 50px;
@@ -1745,6 +1762,14 @@ a.submit-block-btn {
     line-height: 1.8em;
 }
 
+.brand-content .brand-desc { max-height:112px; overflow:hidden}
+
+.brand-detail { width:960px !important;}
+.brand-detail .brand-content .brand-desc {  max-height:none; }
+
+.brand-content .brand-good a { font-weight:bold; color:#ff7f27; text-decoration:none; font-style: italic;}
+.brand-content .brand-more a, .brand-content .brand-more  { font-weight:bold; color:#ccc; text-decoration:none; font-style: italic;}
+
 .brand-content p {
     margin: .5em 0;
 }
@@ -1755,6 +1780,7 @@ a.submit-block-btn {
     font-weight: bold;
     text-transform: uppercase;
 }
+.brand-title a { color:#be4619;text-decoration:none; }
 
 .brands {
     font-size: 14px;
@@ -2149,6 +2175,7 @@ a.pager-item {
     width: 200px;
 }
 
+/* BANER IN MAIN */
 .article-banner {
     color: #33343a;
     line-height: 1.6em;
@@ -2179,6 +2206,40 @@ a.pager-item {
 .article-banner-announce {
     font-size: 13px;
 }
+
+
+.news-banner {
+    color: #33343a;
+    line-height: 1.6em;
+}
+
+.news-banner a {
+    color: #33343a;    
+    text-decoration: none;
+}
+
+.news-banner a:hover {
+    text-decoration: underline;
+}
+
+
+.news-banner-date {
+    font-size: 11px;
+    margin-bottom: 7px;
+}
+
+.news-banner-title {
+    line-height: 1.3em;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 7px;
+}
+
+.news-banner-announce {
+    font-size: 13px;
+}
+
+
 
 .bottom-banners-articles .goods-title {
     margin-bottom: 15px;

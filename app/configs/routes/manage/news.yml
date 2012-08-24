@@ -1,0 +1,19 @@
+index:
+  pattern: /
+  defaults:
+    controller: News:index
+
+add:
+  pattern: /add
+  defaults:
+    controller: News:add
+
+edit:
+  pattern: /edit/{newsId}
+  defaults:
+    controller: News:edit
+
+remove:
+  pattern: /remove/{newsId}
+  defaults:
+    controller: News:remove

@@ -39,6 +39,14 @@ class Index extends \Core\Abstracts\Singleton
             $item->save();
             $result['Статьи'][] = array('name' => $item->name, 'link' => $item->link);
         }
+        
+        foreach (\Core\Model\News::all() as $item)
+        {
+            if (!isset($result['Новости'])) $result['Новости'] = array();
+            $item->updateLink();
+            $item->save();
+            $result['Новости'][] = array('name' => $item->name, 'link' => $item->link);
+        }
 
         foreach (\Core\Model\Client::all() as $item)
         {
@@ -133,6 +141,10 @@ class Index extends \Core\Abstracts\Singleton
         else if ('article' == $type)
         {
             $class = '\Core\Model\Articlepicture';
+        }
+        else if ('news' == $type)
+        {
+            $class = '\Core\Model\Newspicture';
         }
         else if ('author' == $type)
         {
@@ -243,6 +255,11 @@ class Index extends \Core\Abstracts\Singleton
                         'route' => 'manage_articles_authors_index'
                     )
                 )
+            ),
+            array(
+                'name'  => 'Новости',
+                'route' => 'manage_news_index'
+                
             ),
             array(
                 'name'  => 'Настройки',

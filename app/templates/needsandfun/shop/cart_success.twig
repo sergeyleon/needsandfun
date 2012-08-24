@@ -1,0 +1,40 @@
+{% extends defaults.layouts ~ '/basic.twig' %}
+{% import defaults.macros ~ '/shop.twig' as shop %}
+
+{% block title %}
+Корзина
+{% endblock %}
+
+{% block content %}
+    <div class="shop">
+        <div class="categories">
+            <div class="categories-padder">
+                <div class="categories-title">
+                    Каталог
+                </div>
+                {% for item in shopCategories %}
+                    {{ shop.categoryItem(item) }}
+                {% endfor %}
+
+                <div class="shop-info">
+                    <div class="shop-info-item">
+                        <div class="shop-info-pic"></div>
+                        <a href="{{ path('shop_size_chart') }}" class="shop-info-text">Таблица размеров</a>
+                    </div>
+
+                    <div class="shop-info-item">
+                        <div class="shop-info-pic"></div>
+                        <a href="{{ path('brands') }}" class="shop-info-text">Наши бренды</a>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        
+        <div>
+          <h1>Заказ оформлен успешно.</h1>
+					В ближайшее время наши менеджеры свяжутся с Вами для подтверждения.
+        </div>
+        <div class="clear"></div>
+    </form>
+{% endblock %}

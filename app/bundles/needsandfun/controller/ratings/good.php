@@ -4,12 +4,24 @@ namespace Needsandfun\Controller;
 
 class RatingsGood extends \Core\Abstracts\Authorized
 {
+
+
+
+
     private function _proceed($good, $values)
     {
-        $message = \Core\Model\Review::add($good, $this->getClient(), $values)
+
+        if(isset($values['code'])) {
+        
+           $message = \Core\Model\Review::add_private($good, 0, $values)
             ? 'Ваш отзыв добавлен успешно! Он появится на сайте после модерации!'
             : 'При попытке добавить отзыв произошла ошибка!';
-
+        }
+        else {
+          $message = \Core\Model\Review::add($good, $this->getClient(), $values)
+            ? 'Ваш отзыв добавлен успешно! Он появится на сайте после модерации!'
+            : 'При попытке добавить отзыв произошла ошибка!';
+        }
         $this->page->setMessage($message);
         $this->router->reload();
     }

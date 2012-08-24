@@ -1,0 +1,47 @@
+{% extends defaults.layouts ~ '/basic.twig' %}
+{% import defaults.macros ~ '/banners.twig' as banners %}
+{% import defaults.macros ~ '/markup.twig' as markup %}
+{% import defaults.macros ~ '/common.twig' as common %}
+
+{% block title %}
+    {{ item.name }}
+{% endblock %}
+
+{% block content %}
+    <div class="page short">
+        <div class="place">
+
+                    
+            <div class="place-info-wrap">
+            
+                <div class="news-item">
+                        
+                    <div class="news-img">
+                        {{ common.itemPicture(item.getIcon, 'small_article') }}
+                        <div style="padding-top:20px">
+                        {{ markup.addThis() }}
+                        </div>
+                    </div>
+                    <div class="news-content" >
+                        <div class="news-title">
+                            <h2>{{ item.name }}<h2>
+                        </div>
+                        <div class="news-desc">{{ item.content|raw }}</div>
+
+                    </div>
+			             <div class="clear"></div>
+                </div>
+        
+            
+                
+            </div>
+        </div>
+
+        <div class="page-right">
+            <div class="main-body-right">
+                {{ banners.shop(shopBanners, true) }}
+            </div>
+        </div>
+    </div>
+    <div class="clear"></div>    
+{% endblock %}

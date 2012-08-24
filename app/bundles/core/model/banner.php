@@ -29,6 +29,12 @@ class Banner extends \ActiveRecord\Model implements Itemswithpics
         # ключ: main
         return self::getAll(array('type' => 'shop', 'order' => 'rand()', 'limit' => $limit));
     }        
+    
+    static function news($limit = 3)
+    {
+        # ключ: main
+        return self::getAll(array( 'order' => 'rand()', 'limit' => $limit));
+    }      
 
     static function getAll($_options = false)
     {

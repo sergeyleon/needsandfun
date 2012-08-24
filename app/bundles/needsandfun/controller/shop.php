@@ -8,6 +8,27 @@ class Shop extends \Core\Abstracts\Authorized
     {
         parent::__construct();
         Index::filters();
+        
+        if (isset($_POST['authorize']))
+        {
+            $this->_auth($_POST['login'], $_POST['password']);
+        }
+        else if (isset($_POST['flush_password']))
+        {
+            $this->_flushPassword($_POST);
+        }
+        
+    }
+    
+    private function _auth($login, $password)
+    {
+        \Core\Model\User::auth($login, $password);
+
+        $url = empty($_SERVER['HTTP_REFERER'])
+            ? $this->router->generate('index')
+            : $_SERVER['HTTP_REFERER'];
+
+        $this->router->go($url);
     }
 
     private function _getGoods($page = 1, $categories = false, $category = false)
@@ -68,8 +89,68 @@ class Shop extends \Core\Abstracts\Authorized
                 $result['variables'][] = $filter['brands'];
             }
 
+
+/////////////////////////
+/*
+            if (isset($filter['sort']))  {
+            
+
+            $sort  = $filter['sort'];
+            $dir = isset($sort) && 'desc' == $sort
+                ? 'DESC'
+                : 'ASC';
+
+            $order = array();
+
+            if (isset($sort))
+            {
+            echo "dfsdf";
+                switch ($sort)
+                {
+                    case 'rating':
+                        $order[] = 'rating ' . $dir;
+                        break;
+
+                    case 'price':
+                        $options['joins'] = 'left join sizes on sizes.good_id = goods.id';
+                        $options['group'] = 'goods.id';
+                        $order[] = 'sizes.price ' . $dir;
+                        break;
+
+                    case 'created':
+                        $order[] = 'goods.created ' . $dir;
+                        break;
+                        
+                    case 'abc':
+                        $order[] = 'name ' . $dir;
+                        break;
+                }
+            }
+
+
+
+            $options['joins'] = 'left join sizes on sizes.good_id = goods.id';
+            $options['group'] = 'goods.id';
+            $order[]  = 'sizes.price DESC';
+            
+         
+            $order[] = 'name ' . $dir;
+
+            $options['order'] = implode(', ', $order);
+            
+            }
+            */
+            /////////////////////////
+
+
+
             $conditions = array_merge($conditions, $result['conditions']);
             $variables = $result['variables'];
+            
+            
+            
+            
+            
         }
 
         $options = array('conditions' => array(implode(' AND ', $conditions)));
@@ -91,21 +172,29 @@ class Shop extends \Core\Abstracts\Authorized
             $this->page['pager']   = \Core\Model\Good::getPager($page, $category, $categories ? 'shop_category_page' : 'shop_index_page', $total);
         }
         
-        $options['order']  = 'name';
+        
 
-        if (isset($this->page['sort']))
-        {   
-            $sort = $this->page['sort'];
+//////////
+if (!empty($_GET['filter'])) 
+        {
 
-            $dir = isset($sort['dir']) && 'desc' == $sort['dir']
+            $filter = $_GET['filter'];
+            
+        if (isset($filter['sort']))  {
+            
+
+            $sort  = $filter['sort'];
+            $dir = isset($sort) && 'desc' == $sort
                 ? 'DESC'
                 : 'ASC';
 
             $order = array();
 
-            if (isset($sort['type']))
+            if (isset($sort))
             {
-                switch ($sort['type'])
+            echo "dfsdf";
+                switch ($sort)
+              
                 {
                     case 'rating':
                         $order[] = 'rating ' . $dir;
@@ -120,13 +209,29 @@ class Shop extends \Core\Abstracts\Authorized
                     case 'created':
                         $order[] = 'goods.created ' . $dir;
                         break;
+                        
+                    case 'abc':
+                        $order[] = 'name ' . $dir;
+                        break;
                 }
             }
 
+
+
+            $options['joins'] = 'left join sizes on sizes.good_id = goods.id';
+            $options['group'] = 'goods.id';
+            $order[]  = 'sizes.price DESC';
+            
+         
             $order[] = 'name ' . $dir;
 
             $options['order'] = implode(', ', $order);
         }
+        
+        }
+ /////////////////       
+
+        
 
         $goods = \Core\Model\Good::all($options);
         
@@ -159,7 +264,7 @@ class Shop extends \Core\Abstracts\Authorized
         $this->_categories();
         
         $this->page['bigBanners']  = \Core\Model\Banner::big();
-        $this->page['brands']          = \Core\Model\Brand::all(array('conditions' => 'deleted is null'));
+        $this->page['brands']          = \Core\Model\Brand::all(array('conditions' => 'deleted is null ORDER BY name ASC'));
 
         if (!empty($_GET['filter'])) $this->page['goods'] = $this->_getGoods($page);
         else $this->page['newGoods'] = \Core\Model\Good::newGoods(\Core\Model\Good::$perPage);
@@ -184,9 +289,9 @@ class Shop extends \Core\Abstracts\Authorized
         $this->_categories($categoryId);
             
         $categories = $this->page['currentCategory']->getChildren();
+
         
-        
-       // var_dump( $categories);
+        // var_dump( $categories);
         
         $this->page['goods'] = $this->_getGoods($page, $categories, $category);
         
@@ -199,7 +304,7 @@ class Shop extends \Core\Abstracts\Authorized
         
         $options =  implode(' OR ', $brandArray);
 
-        $this->page['brands'] = \Core\Model\Brand::all(array('conditions' => array($options)));
+        $this->page['brands'] = \Core\Model\Brand::all(array('conditions' => array($options.' ORDER BY name ASC ')));
         ////////////////////////////////////////
         
         //////////////////////////////////////// Child in category
@@ -251,9 +356,17 @@ class Shop extends \Core\Abstracts\Authorized
     
     private function _proceed($good, $values)
     {
-        $message = \Core\Model\Review::add($good, $this->getClient(), $values)
+        if(isset($values['code'])) {
+        
+           $message = \Core\Model\Review::add_private($good, 0, $values)
+            ? 'Ваш отзыв добавлен успешно! Он появится на сайте после модерации!'
+            : 'Вы ввели неверный код с картинки!';
+        }
+        else {
+          $message = \Core\Model\Review::add($good, $this->getClient(), $values)
             ? 'Ваш отзыв добавлен успешно! Он появится на сайте после модерации!'
             : 'При попытке добавить отзыв произошла ошибка!';
+        }
 
         $this->page->setMessage($message);
         $this->router->reload();

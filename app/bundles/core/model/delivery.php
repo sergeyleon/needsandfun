@@ -91,15 +91,23 @@ class Delivery extends \ActiveRecord\Model
             }
             
             $delivery->address = implode(', ', $address);
+
         } 
         else if ('metro' == $options['type'])
         {
             $delivery->metro_id = $options['data']['metro'];
+
         }
 
         if (isset($options['data']['phone']))
         {
             $delivery->recall = $options['data']['phone'];
+
+        }
+        
+        if (isset($options['data']['comment']))
+        {
+            $delivery->comment = $options['data']['comment'];
         }
 
         $delivery->setType($options['type']);

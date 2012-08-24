@@ -1,0 +1,113 @@
+{% extends defaults.layouts ~ '/manage.twig' %}
+{% import defaults.macros ~ '/manage.twig' as manage %}
+
+{% block title %}
+    {% if item.id %}
+        Правка новости &laquo;{{ item.name }}&raquo;
+    {% else %}
+        Новая новость
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+
+    <script type="text/javascript" src="{{ defaults.common }}/js/mylibs/tinymce/jquery.tinymce.js"></script>
+    <script type="text/javascript">
+        $(function() {
+            $('textarea.smallwysiwyg').each(function() {
+                $(this).closest('.input-wrap').addClass('tinymce');
+                $(this).tinymce({
+                    script_url : '{{ defaults.common }}/js/mylibs/tinymce/tiny_mce.js',
+                    mode : "textareas",
+                    theme : "advanced",
+                    plugins : "table",
+            
+                    // Theme options
+                    theme_advanced_buttons1 : "bold,italic,underline,strikethrough,|,bullist,numlist,|,fontselect,fontsizeselect,|,justifyleft,justifycenter,justifyright,justifyfull,|,table,removeformat,code",
+                    theme_advanced_buttons2 : "",
+                    theme_advanced_buttons3 : "",
+                    theme_advanced_buttons4 : "",
+                    theme_advanced_toolbar_location : "top",
+                    theme_advanced_toolbar_align : "left",
+                    theme_advanced_statusbar_location : "bottom",
+                    theme_advanced_resizing : true,
+                    width: 410,             
+                    content_css : "{{ defaults.common }}/css/style.css"
+                });
+            });
+        });
+    </script>    
+
+
+    <div class="header-title">{{ block('title') }}</div>
+    
+    <form method="post" enctype="multipart/form-data">
+        {% if item.id %}
+            <input type="hidden" name="id" value="{{ item.id }}">
+        {% endif %}
+                
+        <table class="form-table lefted">
+            <tr>
+                <td width="100px">
+                    Название
+                </td>
+                <td width="500px">
+                    <div class="input-wrap">
+                        <input type="text" name="name" value="{{ item.name }}">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td width="100px">
+                    Краткое описание
+                </td>
+                <td width="500px">
+                    <div class="input-wrap">
+                        <textarea name="announce" >{{ item.announce }}</textarea>
+                    </div>
+                </td>
+            </tr>
+            
+
+            <tr>
+                <td>
+                    Содержание
+                </td>
+                <td>
+                    <div class="input-wrap">
+                        <textarea class="smallwysiwyg" name="content" >{{ item.content }}</textarea>
+                    </div>                
+                </td>
+            </tr>            
+            <tr>
+                <td></td>
+                <td>
+                    <div class="form-submit">
+                        <button type="submit" name="proceed">
+                                Сохранить
+                        </button>
+                    </div>                
+                </td>
+            </tr>
+        </table>
+        
+        <div class="row lefted">
+            <div class="gallery">
+                {% if item.getIcons|length %}
+                    <div class="gallery-wrap" data-url="{{ path('manage_processPictures') }}" data-type="news">
+                    {% for pic in item.getIcons %}
+                        <div class="gallery-item" data-id="{{ pic.id }}">
+                            <div class="gallery-item-delete"></div>
+                            <img width="40px" height="40px" src="{{ pic.picture.icon }}" />
+                        </div>
+                    {% endfor %}
+                        <div class="clear"></div>
+                    </div>
+                {% endif %}
+                <input type="file" name="pictures[]" multiple="multiple" min="1" max="5" />
+            </div>
+        </div>        
+        
+        <div class="clear"></div>
+    </form>    
+{% endblock %}

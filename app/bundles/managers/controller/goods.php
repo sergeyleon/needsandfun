@@ -971,6 +971,7 @@ private function _getGoods($page = 1, $categories = false, $category = false)
         $category->top_description  = $values['top_description'];
         $category->meta_description = $values['meta_description'];
         $category->meta_keywords    = $values['meta_keywords'];
+        $category->sort             = $values['sort'];
         $category->title            = $values['title'];
         if(empty($values['title'])) { $category->title = $values['name']; }
         

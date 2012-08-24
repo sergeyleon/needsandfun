@@ -39,6 +39,7 @@ class Email extends \Core\Abstracts\Singleton
 	static function validate($email)
 	{
 		return filter_var($email, FILTER_VALIDATE_EMAIL);
+		//return $email;
 	}
 
 	public function create($options = false)
@@ -47,7 +48,8 @@ class Email extends \Core\Abstracts\Singleton
 
 		if ($this->_mailer)
 		{
-			$message = \Swift_Message::newInstance()->setCharset('utf-8');;
+			$message = \Swift_Message::newInstance()->setCharset('utf-8');
+			
 
 			$subject = empty($options['subject'])
 				? 'Вам письмо!'
@@ -63,7 +65,8 @@ class Email extends \Core\Abstracts\Singleton
 
 			$from = empty($options['from'])
 				? array($this->env->variables->MAIL->sender => 'Мейлер')
-				: $options['from'];
+				: array($this->env->variables->MAIL->sender => $options['from']);
+
 
 			$message->setFrom($from);
 

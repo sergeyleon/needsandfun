@@ -180,6 +180,7 @@ class Cart extends \Core\Abstracts\Singleton
             if ($client)
             {
                 $this->_order->setClient($client);
+                
                 $this->_order->setStatus(Status::FRESH);
                 
                 $delivery = array(

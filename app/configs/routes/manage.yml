@@ -1,5 +1,5 @@
 index:
-  pattern: /
+  pattern: 
   defaults:
     controller: Index:index
 
@@ -52,6 +52,11 @@ articles:
   pattern: /articles
   source: routes/manage/articles.yml  
   appendName: true    
+  
+news:
+  pattern: /news
+  source: routes/manage/news.yml  
+  appendName: true
 
 callbacks:
   pattern: /callbacks

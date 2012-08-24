@@ -38,10 +38,10 @@ shop_prod:
     GOOGLE_ANALYTICS: UA-30150643-1
     DB_ENGINE: MYSQL
     MYSQL:  
-      DB_USER: needsandfun
-      DB_PASSWORD: D5yY8erFgeSG
+      DB_USER: root
+      DB_PASSWORD: 
       DB_HOST: 127.0.0.1  
-      DB_NAME:   needsandfun_prod
+      DB_NAME:   needf
     TWIG:
       cache: /app/templates/cache/
     MAIL:

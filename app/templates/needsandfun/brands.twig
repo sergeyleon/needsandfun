@@ -9,22 +9,32 @@
             <div class="brands">
                 {% for brand in brands %}
                     <div class="brand-item">
-                        <a name="{{ brand.name|lower }}"></a>
+                        
                         <div class="brand-img">
-                            {{ shop.itemPicture(brand.getIcon, 'brand_preview') }}
+                            <a href="/brand/{{ brand.link }}">{{ shop.itemPicture(brand.getIcon, 'brand_preview') }}</a>
                         </div>
                         <div class="brand-content">
                             <div class="brand-title">
-                                <h2>{{ brand.name }}<h2>
+                                <h2><a href="/brand/{{ brand.link }}-detail" name="{{ brand.name|lower }}">{{ brand.name }}</a><h2>
                             </div>
+                            <div class="brand-good"><a href="/brand/{{ brand.link }}">Смотреть все товары {{ brand.name }}</a></div>
                             <div class="brand-desc">{{ brand.description|raw }}</div>
+                            <div class="brand-more"><span class="more_point">...</span><br />
+                              <a href="/brand/{{ brand.link }}-detail">Подробнее</a>
+                            </div>
                         </div>
-					<div class="clear"></div>
+					             <div class="clear"></div>
                     </div>
                 {% endfor %}
+                
+                {% if pager %}
+            {{ common.pager(pager) }}
+        {% endif %}
+                
             </div>
         </div>
         
         <div class="clear"></div>
     </div>
 {% endblock %}
+

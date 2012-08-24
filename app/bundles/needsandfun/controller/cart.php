@@ -23,6 +23,11 @@ class Cart extends \Core\Abstracts\Authorized
             {
                 $this->page['currentPhone']   = $this->getClient()->phone;
             }
+            
+            if ($this->getClient())
+            {
+                $this->page['currentName']   = $this->getClient()->first_name.' '.$this->getClient()->last_name;
+            }
 
             $this->page['shopCategories'] = \Core\Model\Category::getAll();
             
@@ -51,10 +56,21 @@ class Cart extends \Core\Abstracts\Authorized
         }
     }
     
+    public function success() {
+      $this->page->display('shop/cart_success.twig');
+    }
+    
     private function _proceed($values) 
     {
+
+        
+
         $cart = \Core\Model\Cart::init($this->sessionStorage);
         $order = $cart->confirm($values);
+        
+        $delivery = \Core\Model\Delivery::all(array('conditions' => array('order_id = ?', $order->id)));
+        
+        $metro = \Core\Model\Metro::all(array('conditions' => array('id = ?', $delivery[0]->metro_id )));
 
         if ($order)
         {
@@ -63,15 +79,17 @@ class Cart extends \Core\Abstracts\Authorized
             $options = array(
                 'orderId' => $order->id,
                 'date'    => $now,
+                'delivery' => $delivery[0],
+                'metro' => $metro[0]->name,
                 'email'   => $order->getClient()->getUser()->login
             );
 
-            Email::confirmOrder($order);
+            Email::confirmOrder($order, $options);
             
-            Email::confirmOrderAdmin($order);
+            Email::confirmOrderAdmin($order, $options);
 
             $this->page->setMessage('Заказ оформлен успешно! В ближайшее время наши менеджеры свяжутся с вами для подтверждения заказа.');
-            $this->router->go($this->router->generate('index'));
+            $this->router->go($this->router->generate('shop_success'));
         }
         else
         {

@@ -5,7 +5,7 @@ index:
 
 
 index_page: 
-  pattern: -page-{page}
+  pattern: page-{page}/
   defaults:
     page: 1
     controller: Shop:index
@@ -14,7 +14,7 @@ index_page:
 
 
 category_page:
-  pattern: -{category}-page-{page}
+  pattern: {category}-page-{page}/
   defaults:
     page: 1
     controller: Shop:category
@@ -22,6 +22,6 @@ category_page:
     page: (\d+|all)
 
 category:
-  pattern: -{category}
+  pattern: {category}/
   defaults:
     controller: Shop:category

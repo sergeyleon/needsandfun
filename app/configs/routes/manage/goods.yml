@@ -18,7 +18,7 @@ index_page:
     
 
 category_page:
-  pattern: /category/{category}-page-{page}
+  pattern: /categorys/{category}-page-{page}
   defaults:
     page: 1
     controller: Goods:category_index
@@ -26,7 +26,7 @@ category_page:
     page: (\d+|all)
     
 category:
-  pattern: /category/{category}
+  pattern: /categorys/{category}
   defaults:
     controller: Goods:category_index
  

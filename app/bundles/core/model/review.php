@@ -13,6 +13,10 @@ class Review extends \ActiveRecord\Model
 		array('client')
 	);
 
+
+   
+
+
 	static function add(Reviewable $item, Client $client, $values)
 	{		
 		$review = new self();
@@ -44,6 +48,82 @@ class Review extends \ActiveRecord\Model
 
 		return $review;
 	}
+	
+	
+	static function add_private(Reviewable $item, $client = 0, $values)
+	{		
+	
+	   function generate_code() //запускаем    функцию, генерирующую код.
+  	 {
+  		$hours = date("H"); // час       
+  		$minuts = substr(date("H"), 0 , 10);// минута 
+  		$mouns = date("m");    // месяц             
+  		$year_day = date("z"); // день в году 
+  		$str = $hours . $minuts . $mouns . $year_day; //создаем строку
+  		$str = md5(md5($str)); //дважды шифруем в md5
+  		$str = strrev($str);// реверс строки
+  		$str = substr($str, 3, 6); // извлекаем 6 символов, начиная с 3
+  		// Вам конечно же можно постваить другие значения, так как, если взломщики узнают, каким именно способом это все генерируется, то в защите не будет смысла.
+  		$array_mix = preg_split('//', $str, -1, PREG_SPLIT_NO_EMPTY);
+  		srand ((float)microtime()*1000000);
+  		shuffle ($array_mix);
+  
+  		return implode("", $array_mix);
+  	}
+    function chec_code($code) //проверяем код 
+  	{
+  		$code = trim($code);//удаляем пробелы 
+  		$array_mix = preg_split ('//', generate_code(), -1, PREG_SPLIT_NO_EMPTY);
+  		$m_code = preg_split ('//', $code, -1, PREG_SPLIT_NO_EMPTY);
+  		$result = array_intersect ($array_mix, $m_code);
+  		if (strlen(generate_code())!=strlen($code)) {
+  			return false;
+  		}
+  		if (sizeof($result) == sizeof($array_mix)) {
+  			return true;
+  		}
+  		else {
+  			return false;
+  		}
+  	}
+
+	
+		$review = new self();
+		$review->client_id = 0;
+
+		$review->rating      = $values['rate'];
+
+		if (!empty($values['pros']))
+		{
+			$review->pros 	 = $values['pros'];
+		}
+
+		if (!empty($values['contras']))
+		{
+			$review->contras = $values['contras'];
+		}
+
+		if (!empty($values['comment']))
+		{
+			$review->comment = $values['comment'];
+		}
+
+    if (!chec_code($values['code']))
+  	{
+  		return false;
+  	}
+    else {
+  		$review->save();
+  
+  		$link 			 = $item->getLinkModel();
+  		$link->item_id   = $item->id;
+  		$link->review_id = $review->id;
+  		$link->save();
+  
+  		return $review;
+		}
+	}
+	
 
 	public function remove()
 	{

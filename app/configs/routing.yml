@@ -1,7 +1,14 @@
+#index:
+#  pattern: /
+#  defaults: 
+#    controller: Shop:index
+
 index:
   pattern: /
   defaults: 
     controller: Index:show
+
+
 
 markets:
   pattern: /market.xml
@@ -15,9 +22,13 @@ sitemap:
 
 # shop ========>
 shop:
-  pattern: /store
+  pattern: /store/
   source: routes/shop.yml
   appendName: true
+  
+#index:
+#  pattern: /
+#  source: routes/shop.yml
 
 shop_delivery:
   pattern: /delivery
@@ -40,12 +51,12 @@ shop_about:
     controller: Shop:aboutPage
 
 shop_good_ratings:
-  pattern: /good-ratings-{good}
+  pattern: /good/ratings-{good}
   source: routes/goods/ratings.yml
   appendName: true
 
 shop_good:
-  pattern: /good-{good}
+  pattern: /good/{good}/
   defaults:
     controller: Shop:good
 
@@ -58,6 +69,12 @@ shop_cart_update:
   pattern: /cart-update
   defaults:
     controller: Cart:update
+    
+shop_success:
+  pattern: /cart-success
+  defaults:
+    controller: Cart:success
+    
 # <========    
 
 # events ========>
@@ -121,6 +138,18 @@ articles_article:
     controller: Articles:article  
 # <============
 
+# news ========>
+news:
+  pattern: /news
+  source: routes/news.yml
+  appendName: true  
+
+news_news:
+  pattern: /news/{news}/
+  defaults:
+    controller: News:news  
+# <============
+
 # pages ========>
 pages_show:
   pattern: /page-{link}
@@ -128,12 +157,18 @@ pages_show:
     controller: Pages:show  
 # <============
 
+brands_page:
+  pattern: /brands-page-{page}
+  defaults:
+    page: 1
+    controller: Brands:index
+  requirements:
+    page: (\d+|all)
 
 brands:
   pattern: /brands
   defaults:
     controller: Brands:index
-
 
 brand_page:
   pattern: /brand/{brand}-page-{page}
@@ -143,10 +178,16 @@ brand_page:
   requirements:
     page: (\d+|all)
 
+brand_detail:
+  pattern: /brand/{brand}-detail
+  defaults:
+    controller: Brands:brand_detail
+
 brand:
   pattern: /brand/{brand}
   defaults:
     controller: Brands:brand
+    
 
 suppliers:
   pattern: /suppliers

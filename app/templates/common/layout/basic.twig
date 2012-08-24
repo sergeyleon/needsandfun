@@ -357,7 +357,13 @@
                                         
                         <div class="menu-item big">
                             <a href="{{ path('articles_index') }}">СТАТЬИ</a>
-                        </div>                
+                        </div>
+                        
+                        <div class="menu-delimeter">&bull;</div>
+                                        
+                        <div class="menu-item big">
+                            <a href="{{ path('news_index') }}">НОВОСТИ</a>
+                        </div>      
                         
                         <div class="clear"></div>
                     </div>
@@ -369,6 +375,43 @@
         {% block content '' %}
       </div>
       <footer>
+      
+        <div class="header-menu">
+        <div class="menu-group-wrap">
+            <div class="menu-group">
+                <div class="menu-item big">
+                    <a href="{{ path('events_index') }}">детские спортивные комплексы</a>
+                </div>
+            
+                <div class="menu-delimeter">&bull;</div>
+                
+                <div class="menu-item big">
+                    <a href="{{ path('places_index') }}">коляски детские для кукол</a>
+                </div>
+                
+                <div class="menu-delimeter">&bull;</div>
+                                
+                <div class="menu-item big">
+                    <a href="{{ path('shop_index') }}">детские игровые домики</a>
+                </div>
+                
+                <div class="menu-delimeter">&bull;</div>
+                                
+                <div class="menu-item big">
+                    <a href="{{ path('articles_index') }}">детские карнавальные костюмы</a>
+                </div>    
+                
+                <div class="menu-delimeter">&bull;</div>
+                                
+                <div class="menu-item big">
+                    <a href="{{ path('articles_index') }}">деревянные игрушки</a>
+                </div>                
+                
+                <div class="clear"></div>
+            </div>
+        </div>
+        </div>
+      
           <div class="footer-line"></div>
           
           <table class="footer-wrap">

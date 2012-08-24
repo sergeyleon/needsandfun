@@ -109,6 +109,42 @@
     </div>        
 {% endmacro %}
 
+
+{% macro goods_age(goods_age) %}
+    <div class="main-body-wrap">
+        <div class="goods-title">
+            В магазине
+        </div>
+
+        {% for good in goods_age %}
+            <div class="banner-item{% if loop.last %} last{% endif %}">
+                <div class="banner-pic">
+                    {% if link.link %}
+                            <a href="/good/{{ good.link }}">
+                    {% endif %}
+                        {{ _self.itemPicture(good.getIcon, 'shop_banner') }}
+                    {% if good.link %}
+                        </a>
+                    {% endif %}
+                </div>
+                {% if good.name %}
+                    <div class="banner-title">
+                        {% if good.link %}
+                            <a href="/good-{{ good.link }}">
+                        {% endif %}
+                            {{ good.name }}
+                        {% if good.link %}
+                            </a>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>        
+{% endmacro %}
+
+
+
 {% macro partners(partners) %}
     <div class="partners main-body-wrap">
         <div class="goods-title">
@@ -190,6 +226,23 @@
         </div>
 
         <div class="article-banner-announce">
+            {{ item.announce|truncate(100) }}
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro news(item) %}
+    <div class="news-banner">
+        <div class="news-banner-date">
+            {{ item.created|date('d.m.Y') }}
+        </div>
+        <div class="news-banner-title">
+            <a href="{{ item.url }}">
+                {{ item.name }}
+            </a>
+        </div>
+
+        <div class="news-banner-announce">
             {{ item.announce|truncate(100) }}
         </div>
     </div>

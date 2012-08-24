@@ -69,14 +69,14 @@ class Category extends \ActiveRecord\Model implements Humanizeurl
     static public function getAll($selected = false)
     {
         $_categories = self::all(array(
-            'order' => 'weight desc'
+            'order' => 'sort desc'
         ));
         
         $address = $categories = array();
         
         foreach ($_categories as &$_category)
         {
-//            echo '@ ' . $_category->id . '<br />';
+        
             if ($_category->is_visible)
             {
                 if (isset($address[$_category->id]->allChildren) && count($address[$_category->id]->allChildren))
