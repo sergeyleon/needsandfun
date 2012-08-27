@@ -11,10 +11,10 @@
 
 {% block content %}
 
-  <script type="text/javascript" src="{{ defaults.common }}/js/mylibs/tinymce/jquery.tinymce.js"></script>
+    <script type="text/javascript" src="{{ defaults.common }}/js/mylibs/tinymce/jquery.tinymce.js"></script>
     <script type="text/javascript">
         $(function() {
-            $('textarea.wysiwyg').each(function() {
+            $('textarea.smallwysiwyg').each(function() {
                 $(this).closest('.input-wrap').addClass('tinymce');
                 $(this).tinymce({
                     script_url : '{{ defaults.common }}/js/mylibs/tinymce/tiny_mce.js',
@@ -36,7 +36,7 @@
                 });
             });
         });
-    </script>
+    </script> 
 
     <div class="header-title">{{ block('title') }}</div>
     
@@ -247,7 +247,7 @@
                             </td>
                             <td>
                                 <div class="input-wrap">
-                                    <textarea name="description" class="wysiwyg" data-common="{{ defaults.common }}">{{ event.description }}</textarea>
+                                    <textarea name="description" class="smallwysiwyg" data-common="{{ defaults.common }}">{{ event.description }}</textarea>
                                 </div>
                             </td>
                         </tr>
