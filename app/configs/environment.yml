@@ -1,5 +1,5 @@
 shop_dev:
-  hosts:       needsandfun.dev
+  hosts:       nf.balticit.ru
   namespace:   Needsandfun
   rewrite:     false
   paths:
@@ -9,7 +9,7 @@ shop_dev:
     DB_ENGINE: MYSQL
     MYSQL:  
       DB_USER: root
-      DB_PASSWORD: 123qwe
+      DB_PASSWORD: password
       DB_HOST: 127.0.0.1    
       DB_NAME:   needsandfun
     TWIG:
@@ -21,7 +21,7 @@ shop_dev:
       user:       shop@needsandfun.ru
       sender:     shop@needsandfun.ru
       reciever:   info@needsandfun.ru
-      password:   1tp7mPcO90X_w3JZGrTo
+      password:   needs712
     SOCIAL:
       twitter:   https://twitter.com/#!/NeedsAndFun 
       facebook: http://www.facebook.com/pages/%D0%9D%D1%83%D0%B6%D0%BD%D0%BE-%D0%B8-%D0%92%D0%B5%D1%81%D0%B5%D0%BB%D0%BE/337994872909310
@@ -38,10 +38,10 @@ shop_prod:
     GOOGLE_ANALYTICS: UA-30150643-1
     DB_ENGINE: MYSQL
     MYSQL:  
-      DB_USER: root
-      DB_PASSWORD: 
+      DB_USER: needsandfun
+      DB_PASSWORD: D5yY8erFgeSG
       DB_HOST: 127.0.0.1  
-      DB_NAME:   needf
+      DB_NAME:   needsandfun_prod
     TWIG:
       cache: /app/templates/cache/
     MAIL:
@@ -58,7 +58,7 @@ shop_prod:
       vkontakte:  http://vk.com/club35939180
     
 manager_dev:
-  hosts:       needsandfun.dev
+  hosts:       nf.balticit.ru
   namespace:   Managers
   rewrite:     false
   paths:
@@ -77,10 +77,10 @@ manager_dev:
       host:       smtp.gmail.com
       port:       465
       encryption: ssl
-      user:       shop@needsandfun.ru
-      sender:     shop@needsandfun.ru
+      user:       noreply@weboshin.ru
+      sender:     noreply@weboshin.ru
       reciever:   info@needsandfun.ru
-      password:   needs712
+      password:   1tp7mPcO90X_w3JZGrTo
 
 manager_prod:
   hosts:       test.needsandfun.ru, needsandfun.ru, www.needsandfun.ru
@@ -102,7 +102,7 @@ manager_prod:
       host:       smtp.gmail.com
       port:       465
       encryption: ssl
-      user:       shop@needsandfun.ru
-      sender:     shop@needsandfun.ru
+      user:       noreply@weboshin.ru
+      sender:     noreply@weboshin.ru
       reciever:   info@needsandfun.ru
-      password:   needs712
+      password:   1tp7mPcO90X_w3JZGrTo

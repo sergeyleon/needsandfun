@@ -3517,6 +3517,7 @@ a.pager-item {
     border-radius: 5px;
     background: #f2f0e6;
     margin-bottom: 30px;
+    display:none
 }
 
 .sorter-item {
@@ -3525,11 +3526,11 @@ a.pager-item {
 }
 
 .sorter-item.show-all {
-    background: #d2ceb8;
+    /*background: #d2ceb8;*/
     position: relative;
-    float: right;
+    float: none !important;
     border-radius: 3px;
-    margin: 0 0 0 20px; 
+    margin: 0 0 0 15px !important; 
 }
 
 .sorter-item.show-all .sorter-item-icon {
