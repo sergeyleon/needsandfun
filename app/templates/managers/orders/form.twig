@@ -9,10 +9,24 @@
 {% endblock %}
 
 {% block content %}
-    <div class="header-title">{{ block('title') }} <a href="{{ path('manage_orders_remove', {'orderId': item.id}) }}" >Удалить</a></div>
+    <div class="header-title">{{ block('title') }} <a href="{{ path('manage_orders_remove', {'orderId': item.id}) }}" >Удалить</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="#" id="print">Распечатать</a></div>
     
+    <script type="text/javascript">
+        $(document).ready(function() {
+          $("#print").click(function() {
+          
+           printElem({ leaveOpen: true, printMode: 'popup' });
+            
+         });
+         
+         function printElem(options){
+     $('#toPrint').printElement(options);
+ }
+
+        });
+    </script> 
     
-    
+    <div id="toPrint" >
     <form method="post">
         {% if item.id %}
             <input type="hidden" name="id" value="{{ item.id }}">
@@ -238,4 +252,12 @@
         
         <div class="clear"></div>
     </form> 
+    
+    
+    
+    
+    
+    
+    
+    </div>
 {% endblock %}
