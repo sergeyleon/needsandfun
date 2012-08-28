@@ -6,8 +6,10 @@ class Market extends \Core\Abstracts\Singleton
 {
 	public function clickAndPay()
 	{
-		 $options = array(
-   'conditions' => '((supplier_id=3 or supplier_id=13 or supplier_id=15 or supplier_id=18 or supplier_id=36 or supplier_id=37) and is_available=1) or in_stock>0 and deleted is null
+		$options = array(
+			'conditions' => 'deleted is null 
+				and is_available=1
+				and supplier_id=13 or supplier_id=3
 				and id in (
 					select 
 						good_id 

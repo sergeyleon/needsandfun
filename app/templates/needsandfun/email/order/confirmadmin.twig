@@ -63,7 +63,7 @@
 							Заказ № : {{ order.id }} <br />
               Дата заказа : {{ date|date('d.m.Y')}}<br /> 
               Адрес доставки : {% if delivery.address %} {{ delivery.address }}  {% else %}  {% if delivery.metro_id %} {{ metro }} {% else %} Самовывоз {% endif %} {% endif %}<br />
-              Комментарий : {{ delivery.comment }}<br />
+              Комментарий : {{ delivery.comment|default("не указан") }}<br />
               Статус : оформлен успешно.
 						</p>
 						
@@ -71,9 +71,10 @@
 						<p style="font-family:sans-serif; font-size: 14px; line-height: 1.4em">
 						  <b>Информация о клиенте</b><br />
 						  E-mail: {{ order.getClient.email }}<br />
-						  Имя : {{ order.getClient.first_name }}{{ delivery.recall }}<br />
-						  Фамилия: {{ order.getClient.last_name }}<br />
-						  Телефон: {{ order.getClient.phone }}
+						  Имя : {{ order.getClient.first_name|default("не указан") }}<br />
+						  Фамилия: {{ order.getClient.last_name|default("не указан") }}<br />
+						  Телефон: {{ order.getClient.phone|default("не указан") }}<br />
+						  Телефон для связи: {{ delivery.recall|default("не указан") }}
 						</p>
 						
 						

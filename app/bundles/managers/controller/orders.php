@@ -81,7 +81,9 @@ class Orders extends \Core\Abstracts\Singleton
         if ($values['status'] != $item->getStatus()->id)
         {
             $item->setStatus($values['status']);
-        } 
+        }
+        
+        $item -> save();
 
         $this->router->go($this->router->generate('manage_orders_index'));
     }

@@ -69,7 +69,7 @@
 							Заказ № : {{ order.id }} <br />
               Дата заказа : {{ date|date('d.m.Y')}}<br /> 
               Адрес доставки : {% if delivery.address %} {{ delivery.address }}  {% else %}  {% if delivery.metro_id %} {{ metro }} {% else %} Самовывоз {% endif %} {% endif %}<br />
-              Комментарий : {{ delivery.comment }}<br />
+              Комментарий : {{ delivery.comment|default("не указан") }}<br />
               Статус : оформлен успешно.<br />
 							В ближайшее время наши менеджеры свяжутся с Вами для подтверждения.
 						</p>

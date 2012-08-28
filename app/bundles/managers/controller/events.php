@@ -162,11 +162,13 @@ class Events extends \Core\Abstracts\Singleton
         {
             $event->age_from = $values['age_from'];
         }
+        else { $event->age_from = null; }
         
         if (!empty($values['age_to']) && 'any' != $values['age_to'])
         {
             $event->age_to   = $values['age_to'];
         }
+        else { $event->age_to = null; }
         
         if (empty($values['id'])) 
         {

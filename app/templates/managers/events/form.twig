@@ -11,10 +11,10 @@
 
 {% block content %}
 
-  <script type="text/javascript" src="{{ defaults.common }}/js/mylibs/tinymce/jquery.tinymce.js"></script>
+    <script type="text/javascript" src="{{ defaults.common }}/js/mylibs/tinymce/jquery.tinymce.js"></script>
     <script type="text/javascript">
         $(function() {
-            $('textarea.wysiwyg').each(function() {
+            $('textarea.smallwysiwyg').each(function() {
                 $(this).closest('.input-wrap').addClass('tinymce');
                 $(this).tinymce({
                     script_url : '{{ defaults.common }}/js/mylibs/tinymce/tiny_mce.js',
@@ -36,7 +36,7 @@
                 });
             });
         });
-    </script>
+    </script>   
 
     <div class="header-title">{{ block('title') }}</div>
     
@@ -87,7 +87,7 @@
                                                 <option value="any">Любой</option>
                                                 
                                                 {% for age in 0..18 %}
-                                                    <option{% if event.age_from is not null and event.age_from == age %} selected="selected"{% endif %}>{{ age }}</option>
+                                                    <option{% if event.age_from is not null and event.age_from == age %}  selected="selected"{% endif %} value="{{ age }}">{{ age }}</option>
                                                 {% endfor %}
                                             </select>
                                         </td>
@@ -98,7 +98,7 @@
                                             <select name="age_to">
                                                 <option value="any">Любой</option>                                
                                                 {% for age in 0..18 %}
-                                                    <option{% if event.age_to is not null and event.age_to == age %} selected="selected"{% endif %}>{{ age }}</option>
+                                                    <option{% if event.age_to is not null and event.age_to == age %} value="{{  event.age_to }}" selected="selected"{% endif %} value="{{ age }}">{{ age }}</option>
                                                 {% endfor %}
                                             </select>
                                         </td>
@@ -247,7 +247,7 @@
                             </td>
                             <td>
                                 <div class="input-wrap">
-                                    <textarea name="description" class="wysiwyg" data-common="{{ defaults.common }}">{{ event.description }}</textarea>
+                                    <textarea name="description" class="smallwysiwyg" data-common="{{ defaults.common }}">{{ event.description }}</textarea>
                                 </div>
                             </td>
                         </tr>

@@ -35,7 +35,26 @@
             
             <tr>
                 <td>
-                    Доставка
+                    Имя
+                </td>
+                <td>
+                    {{ item.client.first_name|default("не указан") }} 
+                    {{ item.client.last_name }}
+                </td>
+            </tr>
+            
+            <tr>
+                <td>
+                    Телефон
+                </td>
+                <td>
+                    {{ item.client.phone|default("не указан") }}
+                </td>
+            </tr>
+            
+            <tr>
+                <td>
+                    Тип доставка
                 </td>
                 <td>
                     {{ item.delivery.getType.name }}{% if item.delivery.metro %} &laquo;{{ item.delivery.metro.name }}&raquo;{% endif %}
@@ -46,23 +65,40 @@
                     </div>     
                 </td>
             </tr>
-
-
+            
             <tr>
                 <td>
-                    Имя
+                    Метро
                 </td>
                 <td>
-                    {{ item.client.first_name|default(item.client.user.login) }} 
-                    {{ item.client.last_name }}
+                    {{ item.delivery.metro.name|default("не указан") }}
                 </td>
             </tr>
+
             <tr>
                 <td>
-                    Телефон
+                    Адрес
                 </td>
                 <td>
-                    {{ item.client.phone }}
+                    {{ item.delivery.address|default("не указан") }}
+                </td>
+            </tr>
+            
+            <tr>
+                <td>
+                    Указанный телефон для связи 
+                </td>
+                <td>
+                    {{ item.delivery.recall|default("не указан") }}
+                </td>
+            </tr>
+            
+            <tr>
+                <td>
+                    Дата доставки
+                </td>
+                <td>
+                    {{ item.delivery.delivery_date|default("не указан") }}
                 </td>
             </tr>
 
@@ -94,7 +130,7 @@
                 <td colspan="2">
                     <table class="items-table" width="100%">
                         <thead>
-                            <th class="left"><div>Наименование</div></th>
+                            <th class="left" width="250px"><div>Наименование</div></th>
                             <th width="100px"><div>Размер</div></th>
                             <th width="100px"><div>Цена</div></th>
                         </thead>
@@ -111,11 +147,58 @@
                                         {{ ordergood.size.price|money }}
                                     </td>
                                 </tr>
+
                             {% endfor %}
+                                
                         </tbody>
                     </table>
                 </td>
             </tr>
+            
+            
+            <tr>
+                <td>
+                    Доставка
+                </td>
+                <td colspan="2">
+                    <table class="items-table" width="100%">
+                        <tbody>
+                          <tr class="items-table-item">
+                              <td class="left" width="250px">
+                                  {{ item.delivery.getType.name }}{% if item.delivery.metro %} &laquo;{{ item.delivery.metro.name }}&raquo;{% endif %}
+                              </td>
+                              <td width="100px"></td>
+                              <td width="100px">
+                                  {{ item.delivery.getType.price|money }}
+                              </td>
+                          </tr>
+                      </tbody>
+                    </table>
+                </td>
+            </tr>
+            
+            <tr>
+                <td>
+                    <b>Итого</b>
+                </td>
+                <td colspan="2">
+                    <table class="items-table" width="100%">
+                        <tbody>
+                          <tr class="items-table-item">
+                              <td class="left" width="250px">
+                                &nbsp;
+                              </td>
+                              <td width="100px">&nbsp;</td>
+                              <td width="100px">
+                                  {{ item.price|money }}
+                              </td>
+                          </tr>
+                      </tbody>
+                    </table>
+                  
+                </td>
+            </tr> 
+            
             <tr>
                 <td></td>
                 <td>
