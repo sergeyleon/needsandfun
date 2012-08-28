@@ -39,7 +39,7 @@ class Email extends \Core\Abstracts\Singleton
 	static function validate($email)
 	{
 		return filter_var($email, FILTER_VALIDATE_EMAIL);
-		//return $email;
+		return $email;
 	}
 
 	public function create($options = false)

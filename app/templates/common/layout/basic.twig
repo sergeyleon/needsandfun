@@ -220,7 +220,7 @@
                         <div class="search-icon" data-type="search-btn"></div>
 
                         <div class="search-popup" data-type="search-from" style="display: none">
-                          <form action="{{ path('search_index') }}">
+                          <form method="post" action="{{ path('search_index') }}">
                             <div class="search-popup-item input-wrap">
                               <input type="text" name="q" />
                             </div>
@@ -380,31 +380,31 @@
         <div class="menu-group-wrap">
             <div class="menu-group">
                 <div class="menu-item big">
-                    <a href="http://needsandfun.ru/store/detskie-sportivnye-kompleksy-dsk/">детские спортивные комплексы</a>
+                    <a href="{{ path('events_index') }}">детские спортивные комплексы</a>
                 </div>
             
                 <div class="menu-delimeter">&bull;</div>
                 
                 <div class="menu-item big">
-                    <a href="http://needsandfun.ru/store/kolyaski-dlya-kukol/">коляски детские для кукол</a>
+                    <a href="{{ path('places_index') }}">коляски детские для кукол</a>
                 </div>
                 
                 <div class="menu-delimeter">&bull;</div>
                                 
                 <div class="menu-item big">
-                    <a href="http://needsandfun.ru/store/detskie-igrovye-palatki-i-domiki/">детские игровые домики</a>
+                    <a href="{{ path('shop_index') }}">детские игровые домики</a>
                 </div>
                 
                 <div class="menu-delimeter">&bull;</div>
                                 
                 <div class="menu-item big">
-                    <a href="http://needsandfun.ru/store/karnaval-nye-kostyumy/">детские карнавальные костюмы</a>
+                    <a href="{{ path('articles_index') }}">детские карнавальные костюмы</a>
                 </div>    
                 
                 <div class="menu-delimeter">&bull;</div>
                                 
                 <div class="menu-item big">
-                    <a href="http://needsandfun.ru/store/derevyannye-igrushki/">деревянные игрушки</a>
+                    <a href="{{ path('articles_index') }}">деревянные игрушки</a>
                 </div>                
                 
                 <div class="clear"></div>

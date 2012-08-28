@@ -97,7 +97,17 @@ class User extends \ActiveRecord\Model
         {
             $password = self::generatePassword(8);
         }
+        
+        if(!$login) {
 
+          $options = array(
+            'conditions' => array(' login  = ? ', 'nomail@nomail.com'),
+          );
+          $user = self::find($options);
+          return $user;
+          
+        }
+        else {
         if (Email::validate($login))
         {
             if (!self::exists($login))
@@ -122,8 +132,10 @@ class User extends \ActiveRecord\Model
         {
             \Core\Page::get()->setMessage('Недопустимый адрес электронной почты!');
         }
-
-        return false;        
+        
+        return false;  
+        }
+              
     }
 
 ############################################################################################################################################    

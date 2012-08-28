@@ -192,7 +192,7 @@ if (!empty($_GET['filter']))
 
             if (isset($sort))
             {
-            
+ 
                 switch ($sort)
               
                 {

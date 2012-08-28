@@ -71,11 +71,12 @@ class Email extends \Core\Abstracts\Authorized
 		
 		\Core\Model\Email::get()->create(array(
             'to'      => $order->getClient()->email,
-            'from' => 'Needsandfun.ru <shop@needsandfun.ru>',
+            'from' => 'Needsandfun.ru ',
             'subject' => 'Вы сделали заказ на сайте needsandfun.ru',
             'text'    => $this->page->render('email/order/confirm.twig', $options)
         ));
-	}
+	
+  }
 	public function confirmOrderAdmin(\Core\Model\Order $order,$options)
 	{
 
@@ -100,7 +101,7 @@ class Email extends \Core\Abstracts\Authorized
             'subject' => 'Заказ с сайта needsandfun.ru',
             'text'    => $this->page->render('email/order/confirmadmin.twig', $options)
         ));
-       
+      
 	}
 	
 	public function confirmAddEvent($values)

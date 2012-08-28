@@ -82,6 +82,7 @@ class Cart extends \Core\Abstracts\Authorized
                 'delivery' => $delivery[0],
                 'metro' => $metro[0]->name,
                 'email'   => $order->getClient()->getUser()->login
+              
             );
 
             Email::confirmOrder($order, $options);
