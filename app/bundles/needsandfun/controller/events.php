@@ -126,7 +126,7 @@ class Events extends \Core\Abstracts\Authorized
 
         if($age_from != '' && $age_to != '') { $conditions[] = ' age_from >= ' . $age_from. ' AND age_to <='. $age_to ;}
         if($age_from != '' && $age_to == '') { $conditions[] = ' age_from >= ' . $age_from ; }
-        if($age_from == '' && $age_to != '') { $conditions[] = ' AND age_to <='. $age_to ;  echo "sdfsdf";}
+        if($age_from == '' && $age_to != '') { $conditions[] = ' AND age_to <='. $age_to ;}
         if($age_from == '' && $age_to == '') {  }
         
         $options = array('conditions' => array(implode(' AND ', $conditions)));
