@@ -87,7 +87,7 @@
                                                 <option value="any">Любой</option>
                                                 
                                                 {% for age in 0..18 %}
-                                                    <option{% if event.age_from is not null and event.age_from == age %} selected="selected"{% endif %}>{{ age }}</option>
+                                                    <option{% if event.age_from is not null and event.age_from == age %} selected="selected"{% endif %} value="{{ age }}>{{ age }}</option>
                                                 {% endfor %}
                                             </select>
                                         </td>
@@ -98,7 +98,7 @@
                                             <select name="age_to">
                                                 <option value="any">Любой</option>                                
                                                 {% for age in 0..18 %}
-                                                    <option{% if event.age_to is not null and event.age_to == age %} selected="selected"{% endif %}>{{ age }}</option>
+                                                    <option{% if event.age_to is not null and event.age_to == age %} selected="selected"{% endif %} value="{{ age }}>{{ age }}</option>
                                                 {% endfor %}
                                             </select>
                                         </td>
