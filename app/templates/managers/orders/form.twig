@@ -57,7 +57,14 @@
                     Тип доставка
                 </td>
                 <td>
-                    {{ item.delivery.getType.name }}{% if item.delivery.metro %} &laquo;{{ item.delivery.metro.name }}&raquo;{% endif %}
+                    {# item.delivery.getType.name #}{#% if item.delivery.metro %} &laquo;{{ item.delivery.metro.name }}&raquo;{% endif %#}
+                    
+                    <select name="type">
+                        {% for type in types %}
+                            <option value="{{ type.id }}"{% if item.delivery.delivery_type_id == type.id %} selected="selected"{% endif %}>{{ type.name }}</option>
+                        {% endfor %}
+                    </select>
+                    
                     <div class="tools">
                         <div class="tools-item edit" data-type="edit">
                             <a href="{{ path('manage_deliveries_edit', {'deliveryId': item.delivery.id}) }}" class="icon"></a>
@@ -71,7 +78,21 @@
                     Метро
                 </td>
                 <td>
-                    {{ item.delivery.metro.name|default("не указан") }}
+                    {# item.delivery.metro.name|default("не указан") #}
+                    
+                    <select name="metro">
+                        <option value="0">Выберите&hellip;</option>
+                        {% for line in metrolines %}
+                            <optgroup label="{{ line.name }}">
+                                {% for metro in line.metros %}
+                                    <option value="{{ metro.id }}"{% if item.delivery.metro.id == metro.id %} selected="selected"{% endif %}>
+                                        {{ metro.name }}
+                                    </option>
+                                {% endfor %}
+                            </optgroup>
+                        {% endfor %}
+                    </select>
+                    
                 </td>
             </tr>
 
@@ -80,7 +101,8 @@
                     Адрес
                 </td>
                 <td>
-                    {{ item.delivery.address|default("не указан") }}
+                    {# item.delivery.address|default("не указан") #}
+                    <input type="text" name="address" value="{{ item.delivery.address }}" />
                 </td>
             </tr>
             
@@ -89,7 +111,8 @@
                     Указанный телефон для связи 
                 </td>
                 <td>
-                    {{ item.delivery.recall|default("не указан") }}
+                    {# item.delivery.recall|default("не указан") #}
+                    <input type="text" name="recall" value="{{ item.delivery.recall }}" />
                 </td>
             </tr>
             
@@ -98,7 +121,8 @@
                     Дата доставки
                 </td>
                 <td>
-                    {{ item.delivery.delivery_date|default("не указан") }}
+                    {# item.delivery.delivery_date|default("не указан") #}
+                    <input type="text" class="jcalendar" name="delivery_date"{% if item.delivery.delivery_date %} value="{{ item.delivery.delivery_date|date('d.m.Y') }}"{% endif %}/>
                 </td>
             </tr>
 
@@ -169,7 +193,8 @@
                               </td>
                               <td width="100px"></td>
                               <td width="100px">
-                                  {{ item.delivery.getType.price|money }}
+                                  {# item.delivery.getType.price|money #}
+                                  <input type="text" name="delivery_price" value="{{ item.delivery.delivery_price|default(item.delivery.getType.price) }}" />
                               </td>
                           </tr>
                       </tbody>
