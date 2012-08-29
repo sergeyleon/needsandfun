@@ -140,7 +140,7 @@
                                     </th>
                                     <th width="20px"></th>
                                     <th width="221px" colspan="3">
-                                        Телефон
+                                        Телефон*
                                     </th>
                                     <th width="20px"></th>
                                     <th width="221px">
@@ -150,15 +150,15 @@
                                 
                                 <tr>
                                     <td>
-                                        <input type="text" name="delivery[courier][email]" data-name="email" placeholder="mail@mailbox.com"{% if currentEmail %} value="{{ currentEmail }}" readonly="readonly"{% endif %} />
+                                        <input type="text" name="delivery[courier][email]" data-name="email" placeholder="Например, mail@mail.ru"{% if currentEmail %} value="{{ currentEmail }}" readonly="readonly"{% endif %} />
                                     </td>
                                     <td></td>
                                     <td colspan="3">
-                                        <input type="text" name="delivery[courier][phone]" data-name="phone" placeholder="+7 (123) 456-78-90"{% if currentPhone %} value="{{ currentPhone }}" {% endif %} />
+                                        <input type="text" name="delivery[courier][phone]" data-name="phone" placeholder="Например, (495)123-45-67"{% if currentPhone %} value="{{ currentPhone }}" {% endif %} />
                                     </td>
                                     <td></td>
                                     <td>
-                                        <input type="text" name="delivery[courier][city]" data-required="true" data-name="city" placeholder="Москва" />
+                                        <input type="text" name="delivery[courier][city]" data-required="true" data-name="city" placeholder="Например, Москва" />
                                     </td>
                                 </tr>
                                 
@@ -169,19 +169,19 @@
                                 </tr>
                                 <tr>
                                     <td colspan="9">
-                                        <textarea style="width:100%" name="delivery[courier][comment]" data-name="comment" placeholder="Ваш комментарий" ></textarea>
+                                        <textarea style="width:100%" name="delivery[courier][comment]" data-name="comment" placeholder="Введите дополнительную информацию по заказу" ></textarea>
                                     </td>
                                 </tr>
                                 
                                 <tr>
                                     <th>
-                                        Улица
+                                        Улица*
                                     </th>
                                     
                                     <th></th>
                                     
                                     <th>
-                                        Дом
+                                        Дом*
                                     </th>
                                     
                                     <th>
