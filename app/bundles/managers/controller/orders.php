@@ -86,7 +86,7 @@ class Orders extends \Core\Abstracts\Singleton
         
         $delivery = $delivery[0];
         
-        if($values['delivery_price']) { $values['delivery_price'] = null; }
+        if($values['delivery_price'] == '') { $values['delivery_price'] = null; }
         $delivery->delivery_price = $values['delivery_price'];
         
         $delivery->metro_id = !empty($values['metro'])
@@ -110,7 +110,7 @@ class Orders extends \Core\Abstracts\Singleton
         {
             $item->setStatus($values['status']);
         }
-        
+        $item -> price = $values['price']+$values['delivery_price'];
         $item -> save();
         
 
