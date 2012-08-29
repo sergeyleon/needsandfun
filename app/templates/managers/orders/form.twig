@@ -140,6 +140,14 @@
                     <input type="text" class="jcalendar" name="delivery_date"{% if item.delivery.delivery_date %} value="{{ item.delivery.delivery_date|date('d.m.Y') }}"{% endif %}/>
                 </td>
             </tr>
+            <tr>
+                <td>
+                    Комментарий
+                </td>
+                <td>
+                    {{ item.delivery.comment|default("не указан") }}
+                </td>
+            </tr>
 
 
             <tr>
@@ -170,6 +178,7 @@
                     <table class="items-table" width="100%">
                         <thead>
                             <th class="left" width="250px"><div>Наименование</div></th>
+                            <th width="150px"><div>Артикул</div></th>
                             <th width="100px"><div>Размер</div></th>
                             <th width="100px"><div>Цена</div></th>
                         </thead>
@@ -185,6 +194,7 @@
                                     <td class="left">
                                         {{ ordergood.size.good.name }}
                                     </td>
+                                    <td>{{ ordergood.size.good.article }}</td>
                                     <td>
                                         {{ ordergood.size.name }}
                                     </td>
