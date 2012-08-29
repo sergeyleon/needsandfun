@@ -375,6 +375,15 @@
 
                 </td>
             </tr>
+            
+            <tr>
+                <td>
+                    Комментарий
+                </td>
+                <td>
+                    {{ item.delivery.comment|default("не указан") }}
+                </td>
+            </tr>
 
             <tr>
                 <td>
@@ -384,6 +393,7 @@
                     <table class="items-table" width="100%">
                         <thead>
                             <th class="left" width="250px"><div>Наименование</div></th>
+                            <th width="150px"><div>Артикул</div></th>
                             <th width="100px"><div>Размер</div></th>
                             <th width="100px"><div>Цена</div></th>
                         </thead>
@@ -392,6 +402,9 @@
                                 <tr class="items-table-item">
                                     <td class="left">
                                         {{ ordergood.size.good.name }}
+                                    </td>
+                                    <td class="left">
+                                        {{ ordergood.size.good.articul }}
                                     </td>
                                     <td>
                                         {{ ordergood.size.name }}
