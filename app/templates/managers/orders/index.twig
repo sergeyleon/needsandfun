@@ -40,7 +40,11 @@
                 </th>                
 
                 <th width="150px" class="left">
-                    <div>Способ и дата доставки</div>
+                    <div>Способ/div>
+                </th>
+
+		<th width="150px" class="left">
+                    <div>Дата доставки</div>
                 </th>
 
             </tr>
@@ -92,7 +96,9 @@
                         </div>                        
 
                         {{ item.delivery.getType.name }}{% if item.delivery.metro %} &laquo;{{ item.delivery.metro.name }}&raquo;{% endif %}
-                        
+			</td>                        
+
+			<td>
                         <input type="text" class="jcalendar" name="delivery_date"{% if item.delivery.delivery_date %} value="{{ item.delivery.delivery_date|date('d.m.Y') }}"{% endif %}/>
                     
 			</td>
