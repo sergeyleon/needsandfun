@@ -31,16 +31,20 @@
                     <div>Товары</div>
                 </th>
 
-                <th width="100px">
+                <th width="70px">
                     <div>Сумма</div>
                 </th>
 
-                <th width="100px">
+                <th width="70px">
                     <div>Скидка</div>
                 </th>                
 
-                <th width="200px" class="left">
+                <th width="150px" class="left">
                     <div>Доставка</div>
+                </th>
+
+		<th width="150px" class="left">
+                    <div>Дата</div>
                 </th>
             </tr>
         </thead>
@@ -92,10 +96,9 @@
 
                         {{ item.delivery.getType.name }}{% if item.delivery.metro %} &laquo;{{ item.delivery.metro.name }}&raquo;{% endif %}
                         
-                        {% if item.delivery.delivery_date %}
-                            <br />{{ item.delivery.delivery_date|date('d.m.Y') }}
-                        {% endif %}
-                    </td>
+                        <input type="text" class="jcalendar" name="delivery_date"{% if item.delivery.delivery_date %} value="{{ item.delivery.delivery_date|date('d.m.Y') }}"{% endif %}/>
+                    
+			</td>
                 </tr>
             {% else %}
                 <tr>
