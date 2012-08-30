@@ -16,7 +16,7 @@
                     <div>№№</div>
                 </th>
 
-                <th width="120px">
+                <th width="90px">
                     <div>Создан</div>
                 </th>
 
@@ -43,10 +43,12 @@
                     <div>Способ</div>
                 </th>
 
-		<th width="150px" class="left">
+		<th width="120px" class="left">
                     <div>Дата доставки</div>
                 </th>
-
+		<th width="50px" class="left">
+                    <div>Бланк</div>
+                </th>
             </tr>
         </thead>
         <tbody>
@@ -101,6 +103,27 @@
 			<td>
                         <input type="text" class="jcalendar" name="delivery_date"{% if item.delivery.delivery_date %} value="{{ item.delivery.delivery_date|date('d.m.Y') }}"{% endif %}/>
                     
+			</td>
+
+			<td>
+                        <a href="#" id="print">Печать</a></div>
+    
+    <script type="text/javascript">
+        $(document).ready(function() {
+          $("#print").click(function() {
+           printElem({ leaveOpen: true, printMode: 'popup',
+           overrideElementCSS:[
+        		{ href:'/common/managers/css/printMode.css',media:'print'}]
+            });
+            
+         });
+         
+         function printElem(options){
+          $('#toPrint').printElement(options);
+         }
+
+        });
+    </script>
 			</td>
                 </tr>
             {% else %}
