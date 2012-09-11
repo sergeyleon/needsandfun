@@ -567,6 +567,8 @@ private function _getGoods($page = 1, $categories = false, $category = false)
             
             $data[$col]= $val;
           }
+          
+          if ( is_null($data[0]) ) continue;
    
           unset($checkitems);
           if($data[0] == '0') {$good = new \Core\Model\Good(); $checkitems = \Core\Model\Good::all(array('conditions' => array('article = ?', $data[5]))); } 
