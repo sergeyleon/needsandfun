@@ -199,6 +199,7 @@ var CartItem = function(el) {
     var qntEl   = el.find('input[data-type=qnt]');
     var priceEl = el.find('[data-type=price]');
     var delBtn  = el.find('[data-action=delete]');
+    var weightEl = el.find('[data-type=weight]');
     
     this.init = function() {
         var instance = this;
@@ -397,14 +398,50 @@ var Cart = {
         if(this.deliveryType.val() == 'metro') {
           if(goodPrice > '1000') { deliveryPrice = '0';}
         }
+        if(this.deliveryType.val() == 'ems') {
+           
+          var weight = $("#ems_weight").val();
+          var city = $("#ems_cities").val();
+          var worth = $("#ems_worth").val();
+          if(parseInt(weight) > 0) {
+            // анонимная функция-callback.
+            $.getJSON("http://emspost.ru/api/rest?&method=ems.calculate&from=city--moskva&to="+city+"&weight="+weight+"&callback=?", function(data) {
+              var worth = parseInt($("#ems_worth").val());
+              var ems_price = parseInt(data.rsp.price)+parseFloat(worth*0.01);
+              $("#ems_cost").html(ems_price);
+            });
+            deliveryPrice = $("#ems_cost").html();
+            $("#delivery_price").val(parseInt(deliveryPrice));
+            delivery.attr({ "data-price": parseInt(deliveryPrice)});
+          }
+          else {
+            $("#ems_cost").html("стоимость доставки нужно выяснять у менеджера");
+            $("#delivery_price").val(parseInt(0));
+            delivery.attr({ "data-price": parseInt(0)});
+          }
+          
+          var total_weight = 0;
+          $('.cart-goods-item').each(function(){
+            var qnt = $(this).find('[data-type=qnt]').val();
+            var weight = $(this).find('[data-type=weight]').html();
+            total_weight = parseInt(total_weight)+parseInt(qnt*weight);
+          });
+          $("#ems_weight").val(parseInt(total_weight));
+          
+        }
+
         /* END BALTIC IT Fix */
+        
+        
+        
         
         var goodsText = this.goodsText(qnt) + moneyFormat(goodPrice, false);
         var deliveryText = deliveryText + (deliveryPrice/1 ? (': ' + moneyFormat(deliveryPrice, false)) : '');
         var discountText = this.discountText(this.element.attr('data-reviews'), this.element.attr('data-summ'));
         
-        var totalPrice = moneyFormat((goodPrice/1 + deliveryPrice/1 - this.discount.reviews/1) * (1 - this.discount.summ/100));
         
+        var totalPrice = moneyFormat((goodPrice/1 + deliveryPrice/1 - this.discount.reviews/1) * (1 - this.discount.summ/100));
+
         this.overallText.html(goodsText + ' + ' + deliveryText + ''); 
         this.discountTextElement.html(discountText);
         this.overallPrice.html(totalPrice);
@@ -420,7 +457,7 @@ var Cart = {
 
         if (summDiscount)
         {
-            this.discount.summ = 100/summDiscount;
+            this.discount.summ = summDiscount;
             text.push('скидка ' + summDiscount + '%');
         }
         
@@ -1164,4 +1201,25 @@ var moneyFormat = function(number, addition) {
     }
 
     return number_format(number, 0, '', ' ') + (addition ? '.-' : '');
+}
+
+//EMS DELIVERY
+function EMS_CALC() {
+  var weight = $("#ems_weight").val();
+  var city = $("#ems_cities").val();
+  var worth = $("#ems_worth").val();
+  if(parseInt(weight) > 0) {
+  // анонимная функция-callback.
+  $.getJSON("http://emspost.ru/api/rest?&method=ems.calculate&from=city--moskva&to="+city+"&weight="+weight+"&callback=?", function(data) {
+    var worth = parseInt($("#ems_worth").val());
+    var ems_price = parseInt(data.rsp.price)+parseFloat(worth*0.01);
+    $("#ems_cost").html(ems_price);
+  });
+  }
+  else {
+            $("#ems_cost").html("стоимость доставки нужно выяснять у менеджера");
+            $("#delivery_price").val(parseInt(0));
+            delivery.attr({ "data-price": parseInt(0)});
+          }
+  
 }

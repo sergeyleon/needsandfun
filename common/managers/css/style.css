@@ -556,7 +556,7 @@ td.middle {
     margin: 0 15px 0 0;    
 }
 
-.form-submit button {
+.form-submit button, .form-submit a {
     padding: 5px 20px;
     font-size: 13px;
     color: white;
@@ -566,6 +566,7 @@ td.middle {
     border-top: 1px solid #6AD64B;
     border-bottom: 1px solid #329117;
     background-color: #3FB41D;
+    text-decoration:none
 }
 
 .form-submit:hover button: {

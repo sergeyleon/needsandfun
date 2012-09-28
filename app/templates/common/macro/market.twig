@@ -9,7 +9,8 @@
     {#{% endif %}#}
 {% endmacro %}
 
-{% macro good(good) %}
+{% macro good_old(good) %}
+
 	<offer id="{{ good.id }}" type="vendor.model" available="true">
 		<url>{{ url('shop_good', {'good': good.encoded_key}) }}</url>
 		<price>{{ good.price }}</price>
@@ -31,4 +32,34 @@
 			<param name="Технология печати">термическая струйная</param>
 		{% endfor %}#}		
 	</offer>
+
 {% endmacro %}
+
+
+
+{% macro good(good) %}
+{% if good.category.id %}
+	<offer id="{{ good.id }}" type="vendor.model" available="true">
+		<url>{{ url('shop_good', {'good': good.good.encoded_key}) }}</url>
+		<price>{{ good.good.price }}</price>
+		<currencyId>RUB</currencyId>
+		<categoryId>{{ good.category.id }}</categoryId >
+		<picture>{{ url('item_img', {'filename': good.good.getIcon.picture.filename, 'type': 'full'}) }}</picture>
+{#		<store>false</store>
+		<pickup>true</pickup>
+		<delivery>true</delivery>#}
+		<typePrefix>{{ good.category.name }}</typePrefix>
+		<vendor>{{ good.good.brand.name }}</vendor>
+		<vendorCode>{{ good.article }}</vendorCode>
+		<model>{{ good.name }}</model>
+		<description>
+			{{ good.description|striptags }}
+		</description>
+{#		<country_of_origin>Япония</country_of_origin>
+		{% for property in good.getProperties %}		
+			<param name="Технология печати">термическая струйная</param>
+		{% endfor %}#}		
+	</offer>
+{% endif %}
+{% endmacro %}
+

@@ -223,6 +223,15 @@ class Index extends \Core\Abstracts\Singleton
                     array(
                         'name'  => 'Работа с массивами',
                         'route' => 'manage_goods_exp'
+                    ),
+                    array(
+                        'name'  => 'Работа с массивами YML',
+                        'route' => 'manage_goods_exp_catalog'
+                    )
+                    ,
+                    array(
+                        'name'  => 'Выгрузка',
+                        'route' => 'manage_goods_exp_simple'
                     )
                 )
             ),

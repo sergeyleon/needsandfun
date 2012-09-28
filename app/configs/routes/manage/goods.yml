@@ -89,6 +89,16 @@ exp:
   pattern: /exp
   defaults:
     controller: Goods:exp
+    
+exp_catalog: 
+  pattern: /exp_catalog
+  defaults:
+    controller: Goods:exp_catalog
+    
+exp_simple: 
+  pattern: /exp_simple
+  defaults:
+    controller: Goods:exp_simple
 
 search:
   pattern: /search

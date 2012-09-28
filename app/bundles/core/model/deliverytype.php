@@ -10,6 +10,7 @@ class Deliverytype extends \ActiveRecord\Model
     static $courier = 1;
     static $pickup  = 2;
     static $metro   = 3;
+    static $ems     = 4;
 
     static $table = 'delivery_types';
     static $has_many = array(

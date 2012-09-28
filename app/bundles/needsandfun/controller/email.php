@@ -63,19 +63,19 @@ class Email extends \Core\Abstracts\Authorized
 		$options = array(
 			'order' => $order,
 			'host'    => $this->router->getHost(),
-			'delivery' => $options[delivery],
-			'metro' => $options[metro]
+			'delivery' => $options['delivery'],
+			'metro' => $options['metro'],
+			'file' => $options['file']
 		);
-		
 
-		
 		\Core\Model\Email::get()->create(array(
             'to'      => $order->getClient()->email,
             'from' => 'Needsandfun.ru ',
             'subject' => 'Вы сделали заказ на сайте needsandfun.ru',
-            'text'    => $this->page->render('email/order/confirm.twig', $options)
+            'text'    => $this->page->render('email/order/confirm.twig', $options),
+            'file'    => $options['file']
         ));
-	
+
   }
 	public function confirmOrderAdmin(\Core\Model\Order $order,$options)
 	{
@@ -83,8 +83,8 @@ class Email extends \Core\Abstracts\Authorized
 		$options = array(
 			'order' => $order,
 			'host'    => $this->router->getHost(),
-			'delivery' => $options[delivery],
-			'metro' => $options[metro]
+			'delivery' => $options['delivery'],
+			'metro' => $options['metro']
 		);
 	
 		\Core\Model\Email::get()->create(array(
@@ -114,13 +114,13 @@ class Email extends \Core\Abstracts\Authorized
             'to'      => 'info@needsandfun.ru',
             'cc'      => 'shop@needsandfun.ru',
             'subject' => 'Событие на сайте',
-            'text'    => 'Пользователь добавил событие: '.$values[title]
+            'text'    => 'Пользователь добавил событие: '.$values['title']
         ));
 		
 		\Core\Model\Email::get()->create(array(
             'to'      => 'bazzy@yandex.ru',
             'subject' => 'Событие на сайте',
-            'text'    => 'Пользователь добавил событие: '.$values[title]
+            'text'    => 'Пользователь добавил событие: '.$values['title']
         ));
 	}
 	

@@ -39,6 +39,7 @@ class Shop extends \Core\Abstracts\Authorized
             'goods.deleted is null',
         );
 
+
         if ($categories)
         {
             $conditions[] = 'goods.id in (select good_id from goods_categories where category_id in (' . implode(', ', $categories) . '))';
@@ -181,7 +182,6 @@ if (!empty($_GET['filter']))
             $filter = $_GET['filter'];
             
         if (isset($filter['sort']))  {
-            
 
             $sort  = $filter['sort'];
             $dir = isset($sort) && 'desc' == $sort
@@ -336,7 +336,8 @@ if (!empty($_GET['filter']))
 
         $this->page['breadcrumbs'] = \Core\Model\Category::all(array('conditions' => array($options3)));
         
-
+        $this->page['page'] = $page;
+        
         $this->page->display('shop/index.twig');
     }
     

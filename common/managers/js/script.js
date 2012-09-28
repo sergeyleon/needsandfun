@@ -686,6 +686,12 @@ $(function() {
         if (!window.confirm('Вы уверены?')) e.preventDefault();
     });
     
+
+    $('[data-confirm] button').click(function(e) {
+        if (!window.confirm('Вы уверены?')) e.preventDefault();
+    });
+    
+    
     $('.type-properties .type-property').each(function() {
         new PropertyType($(this));
     });

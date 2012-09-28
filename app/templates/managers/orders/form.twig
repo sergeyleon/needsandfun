@@ -38,7 +38,7 @@
                 <td width="100px">
                     Статус
                 </td>
-                <td width="300px">
+                <td width="420px">
                     <select name="status">
                         {% for status in statuses %}
                             <option value="{{ status.id }}"{% if item.getStatus.id == status.id %} selected="selected"{% endif %}>{{ status.name }}</option>
@@ -177,10 +177,13 @@
                 <td colspan="2">
                     <table class="items-table" width="100%">
                         <thead>
-                            <th class="left" width="250px"><div>Наименование</div></th>
+                            <th class="left" width="350px"><div>Наименование</div></th>
                             <th width="150px"><div>Артикул</div></th>
                             <th width="100px"><div>Размер</div></th>
                             <th width="100px"><div>Цена</div></th>
+                            <th width="100px"><div>Скидка</div></th>
+                            <th width="100px"><div>Удалить?</div></th>
+                            <th width="100px"><div>Добавить?</div></th>
                         </thead>
                         <tbody>
 
@@ -201,12 +204,23 @@
                                     <td>
                                         {{ ordergood.size.price|money }}
                                     </td>
+                                    <td>
+                                    {% if ordergood.size.good.discount %}
+                                        {{ (ordergood.size.price*ordergood.size.good.discount/100)|money }}
+                                    {% else %}
+                                        0
+                                    {% endif %}
+                                    </td>
+                                    <td data-confirm="true"><button type="submit" name="deleteItem" value="{{ ordergood.id }}" >Удалить</button></td>
+                                    <td data-confirm="true"><button type="submit" name="addItem" value="{{ ordergood.id }}" >Добавить</button></td>
                                 </tr>
-                                
-                                {% set total = ordergood.size.price+total %}
-                               
+                                {% if ordergood.size.good.discount %}
+                                  {% set total = ordergood.size.price-(ordergood.size.price*ordergood.size.good.discount/100)+total %}
+                                {% else %}
+                                  {% set total = ordergood.size.price+total %}
+                                {% endif %}
                             {% endfor %}
-                                <input type="hidden" name="price" value="{{ total }}" />
+
                         </tbody>
                     </table>
                 </td>
@@ -226,7 +240,7 @@
                               </td>
                               <td width="100px"></td>
                               <td width="100px">
-                                  {# item.delivery.getType.price|money #}
+                                  
                                   <input type="text" name="delivery_price" value="{{ item.delivery.delivery_price|default(item.delivery.getType.price) }}" />
                               </td>
                           </tr>
@@ -244,12 +258,14 @@
                         <tbody>
                           <tr class="items-table-item">
                               <td class="left" width="250px">
+                              {% if item.discount %}
+                                {{ total }}(товар) + {{item.delivery.delivery_price|default(item.delivery.getType.price)}}(доставка) - {{item.discount}}(скидка) = {{ (total - item.discount + item.delivery.delivery_price|default(item.delivery.getType.price))|money }}
+                              {% else %}
+                                {{ total }}(товар) + {{item.delivery.delivery_price|default(item.delivery.getType.price)}}(доставка)  = {{ (total - item.discount + item.delivery.delivery_price|default(item.delivery.getType.price))|money }}
+                              {% endif %}
                                 &nbsp;
                               </td>
-                              <td width="100px">&nbsp;</td>
-                              <td width="100px">
-                                  {{ item.price|money }}
-                              </td>
+                              
                           </tr>
                       </tbody>
                     </table>
@@ -264,20 +280,28 @@
                         <button type="submit" name="saveOrder">
                             Сохранить
                         </button>
-                    </div>                
+                    </div>     
+                    
+                             
+                </td>
+                <td>
+                    <div class="form-submit">
+                        <a href="/manage/orders/find-item/{{ item.id }}">Добавить товар</a>
+                    </div>  
                 </td>
             </tr>
+            
+            
         </table>
         
         <div class="clear"></div>
     </form> 
-
-    
-    
+   
     
 <div style="display:none">
 <div id="toPrint" >
-
+        
+        <h1>Заказ № {{ item.id }}</h1>
         <table class="form-table lefted">
             <tr>
                 <td width="100px">
@@ -451,11 +475,15 @@
                         <tbody>
                           <tr class="items-table-item">
                               <td class="left" width="250px">
-                                &nbsp;
+                              
                               </td>
                               <td width="100px">&nbsp;</td>
                               <td width="100px">
-                                  {{ item.price|money }}
+                              {% if item.discount %}
+                                {{ (total - item.discount + item.delivery.delivery_price|default(item.delivery.getType.price))|money }}
+                              {% else %}
+                                {{ (total - item.discount + item.delivery.delivery_price|default(item.delivery.getType.price))|money }}
+                              {% endif %}
                               </td>
                           </tr>
                       </tbody>

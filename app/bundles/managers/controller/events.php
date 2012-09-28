@@ -41,7 +41,107 @@ class Events extends \Core\Abstracts\Singleton
         
         $this->router->go($this->router->generate('manage_events_index'));
     }
+///////////////////////////////////
+    private function _getEvents($page = 1, $categories = false, $category = false)
+    {
+    
+    
+       
+        $conditions = array(
+            'events.deleted is null'
+        );
 
+        if ($categories)
+        {
+            $conditions[] = 'events.id in (select event_id from event_cats where category_id in (' . implode(', ', $categories) . '))';
+        }
+
+        $options = array('conditions' => array(implode(' AND ', $conditions)));
+        
+        if (!empty($variables))
+        {
+            $options['conditions'] = array_merge($options['conditions'], $variables);
+        }
+
+    //    $this->page['clearFilter'] = $this->router->generate($categories ? 'shop_category_page' : 'shop_index_page', array('page' => 'all', 'category' => $category));
+        
+        if (is_numeric($page))
+        {
+            $total = \Core\Model\Event::all($options);
+
+            $options['limit']  = \Core\Model\Event::$perPage;
+            $options['offset'] = \Core\Model\Event::$perPage * ($page - 1);
+
+            $this->page['pager']   = \Core\Model\Event::getPager($page, $category, 'manage_events_category_page', $total);
+            
+          //  var_dump($this->page['pager']);
+        }
+        
+        $options['order']  = 'name';
+
+        $goods = \Core\Model\Event::all($options);
+
+        if (isset($total) && count($total) > 0 && count($goods) == 0 && $page > 1)
+        {
+            $this->router->go($this->router->generate('category_page', array('page' => 1)));
+        }
+
+        return $goods;
+    }
+
+    private function _categories($selected = false)
+    {    
+        $this->page['eventCategories'] = \Core\Model\Eventcategory::getAll($selected);
+    }
+
+    public function category_index($category, $page = 1) 
+    {
+    
+        if($category != 'new') {
+          $this->page['currentCategory'] = \Core\Model\Eventcategory::from_url($category);
+          $category = $this->page['currentCategory']->encoded_key;
+  
+          $categoryId = $this->page['currentCategory']->id;
+  
+          $filters = array('categoryId' => $categoryId);
+          $this->getStorage('flash')->setValue('categoryId', $categoryId);
+          $this->_categories($categoryId);
+              
+          $categories = $this->page['currentCategory']->getChildren();
+        }
+        
+        $this->page['events'] = $this->_getEvents($page, $categories, $category);
+
+        $this->page['categories'] = \Core\Model\Eventcategory::getAll();
+
+        $this->page->display('events/index.twig');
+
+    }
+    
+    
+    public function index($page = 1, $categories = false, $category = false, $query = false)
+    {
+        $this->page['selectedCategory'] = $this->cookieStorage->getValue('events_selectedCategory') ?: 'all';
+
+        $this->page['categories'] = \Core\Model\Eventcategory::getAll();
+
+        $total = \Core\Model\Event::all();
+
+        $options['limit']  = \Core\Model\Event::$perPage;
+        $options['offset'] = \Core\Model\Event::$perPage * ($page - 1);
+        
+        $this->page['pager']   = \Core\Model\Event::getPager($page, $category, 'manage_events_index_page', $total);
+
+        $this->page['events'] = \Core\Model\Event::all(array('conditions' => array('deleted is null'), 
+          'limit' => $options['limit'],
+          'offset' => $options['offset']
+         ));
+          
+        $this->page->display('events/index.twig');
+    }    
+    
+///////////////////////////////////
+/*
     public function index()
     {
         $this->page['selectedCategory'] = $this->cookieStorage->getValue('events_selectedCategory') ?: 'all';
@@ -51,7 +151,7 @@ class Events extends \Core\Abstracts\Singleton
         
         $this->page->display('events/index.twig');
     }
-
+*/
     public function addCategory()
     {
         $category = new \Core\Model\Eventcategory();
@@ -182,6 +282,7 @@ class Events extends \Core\Abstracts\Singleton
         $event->is_checked   = $values['moderation'];
 
         $event->meta_keywords    = $values['meta_keywords'];
+        $event->title            = $values['title'];
         $event->meta_description = $values['meta_description'];
 
         if (!empty($values['place']))
@@ -210,6 +311,25 @@ class Events extends \Core\Abstracts\Singleton
             }
             
         }
+        
+        ////////////////
+        foreach ($event->eventcats as $eventCat)
+        {
+            $eventCat->delete();    
+        }
+        
+        if (!empty($values['category1'])) 
+        {
+            foreach ($values['category1'] as $category)
+            {
+                $eventCat = new \Core\Model\Eventcat();
+                $eventCat->event_id   = $event->id;
+                $eventCat->category_id = $category;
+                $eventCat->save();
+            }
+            
+        }
+        //////////////////
 
         $itempicture = new \Core\Model\Eventpicture();
         \Core\Model\Picture::multipleUpload($_FILES['pictures'], $event, $itempicture);
@@ -225,6 +345,20 @@ class Events extends \Core\Abstracts\Singleton
     public function edit($eventId)
     {
         $this->page['event']    = \Core\Model\Event::find($eventId);
+        
+        $this->page['reporters']  = \Core\Model\Client::getAll();
+        $this->page['sponsors']   = \Core\Model\Sponsor::getAll();
+        $this->page['categories'] = \Core\Model\Eventcategory::getAll();
+        $this->page['placeCategories'] = \Core\Model\Placecategory::getAll();
+        
+        $categories = array();
+        foreach ($this->page['event']->eventcats as $eventCat)
+        {
+            array_push($categories, $eventCat->category_id);   
+        }
+        $this->page['current_category'] = $categories;
+        var_dump($categories) ;
+        
         $this->_form();
     }   
 
@@ -239,12 +373,9 @@ class Events extends \Core\Abstracts\Singleton
     
     public function _form()
     {
-        $this->page['reporters']  = \Core\Model\Client::getAll();
-        $this->page['sponsors']   = \Core\Model\Sponsor::getAll();
-        $this->page['categories'] = \Core\Model\Eventcategory::getAll();
-        $this->page['placeCategories'] = \Core\Model\Placecategory::getAll();
+        $page = $this->getPage();
 
-        $this->page->display('events/form.twig');        
+        $page->display('events/form.twig');        
     }
 
     public function editCategory($categoryId)

@@ -20,7 +20,7 @@
         
             <ol class="sortable categories-wrap" data-url="{{ path('manage_events_category_weight')}}">
                 {% for item in categories %}
-                    {{ common.sortableCategory(item, selectedCategory, 'events') }}
+                    {{ common.sortableCategoryEvent(item, selectedCategory, 'events') }}
                 {% endfor %}
             </ol>
             
@@ -36,7 +36,7 @@
             </div>            
         </div>
         
-        <div class="goods" data-url="{{ path('manage_events_action') }}">
+        <div class="goods module_item" data-url="{{ path('manage_events_action') }}">
             {% for event in events %}
                 <div class="good-item{% if not event.isAvailable %} notAvailable{% endif %}" data-id="{{ event.id }}" data-category="{{ event.getCategory }}" data-exclusive="{{ event.getCategory }}">
                     <div class="good-item-pic">
@@ -66,6 +66,9 @@
                 </div>
             {% endfor %}
             <div class="clear"></div>
+            {% if pager %}
+              {{ common.pager(pager) }}
+            {% endif %}
         </div>
     </div>    
 {% endblock %}

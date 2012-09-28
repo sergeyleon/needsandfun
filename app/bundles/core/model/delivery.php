@@ -60,7 +60,12 @@ class Delivery extends \ActiveRecord\Model
         $order              = $options['order'];
         $delivery->order_id = $order->id;
         
-        if ('courier' == $options['type'])
+        if ('ems' == $options['type'])
+        {
+          $delivery->delivery_price = $options['data']['price'];
+        }
+        
+        if ('courier' == $options['type'] or 'ems' == $options['type'])
         {
             $data = $options['data'];
             $address = array();

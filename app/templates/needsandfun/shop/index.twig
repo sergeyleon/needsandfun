@@ -34,9 +34,7 @@
 
 {% block content %}
 
-    {% if currentCategory.top_description %}
-        <div style="padding:10px">{{ currentCategory.top_description|raw }}</div>
-    {% endif %}
+    
 
     <div class="shop">
         <div class="categories">
@@ -44,7 +42,8 @@
                 <div class="categories-title">
                     Каталог
                 </div>
-
+                
+                
 
                 {{ shop.filter(filter, _context) }}
 
@@ -77,9 +76,21 @@
                     {% set index = 0 %}
                 {% endif %}
                 
+                {% if page == 1 %}
+                  {% if currentCategory.top_description %}
+                      <div style="padding:10px">{{ currentCategory.top_description|raw }}</div>
+                  {% endif %}
+                {% endif %}
+                
+                {% if currentCategory %}
+
+                    <h1>{{ currentCategory.name }}</h1>
+
+                {% endif %}
+                
                 {{ shop.breadcrumbs(breadcrumbs) }}<br />
                 
-                {{ shop.sorter(sort, _context) }}
+                {# shop.sorter(sort, _context) #}
                 
                 {{ shop.categories(categories) }}
                 
@@ -99,10 +110,11 @@
         
             
             
-
-            {% if currentCategory.description %}
-                <div class="clear"></div>
-                {{ currentCategory.description|raw }}
+            {% if page == 1 %}
+              {% if currentCategory.description %}
+                  <div class="clear"></div>
+                  {{ currentCategory.description|raw }}
+              {% endif %}
             {% endif %}
         </div>
         <div class="clear"></div>            

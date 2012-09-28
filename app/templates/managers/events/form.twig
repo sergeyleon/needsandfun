@@ -135,7 +135,7 @@
                             </td>
                         </tr>
 
-                        <tr>
+                        <tr style="display:none">
                             <td>
                                 Категория
                             </td>
@@ -154,7 +154,29 @@
                                     {% endfor %}
                                 </select>
                             </td>
-                        </tr>            
+                        </tr>     
+                        
+                        
+                        <tr>
+                            <td>
+                                Категория
+                            </td>
+                            <td>
+                                <select name="category1[]" multiple="multiple">
+                                    <option value="0" {% for current in current_category %} {% if current == 0 %} selected="selected"{% endif %} {% endfor %}>Временная</option>                    
+                                    {% for category in categories %}
+                                        <option value="{{ category.id }}"{% for current in current_category %} {% if current == category.id %} selected="selected"{% endif %} {% endfor %}>
+                                            {{ category.name }}
+                                        </option>
+                                        {% for category in category.children %}
+                                            <option value="{{ category.id }}"{% for current in current_category %} {% if current == category.id %} selected="selected"{% endif %} {% endfor %}>
+                                                -&nbsp;{{ category.name }}
+                                            </option>
+                                        {% endfor %}
+                                    {% endfor %}
+                                </select>
+                            </td>
+                        </tr>           
                         
 
                         <tr>
@@ -255,6 +277,18 @@
                 </div>
                 <div class="tabs-content">
                     <table class="form-table">
+                        
+                        <tr>
+                            <td width="120px" class="top">
+                                Заголовок события
+                            </td>
+                            <td width="500px">
+                                <div class="input-wrap">
+                                    <input type="text" name="title" value="{{ event.title }}" />
+                                </div>
+                            </td>
+                        </tr>
+                    
                         <tr>
                             <td width="120px" class="top">
                                 META-keywords

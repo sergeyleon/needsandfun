@@ -13,7 +13,8 @@ class Client extends \ActiveRecord\Model implements Itemswithpics, Humanizeurl
     
     static $has_many = array(
         array('clientpictures', 'order' => 'weight', 'foreign_key' => 'item_id'),
-        array('orders', 'order' => 'created desc')
+        array('orders', 'order' => 'created desc'),
+        array('orderstatuses', 'order' => 'created desc')
     );
 
     static $before_save = array('updateLink');
@@ -61,12 +62,18 @@ class Client extends \ActiveRecord\Model implements Itemswithpics, Humanizeurl
 
             foreach ($this->orders as $order)
             {
-                $this->_discount['summ']['orders']++;
-                $this->_discount['summ']['value'] += $order->discounted_price;
+            
+            @$statusquery = \Core\Model\Orderstatus::all(array('conditions' => array('order_id = ? and status_id = ?', $order->id, 4)));
+              if(count(@$statusquery) > 0) {
+               
+                  $this->_discount['summ']['orders']++;
+                  $this->_discount['summ']['value'] += $order->discounted_price;
+               
+              }
             }
 
             $discount = floor($this->_discount['summ']['value']/1000);
-            if (10 < $discount) $discount = 10;
+            if (5 < $discount) $discount = 5;
             $this->_discount['summ']['discount'] = $discount;
 
         }

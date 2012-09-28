@@ -74,7 +74,11 @@ shop_success:
   pattern: /cart-success
   defaults:
     controller: Cart:success
-    
+
+ems_success:
+  pattern: /cart-ems
+  defaults:
+    controller: Cart:ems_success
 # <========    
 
 # events ========>

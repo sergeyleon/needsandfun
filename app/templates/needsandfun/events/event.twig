@@ -6,7 +6,13 @@
 {% import defaults.macros ~ '/common.twig'  as common %}
 
 {% block title %}
+
+  {% if item.title %}
+    {{ item.title }} {{ item.held_date|date('d.m.Y') }}
+  {% else %}
     {{ item.name }} {{ item.held_date|date('d.m.Y') }}
+  {% endif %}
+
 {% endblock %}
 
 {% block metaKeywords %}{{ item.meta_keywords }}{% endblock %}
@@ -15,6 +21,9 @@
 {% block content %}
     <div class="page short">
         <div class="event{% if isMembered %} membered{% endif %}"{% if loggedUser %} id="event" data-id="{{ item.id }}" data-url="{{ path('events_actions', {'eventId': item.id }) }}"{% endif %}>
+            
+            <h1>{{ item.name }}</h1>
+            
             <div class="event-head">
                 <div class="event-pic">
                     {{ common.itemPicture(item.getIcon, 'event') }}
@@ -59,9 +68,7 @@
 
             <div class="event-body">
                 <div class="event-description">
-                    <h1>
-                        <span>{{ item.name }}</span>
-                    </h1>
+                    
 
                     {{ item.description|raw }}
                 </div>

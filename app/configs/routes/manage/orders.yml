@@ -8,6 +8,11 @@ add:
   defaults:
     controller: Orders:add
 
+find:
+  pattern: /find-item/{orderId}
+  defaults:
+    controller: Orders:findNewItem
+
 edit:
   pattern: /edit/{orderId}
   defaults:

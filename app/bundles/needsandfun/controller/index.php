@@ -31,13 +31,12 @@ class Index extends \Core\Abstracts\Authorized
 
     public function show()
     {
-
-      //Baltic It fix
+        //Baltic It fix
         $link = 'index';
         $page = \Core\Model\Page::find(array('conditions' => array('link = ?', $link)));
         $this->page['main_page'] = $page;
-      //End Baltic It fix
-    
+        //End Baltic It fix
+        
         $this->page['bigBanners']    = \Core\Model\Banner::big();
         $this->page['todayBanner']   = \Core\Model\Banner::todayInShop();
         $this->page['shopBanners']   = \Core\Model\Banner::shop();
@@ -45,11 +44,13 @@ class Index extends \Core\Abstracts\Authorized
         $this->page['partners']      = \Core\Model\Partner::banners();
         $this->page['places']        = \Core\Model\Place::banners();
         $this->page['articleBanner'] = current(\Core\Model\Article::banners());
-        $this->page['newsBanner'] = current(\Core\Model\News::banners());
+        $this->page['newsBanner']    = current(\Core\Model\News::banners());
 
         $this->page['actualEvents']  = \Core\Model\Event::actual(6);
-        $this->page['categories'] = \Core\Model\Eventcategory::getAll();
+        $this->page['categories']    = \Core\Model\Eventcategory::getAll();
 
+        $this->page['displayFooterButtons'] = true;
+        
         $this->page->display('index.twig');
     }
 

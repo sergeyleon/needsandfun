@@ -48,8 +48,9 @@
 
         <div id="good" class="good-info lefted" data-id="{{ item.id }}">
             <div class="good-info-wrap">
-                {{ shop.breadcrumbs(breadcrumbs) }}
+                
                 <h1 class="good-name">{{ item.name }}</h1>
+                {{ shop.breadcrumbs(breadcrumbs) }}
                 <div class="good-gallery">
                 
                     <div class="good-gallery-main">
@@ -205,6 +206,15 @@
                     <div class="good-info-brand">
                         {{ markup.addThisBar() }}
                     </div>
+                  
+                    <div class="good-info-brand">
+                        <a href="http://clck.yandex.ru/redir/dtype=stred/pid=47/cid=2508/*http://grade.market.yandex.ru/?id=103012&action=link">
+                          <img src="http://clck.yandex.ru/redir/dtype=stred/pid=47/cid=2507/*http://grade.market.yandex.ru/?id=103012&action=image&size=2" 
+                               border="0" width="150" height="101" 
+                               alt="Читайте отзывы покупателей и оценивайте качество магазина на Яндекс.Маркете" />
+                        </a>
+                    </div>
+                  
                 </div>
 
                 <div class="clear"></div>
@@ -259,7 +269,7 @@
             {% if additionalGoods|length %}
                 <div class="goods-title">
                     С этим товаром часто покупают:
-                </div>
+                </div>Пр
                 {{ shop.goods(additionalGoods) }}    
             {% endif %}
             

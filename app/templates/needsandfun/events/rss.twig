@@ -1,0 +1,16 @@
+{% import defaults.macros ~ '/markup.twig' as markup %}
+{% import defaults.macros ~ '/events.twig' as events %}
+{% block content %}
+<?xml version="1.0" encoding="UTF-8" ?> 
+<rss version="2.0">
+<channel>
+<title>События http://needsandfun.ru/</title>
+<link>http://needsandfun.ru/</link>
+<description>RSS канал событий</description>
+<language>ru</language>
+<copyright>Copyright 2010 - 2011</copyright>
+<author></author>
+{{ events.rss(items) }}
+</channel>
+</rss>
+{% endblock %}

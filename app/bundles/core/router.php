@@ -325,6 +325,9 @@ class Router extends Abstracts\Singleton
    {
       header('HTTP/1.1 ' . $status . ' ' . $this->_statuses[$status]);
       $this->getEnvironment()->set('default');
+      
+      $this->page['displayFooterButtons'] = false;
+      
       $this->getPage()->display('errors/' . $status . '.twig');
    }
    

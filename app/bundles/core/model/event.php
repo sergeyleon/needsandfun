@@ -23,6 +23,7 @@ class Event extends \ActiveRecord\Model implements Itemswithpics, Reviewable, Se
     static $has_many = array(
         array('members'),    
         array('eventsponsors'),
+        array('eventcats'),
         array('eventpictures', 'order' => 'weight', 'foreign_key' => 'item_id'),
         array('eventreviews', 'class' => 'Eventreview', 'foreign_key' => 'item_id'),
         array('reviews', 'foreign_key' => 'item_id', 'through' => 'eventreview', 'conditions' => 'is_checked = 1', 'order' => 'created desc')
@@ -222,6 +223,7 @@ class Event extends \ActiveRecord\Model implements Itemswithpics, Reviewable, Se
         return $sponsors;
     }
     
+    
     public function getBindId()
     {
         return $this->id;
@@ -291,6 +293,8 @@ class Event extends \ActiveRecord\Model implements Itemswithpics, Reviewable, Se
     {
         return $this->category_id;
     }
+    
+    
 
     public function isFresh()
     {
@@ -311,11 +315,12 @@ class Event extends \ActiveRecord\Model implements Itemswithpics, Reviewable, Se
         // $categories = false, $filter = false, $sorter = false
         if (isset($data['categories']))
         {
-            $conditions[] = 'events.category_id in (?)';
-            $variables[]  = $data['categories'];
+            //$conditions[] = 'events.category_id in (?)';
+            //$variables[]  = $data['categories'];
+            $conditions[] = 'events.id in (select event_id from event_cats where category_id in (' . implode(', ', $data['categories']) . '))';
         }
         else {
-            $conditions[] = 'events.category_id in (select id from event_categories where is_visible=1)';
+           // $conditions[] = 'events.category_id in (select id from event_categories where is_visible=1)';
         }
 
         if (isset($data['from']))
@@ -618,7 +623,7 @@ class Event extends \ActiveRecord\Model implements Itemswithpics, Reviewable, Se
         return self::all($options);
     }    
 
-    static function getPager($page, $category = false, $route, $filter = false, $sorter = false)
+    static function getPager2($page, $category = false, $route, $filter = false, $sorter = false)
     {
         $options = array();
         $routeParams['current'] = $page;
@@ -655,4 +660,32 @@ class Event extends \ActiveRecord\Model implements Itemswithpics, Reviewable, Se
 
         return $pager;
     }  
+
+    static function getPager($page, $category = false, $route, $total = 0)
+    {
+        $options = array();
+        $routeParams['current'] = $page;
+
+        if ($category)
+        {
+            $routeParams['category'] = $category;
+            $options['category'] = $category;
+        }
+
+        $pager = array(
+            'total'   => ceil(count($total)/self::$perPage),
+            'current' => $page,
+            'route'   => $route,
+            'routeParams' => $routeParams
+        );
+
+        if ($pager['total'] == 1)
+        {
+            $pager = false;
+        }
+
+        return $pager;
+    }
+
+
 }

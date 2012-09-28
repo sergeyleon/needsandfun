@@ -90,7 +90,7 @@ class Search extends \Core\Abstracts\Singleton
 		{
 			// товары
 			$goods = Good::all(array(
-				'conditions' => array('(name like ? or description like ?) and deleted is null', $query, $query),
+				'conditions' => array('(name like ? or article like ? or description like ?) and deleted is null', $query, $query, $query),
 				'order' => 'name',
 				'limit' => 30
 			));

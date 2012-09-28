@@ -25,6 +25,9 @@
         </div>
 
     	<div class="main-body-content">
+    	     
+    	     {% autoescape false %} {{ main_page.contents }} {% endautoescape %}
+    	
             <div class="tabs">
                 <div class="tabs-items" data-type="items">
                     <div class="tabs-title">

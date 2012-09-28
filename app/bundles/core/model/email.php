@@ -90,6 +90,10 @@ class Email extends \Core\Abstracts\Singleton
 				: 'text/plain';
 
 			$message->addPart($text, $is_html);
+			
+			if(!empty($options['file'])) {
+			  $message->attach(\Swift_Attachment::fromPath($options['file']));
+			}
 
 			$result = $this->_mailer->send($message);	
 		}

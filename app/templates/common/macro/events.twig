@@ -114,6 +114,30 @@
     </div>
 {% endmacro %}
 
+
+
+
+{% macro rss(events, small_icon, short) %}
+{% import defaults.macros ~ '/common.twig' as common %}
+{% for event in events %}
+<item>
+<title>{{ event.name }}</title>
+<link>http://needsandfun.ru{{ event.url }}</link>
+{% if small_icon %}
+{% set iconSize = 'smaller_event' %}
+{% else %}
+{% set iconSize = 'small_event' %}
+{% endif %}
+<description><![CDATA[{{ common.itemPicture(event.getIcon, iconSize) }}]]> Метро:{{ event.place.metro.name }}</description>
+<pubDate>{{ event.held_date }}</pubDate>
+<guid>http://needsandfun.ru{{ event.url }}</guid>
+</item>   
+{% endfor %}
+{% endmacro %}
+
+
+
+
 {% macro ages(event) %}
     {% if event.age_from is not null and event.age_to is not null %}
         От {{ event.age_from }} до {{ event.age_to }}

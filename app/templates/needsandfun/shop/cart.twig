@@ -40,7 +40,9 @@
                     
                     <div class="cart-row-box">
                         <table class="cart-goods" data-type="cart-goods">
+                            
                             {% for id, ordergood in cart.getGoods %}
+
                                 <tr class="cart-goods-item whitened" data-id="{{ id }}" data-qnt="{{ ordergood.qnt }}" data-perGood="{{ ordergood.perGood }}">
                                     <td class="cart-good-pic">
                                         {{ shop.itemPicture(ordergood.good.getIcon, 'icon') }}
@@ -52,6 +54,7 @@
                                     </td>
                                     <td class="cart-good-size">
                                         {{ ordergood.size.name }}
+                                        <div style="display:none" data-type="weight">{{ordergood.good.weight}}</div>
                                     </td>
                                     <td class="cart-good-qnt">
                                         <input type="text" maxlength="3" data-type="qnt" name="goods[{{ id }}][qnt]" value="{{ ordergood.qnt }}" />
@@ -95,6 +98,7 @@
                                         <div data-type="withoutGoodsPrice">
                                             {{ cart.price|money }}
                                         </div>
+                                        
                                     </td>                        
                                 </tr>
                             </table>
@@ -114,6 +118,10 @@
                             Курьером
                         </div>
                         
+                        <div class="tabs-item delivery-type" data-id="ems" data-price="{{ cartDeliveries.ems.price }}" data-text="{{ cartDeliveries.ems.text }}">
+                            Почтой
+                        </div>
+                        
                         <div class="tabs-item delivery-type" data-id="pickup" data-price="{{ cartDeliveries.pickup.price }}" data-text="{{ cartDeliveries.pickup.text }}">
                             Самовывоз
                         </div>
@@ -129,6 +137,9 @@
                     
                     <div class="tabs-contents" style="margin-top:60px" data-type="contents">
                         <div class="tabs-content selected">
+                            <div style="float:right" class="cart-ya-fast-order">
+                                <a href="http://market.yandex.ru/addresses.xml?callback=http%3A%2F%2Fnf.balticit.ru%2Fcart"><img src="http://cards2.yandex.net/hlp-get/5814/png/3.png" border="0" /></a>
+                            </div>
                             <div class="cart-delivery-text">
                                 Доставка осуществляется курьером и стоит <span class="price">{{ cartDeliveries.courier.price|money }}</span>
                             </div>
@@ -140,7 +151,7 @@
                                     </th>
                                     <th width="20px"></th>
                                     <th width="221px" colspan="3">
-                                        Телефон*
+                                        Телефон
                                     </th>
                                     <th width="20px"></th>
                                     <th width="221px">
@@ -150,15 +161,15 @@
                                 
                                 <tr>
                                     <td>
-                                        <input type="text" name="delivery[courier][email]" data-name="email" placeholder="Например, mail@mail.ru"{% if currentEmail %} value="{{ currentEmail }}" readonly="readonly"{% endif %} />
+                                        <input type="text" name="delivery[courier][email]" data-name="email" placeholder="mail@mailbox.com"{% if currentEmail %} value="{{ currentEmail }}" readonly="readonly"{% endif %} />
                                     </td>
                                     <td></td>
                                     <td colspan="3">
-                                        <input type="text" name="delivery[courier][phone]" data-name="phone" placeholder="Например, (495)123-45-67"{% if currentPhone %} value="{{ currentPhone }}" {% endif %} />
+                                        <input type="text" name="delivery[courier][phone]" data-name="phone" placeholder="+7 (123) 456-78-90"{% if currentPhone %} value="{{ currentPhone }}" {% endif %} />
                                     </td>
                                     <td></td>
                                     <td>
-                                        <input type="text" name="delivery[courier][city]" data-required="true" data-name="city" placeholder="Например, Москва" />
+                                        <input type="text" name="delivery[courier][city]" data-required="true" data-name="city" placeholder="Москва" {% if currentCity %} value="{{ currentCity }}" {% endif %} />
                                     </td>
                                 </tr>
                                 
@@ -169,19 +180,19 @@
                                 </tr>
                                 <tr>
                                     <td colspan="9">
-                                        <textarea style="width:100%" name="delivery[courier][comment]" data-name="comment" placeholder="Введите дополнительную информацию по заказу" ></textarea>
+                                        <textarea style="width:100%" name="delivery[courier][comment]" data-name="comment" placeholder="Ваш комментарий" >{% if currentComment %}{{ currentComment }}{% endif %}</textarea>
                                     </td>
                                 </tr>
                                 
                                 <tr>
                                     <th>
-                                        Улица*
+                                        Улица
                                     </th>
                                     
                                     <th></th>
                                     
                                     <th>
-                                        Дом*
+                                        Дом
                                     </th>
                                     
                                     <th>
@@ -201,32 +212,221 @@
                                 
                                 <tr>
                                     <td>
-                                        <input type="text" name="delivery[courier][street]" data-required="true" data-name="street" />
+                                        <input type="text" name="delivery[courier][street]" data-required="true" data-name="street"{% if currentStreet %} value="{{ currentStreet }}" {% endif %} />
                                     </td>
                                     
                                     <td></td>
                                     
                                     <td width="74px">
-                                        <input type="text" name="delivery[courier][house]" data-required="true" data-name="house" class="small" />
+                                        <input type="text" name="delivery[courier][house]" data-required="true" data-name="house" class="small"{% if currentHouse %} value="{{ currentHouse }}" {% endif %} />
                                     </td>
                                     
                                     <td width="73px">
-                                        <input type="text" name="delivery[courier][building]" data-name="house" class="small middle" />
+                                        <input type="text" name="delivery[courier][building]" data-name="house" class="small middle"{% if currentBuilding %} value="{{ currentBuilding }}" {% endif %} />
                                     </td>                            
                                     
                                     <td width="74px">
-                                        <input type="text" name="delivery[courier][appartments]" data-name="appartments" class="small" />
+                                        <input type="text" name="delivery[courier][appartments]" data-name="appartments" class="small"{% if currentAppartments %} value="{{ currentAppartments }}" {% endif %} />
                                     </td>
                                     
                                     <td></td>
                                     
                                     <td>
-                                        <input type="text" name="delivery[courier][name]" />
+                                        <input type="text" data-name="name" name="delivery[courier][name]"{% if currentName %} value="{{ currentName }}" {% endif %} />
                                     </td>
                                 </tr>                            
                                 
                             </table>
                         </div>
+                        
+                        <div class="tabs-content">
+                            <div style="float:right" class="cart-ya-fast-order">
+                                <a href="http://market.yandex.ru/addresses.xml?callback=http%3A%2F%2Fnf.balticit.ru%2Fcart"><img src="http://cards2.yandex.net/hlp-get/5814/png/3.png" border="0" /></a>
+                            </div>
+                            <div class="cart-delivery-text">
+                                &nbsp;
+                            </div>
+
+                            
+                            <table class="tabs-address">
+                                <tr>
+                                    <th width="221px">
+                                        Электропочта
+                                    </th>
+                                    <th width="20px"></th>
+                                    <th width="221px" colspan="3">
+                                        Телефон
+                                    </th>
+                                    <th width="20px"></th>
+                                    <th width="221px">
+                                        Город&nbsp;<span class="tabs-address-zip">(с индексом, если не Москва)</span>
+                                    </th>
+                                </tr>
+                                
+                                <tr>
+                                    <td>
+                                        <input type="text" name="delivery[ems][email]" data-name="email" placeholder="mail@mailbox.com"{% if currentEmail %} value="{{ currentEmail }}" readonly="readonly"{% endif %} />
+                                    </td>
+                                    <td></td>
+                                    <td colspan="3">
+                                        <input type="text" name="delivery[ems][phone]" data-name="phone" placeholder="+7 (123) 456-78-90"{% if currentPhone %} value="{{ currentPhone }}" {% endif %} />
+                                    </td>
+                                    <td></td>
+                                    <td>
+                                        <input type="text" name="delivery[ems][city]" data-required="true" data-name="city" placeholder="Москва" {% if currentCity %} value="{{ currentCity }}" {% endif %} />
+                                    </td>
+                                </tr>
+                                
+                                <tr>
+                                    <th colspan="9">
+                                        Ваш комментарий
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <td colspan="9">
+                                        <textarea style="width:100%" name="delivery[ems][comment]" data-name="comment" placeholder="Ваш комментарий" >{% if currentComment %}{{ currentComment }}{% endif %}</textarea>
+                                    </td>
+                                </tr>
+                                
+                                <tr>
+                                    <th>
+                                        Улица
+                                    </th>
+                                    
+                                    <th></th>
+                                    
+                                    <th>
+                                        Дом
+                                    </th>
+                                    
+                                    <th>
+                                        Корп.
+                                    </th>
+                                    
+                                    <th>
+                                        Квартира
+                                    </th>
+                                    
+                                    <th></th>
+                                    
+                                    <th>
+                                        Имя
+                                    </th>
+                                </tr>
+                                
+                                <tr>
+                                    <td>
+                                        <input type="text" name="delivery[ems][street]" data-required="true" data-name="street"{% if currentStreet %} value="{{ currentStreet }}" {% endif %} />
+                                    </td>
+                                    
+                                    <td></td>
+                                    
+                                    <td width="74px">
+                                        <input type="text" name="delivery[ems][house]" data-required="true" data-name="house" class="small"{% if currentHouse %} value="{{ currentHouse }}" {% endif %} />
+                                    </td>
+                                    
+                                    <td width="73px">
+                                        <input type="text" name="delivery[ems][building]" data-name="house" class="small middle"{% if currentBuilding %} value="{{ currentBuilding }}" {% endif %} />
+                                    </td>                            
+                                    
+                                    <td width="74px">
+                                        <input type="text" name="delivery[ems][appartments]" data-name="appartments" class="small"{% if currentAppartments %} value="{{ currentAppartments }}" {% endif %} />
+                                    </td>
+                                    
+                                    <td></td>
+                                    
+                                    <td>
+                                        <input type="text" data-name="name" name="delivery[ems][name]"{% if currentName %} value="{{ currentName }}" {% endif %} />
+                                    </td>
+                                </tr>                            
+                                
+                            </table>
+                            
+                            
+                            <table class="tabs-address">
+                                <tr>
+                                    <th width="221px">
+                                        Откуда
+                                    </th>
+                                    <th width="20px"></th>
+                                    <th width="221px">
+                                        Куда
+                                    </th>
+                                    <th width="20px"></th>
+                                    <th width="73px">
+                                        Вес
+                                    </th>
+                                    <th width="73px">
+                                        Ценность
+                                    </th>
+                                    <th ></th>
+                                    
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input type="text" readonly="readonly" value="Москва"  />
+                                    </td>
+                                    <td></td>
+                                    <td>
+                                        <select id="ems_cities" name="cities"></select>
+                                    </td>
+                                    <td></td>
+                                    <td width="73px">
+                                        <input id="ems_weight" class="small" type="text" placeholder="Вес, кг." value="{{ weight }}" readonly="readonly"  />
+                                    </td>
+                                    <td width="73px">
+                                        <input id="ems_worth" class="small" type="text" placeholder="руб." value="{{ cart.price }}"  />
+                                    </td>
+                                    <td>
+                                        <input type="hidden" id="delivery_price" name="delivery[ems][price]" />
+                                    </td>
+                                </tr>
+                            </table>
+                            <div class="cart-row-title">
+                            <br /><br />
+                                Итого стоимость EMS = <strong id="ems_cost"></strong> руб.
+                            </div>
+                            <script type="text/javascript">
+                            $(document).ready(function(){
+                              
+                              // Список городов
+                              $.getJSON("http://emspost.ru/api/rest/?method=ems.get.locations&type=cities&plain=true&callback=?",
+                              function(data){
+                                $.each(data.rsp.locations, function(i,item){
+                                  $("<option>").val(item.value).html(item.name).appendTo("#ems_cities");
+                                });
+                              });
+                              
+            
+                      
+                              var items = $('.cart-goods-item');
+                              
+                              var total_weight = 0;
+                              items.each(function(){
+                                var qnt = $(this).find('[data-type=qnt]').val();
+                                var weight = $(this).find('[data-type=weight]').html();
+                                total_weight = parseInt(total_weight)+parseInt(qnt*weight);
+                              });
+                              $("#ems_weight").val(parseInt(total_weight));
+                              
+
+                              
+                              // Калькулятор
+                              $("#ems_cities").live('change', function() {
+                                EMS_CALC();
+                              });
+                              
+                              $("#ems_worth").keyup(function() {
+                                EMS_CALC();
+                              });
+
+                            });
+                            </script>
+                            
+                            
+                        </div>
+                        
+                        
                         <div class="tabs-content">
                             <div class="cart-delivery-text">
                                 Вы можете забрать свой заказ по адресу: {{ cartDefaults.pickupAddress }}
@@ -348,7 +548,7 @@
                                     <td class="cart-price">
                                         =&nbsp;
                                     </td>
-                                    <td width="0" class="cart-price" data-type="cartPrice">
+                                    <td width="0" class="cart-price" id="cartPrice" data-type="cartPrice">
                                         {{ cart.price|money }}
                                     </td>                        
                                 </tr>

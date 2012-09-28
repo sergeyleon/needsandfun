@@ -196,6 +196,21 @@ class Goods extends \Core\Abstracts\Singleton
         {
             $this->import($_POST); // Baltic IT adds
         }
+        
+        else if (isset($_POST['toexcel_catalog']))
+        {
+            $this->export_catalog($_POST); // Baltic IT adds
+        }
+        else if (isset($_POST['tomysql_catalog']))
+        {
+            $this->import_catalog($_POST); // Baltic IT adds
+        }
+        
+        else if (isset($_POST['toexcel_simple']))
+        {
+            $this->export_simple($_POST); // Baltic IT adds
+        }
+        
         else if (isset($_POST['proceed']))
         {
             $this->_proceed($_POST);
@@ -239,10 +254,21 @@ class Goods extends \Core\Abstracts\Singleton
         $good->meta_description = $values['meta_description'];
         $good->p_price          = $values['p_price'];
         $good->in_stock         = $values['in_stock'];
+        $good->weight           = $values['weight'];
         $good->sale             = $values['sale'];
         $good->sell_amount      = $values['sell_amount'];
         $good->link             = $values['link'];
         $good->title            = $values['title'];
+        
+        $good->pickup            = $values['pickup'];
+        $good->country_of_origin = $values['country_of_origin'];
+        
+        $good->yml_publish         = $values['yml_publish'];
+        $good->bid                 = $values['bid'];
+        $good->local_delivery_cost = $values['local_delivery_cost'];
+        
+
+        
         if(empty($values['title'])) { $good->title = $values['name']; }
 
 
@@ -252,10 +278,28 @@ class Goods extends \Core\Abstracts\Singleton
           $message = "У товара есть совпадения! Измените ссылку"; 
           $page->setMessage($message);
         }
-        
-      
 
         $good->save();
+        
+
+        //category
+        foreach ($good->goodcategories as $goodCategory)
+        {
+            $goodCategory->delete();    
+        }
+        
+        if (!empty($values['category'])) 
+        {
+            foreach ($values['category'] as $category)
+            {
+                $goodCategory = new \Core\Model\Goodcategory();
+      					$goodCategory->good_id = $good->id;
+      					$goodCategory->category_id = $category;
+      					$goodCategory->save();
+            }
+            
+        }
+
 
         $goodpicture = new \Core\Model\Goodpicture();
         \Core\Model\Picture::multipleUpload($_FILES['pictures'], $good, $goodpicture);
@@ -530,10 +574,9 @@ private function _getGoods($page = 1, $categories = false, $category = false)
     
     public function import($values)  // Baltic IT adds
     {
-
-       // Если файл загружен успешно, перемещаем его
-       // из временной директории в конечную
-       move_uploaded_file($_FILES["excel"]["tmp_name"], $_SERVER['DOCUMENT_ROOT']."/uploads/".$_FILES["excel"]["name"]);
+      // Если файл загружен успешно, перемещаем его
+      // из временной директории в конечную
+      move_uploaded_file($_FILES["excel"]["tmp_name"], $_SERVER['DOCUMENT_ROOT']."/uploads/".$_FILES["excel"]["name"]);
 
       require_once $_SERVER['DOCUMENT_ROOT'].'/app/library/Classes/PHPExcel.php';
       require_once $_SERVER['DOCUMENT_ROOT'].'/app/library/Classes/PHPExcel/IOFactory.php';   
@@ -549,7 +592,6 @@ private function _getGoods($page = 1, $categories = false, $category = false)
       $error_category = '';
       $error_articul = '';
       foreach ($objPHPExcel->getWorksheetIterator() as $worksheet) {
-      
         $worksheetTitle = $worksheet->getTitle();
         $highestRow = $worksheet->getHighestRow(); // например, 10
         $highestColumn = $worksheet->getHighestColumn(); // например, 'F'
@@ -567,7 +609,9 @@ private function _getGoods($page = 1, $categories = false, $category = false)
             
             $data[$col]= $val;
           }
-   
+		  
+		  if ( is_null($data[0]) ) continue;
+		  
           unset($checkitems);
           if($data[0] == '0') {$good = new \Core\Model\Good(); $checkitems = \Core\Model\Good::all(array('conditions' => array('article = ?', $data[5]))); } 
           else { $good = \Core\Model\Good::find($data[0]); }
@@ -589,162 +633,133 @@ private function _getGoods($page = 1, $categories = false, $category = false)
           $good->compound         = $data[14];
           $good->is_available     = $data[22];
           $good->type_id          = $data[16];
-          $good->sell_amount      = $data[20];
+          $good->weight           = $data[20];
           $good->product_sku      = $data[21];
           $good->supplier_id      = $data[15];
           $good->in_stock         = $data[23];
           $good->sale             = $data[24];
           $good->title            = $data[25];
+          $good->yml_publish      = $data[26];
+          
             
-          if (empty($checkitems) )
-          {
+      if ( empty($checkitems) ) 
+		  { 
+			if ($good->is_available == '') {
+				$good->is_available = '0'; 
+			}
+			
+			if ($good->yml_publish == '') {
+				$good->yml_publish = '0'; 
+			}
           
-          if($good->is_available == '') { $good->is_available = '0';}
+			if ( $good->article == '' or $good->product_sku == '' ) {
+				$error_articul = $error_articul.', '.$good->name;
+			}
           
-          if($good->article == '' or $good->product_sku == ''){
-            $error_articul = $error_articul.', '.$good->name;
-          }
-          if($data[17] == ''){
-            $error_category = $error_category.', '.$good->name;
-          }
-          
+			if ( $data[17] == '' ) {
+				$error_category = $error_category.', '.$good->name;
+			}
           
           
-            $good->save();
+			$good->save();
           
-          
-          
-          
-          
-          // PICTURES
-          $pic_array = explode(",", $data[19]);
+			// PICTURES
+			$pic_array = explode(",", $data[19]);
 
-          foreach($pic_array as $key => $value) {
-            if (trim($value) != '') {
-              $cur_pic = explode("/", $value);
+	        foreach($pic_array as $key => $value) {
+				if (trim($value) != '') {
+					$cur_pic = explode("/", $value);
 
-              //  ADD NEW
-              
-              if(empty($cur_pic[1])) {
-                if (file_exists(ORIGINALS.'/'.$cur_pic[0])) {
-                
-                  unset($checkpics);
-                  $checkpics = \Core\Model\Picture::all(array('conditions' => array('filename = ?', $cur_pic[0])));
-                  if (empty($checkpics) )
-                  {
-                
-                  $goodpicture = new \Core\Model\Goodpicture();
-                  $picture = new \Core\Model\Picture();
+					// ADD NEW
+              		if ( empty($cur_pic[1]) ) {
+						if (file_exists(ORIGINALS.'/'.$cur_pic[0])) {
+					        unset($checkpics);
+							$checkpics = \Core\Model\Picture::all(array('conditions' => array('filename = ?', $cur_pic[0])));
+							if (empty($checkpics) ) {
+								$goodpicture = new \Core\Model\Goodpicture();
+								$picture = new \Core\Model\Picture();
   
-                  CreateThumb(ORIGINALS.'/'.$cur_pic[0], '455', '455', UPLOADS."/full/".$cur_pic[0],'0');
-                  CreateThumb(ORIGINALS.'/'.$cur_pic[0], '50', '50', UPLOADS."/icon/".$cur_pic[0],'1');
-                  CreateThumb(ORIGINALS.'/'.$cur_pic[0], '150', '150', UPLOADS."/small/".$cur_pic[0],'0');
+								CreateThumb(ORIGINALS.'/'.$cur_pic[0], '455', '455', UPLOADS."/full/".$cur_pic[0],'0');
+								CreateThumb(ORIGINALS.'/'.$cur_pic[0], '50', '50', UPLOADS."/icon/".$cur_pic[0],'1');
+								CreateThumb(ORIGINALS.'/'.$cur_pic[0], '150', '150', UPLOADS."/small/".$cur_pic[0],'0');
                   
-                  $picture->filename = $cur_pic[0];
-                  $picture->save();
+								$picture->filename = $cur_pic[0];
+								$picture->save();
                   
-                  $goodpicture->picture_id = $picture->id;
-                  $goodpicture->item_id = $good->id;
-                  $goodpicture->save();
-                  
-                  }
-                  
-                }  
-                else { 
-                  $error_pic = $error_pic.', '.$good->name.':'.ORIGINALS.'/'.$cur_pic[0];
-                }
-              }
-              
-            }  
-          
-            
-          }
+								$goodpicture->picture_id = $picture->id;
+								$goodpicture->item_id = $good->id;
+								$goodpicture->save();                  
+							}
+						}  
+						else { 
+						  $error_pic = $error_pic.', '.$good->name.':'.ORIGINALS.'/'.$cur_pic[0];
+						}
+					}  
+				}	  
+			}
 
-          
-          $category_array = explode(",", $data[17]);
-          
-          
-          // CHECK AND DELETE
-          $items = \Core\Model\Goodcategory::all(array('conditions' => array('good_id = ? ', $good->id)));
-          
-          foreach ($items as $item)
-          {
-              $check = '0';
-              foreach($category_array as $key => $value) {
-                if (trim($value) != '') {
-                  if($value == $item->category_id) { $check = '1'; break; }
-                }
-              }
-              
-              if($check == '0') { $item->delete(); }
-          }
-          
-          // CHECK AND ADD
-          foreach($category_array as $key => $value) {
-            if (trim($value) != '') {
-            
-              $items2 = \Core\Model\Goodcategory::all(array('conditions' => array('good_id = ? and category_id=?', $good->id, $value)));
-            
-              if (!count($items2))
-              {       
-                  $goodCategory = new \Core\Model\Goodcategory();
-                  $goodCategory->good_id = $good->id;
-                  $goodCategory->category_id = $value;
-                  $goodCategory->save();
-              }
-
-            
-            }
-          }
-          
-          
-          // SIZE ADD EDIT DELETE FROM EXCEL
-          $size_array = explode(",", $data[18]);
-          
-          $toDelete = array();
-          
-          foreach($size_array as $key => $value) {
-            if (trim($value) != '') {
-            
-              $cur_size = explode("/", $value);
-              
-              if ($cur_size[2]!= '')
-              {
-                  if($cur_size[0] == '0') {$size = new \Core\Model\Size(); } 
-                  else { $size = \Core\Model\Size::find($cur_size[0]); }
-
-                  $size->name = $cur_size[1];
-                  $size->price = $cur_size[2];
-                  $size->good_id = $good->id;
-                  $size->save();
-                  $dontDelete[] = $size->id;
-              }
-
-            
-            }
-          }
-          
-          $deleteSizes = \Core\Model\Size::all(array('conditions' => array('good_id = ?', $good->id)));
-              
-          foreach ($deleteSizes as $size) 
-          {
-              if (!in_array($size->id, $dontDelete))
-              {
-                  $size->deleted = new \DateTime();
-                  $size->save();
-              }
-          }
-          
-        
+       
+      $category_array = explode(",", $data[17]); 
+      foreach ($good->goodcategories as $goodCategory)
+        {
+            $goodCategory->delete();    
         }
         
-        }
+        foreach($category_array as $key => $value) {
+			     if (trim($value) != '') {
+                $goodCategory = new \Core\Model\Goodcategory();
+      					$goodCategory->good_id = $good->id;
+      					$goodCategory->category_id = $value;
+      					$goodCategory->save();
+            }
+        } 
+       
       
+          
+			// SIZE ADD EDIT DELETE FROM EXCEL
+			$size_array = explode(",", $data[18]);
+          
+			$toDelete = array();
+
+			foreach($size_array as $key => $value) {
+			  if (trim($value) != '') {
+
+				$cur_size = explode("/", $value);
+				if ($cur_size[2]!= '')
+				{
+				  if($cur_size[0] == '0' || !strlen($cur_size[0])) {$size = new \Core\Model\Size(); } 
+				  else { 
+					  $size = \Core\Model\Size::find($cur_size[0]); 
+				  }
+
+					$size->name = $cur_size[1];
+					$size->price = $cur_size[2];
+					$size->good_id = $good->id;
+					$size->save();
+					$dontDelete[] = $size->id;
+				}
+
+
+			  }
+			}
+          
+			$deleteSizes = \Core\Model\Size::all(array('conditions' => array('good_id = ?', $good->id)));
+
+			foreach ($deleteSizes as $size) 
+			{
+				if (!in_array($size->id, $dontDelete))
+				{
+					$size->deleted = new \DateTime();
+					$size->save();
+				}
+			}
+          }
+        }      
       }
       
-        if($error_pic != '' or $error_articul != '' or $error_category != '') {
-          $page = \Core\Page::get();
-        }
+		if($error_pic != '' or $error_articul != '' or $error_category != '') {
+		  $page = \Core\Page::get();
+		}
         
         if($error_pic != '') { $message_1 = "Изображение отсутствует!".$error_pic; $page->setMessage($message_1);} 
         else { $message_1 = '';}
@@ -822,12 +837,13 @@ private function _getGoods($page = 1, $categories = false, $category = false)
                   ->setCellValue('R1', 'category (Категория)')
                   ->setCellValue('S1', 'id/name/price (если указать id = 0, то добавится новый размер)')
                   ->setCellValue('T1', 'id/filename (если указать только имя картинки то добавиться новая)')
-                  ->setCellValue('U1', 'sell_amount (Кол-во проданных)')
+                  ->setCellValue('U1', 'weight (Вес)')
                   ->setCellValue('V1', 'product_sku (Артикул производителя)')
                   ->setCellValue('W1', 'is_available (Видимость пользователю)')
                   ->setCellValue('X1', 'in_stock (Кол-во на складе)')
                   ->setCellValue('Y1', 'sale (Распродажа)')
-                  ->setCellValue('Z1', 'title (Тайтл)');
+                  ->setCellValue('Z1', 'title (Тайтл)')
+                  ->setCellValue('AA1', 'yml_publish (Публикация в каталоге 0 не публикуется, 1 публикуется)');
                   
       
       $i = 1;
@@ -855,6 +871,8 @@ private function _getGoods($page = 1, $categories = false, $category = false)
         }
       	
         $objPHPExcel->setActiveSheetIndex(0);
+        
+        $objPHPExcel->getDefaultStyle()->getNumberFormat()->setFormatCode(\PHPExcel_Style_NumberFormat::FORMAT_TEXT);
 
         $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow('0', $i, $goods->id); 
         $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow('1', $i, $goods->name); 
@@ -876,12 +894,13 @@ private function _getGoods($page = 1, $categories = false, $category = false)
         $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow('17', $i, $goods->getCategories());
         $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow('18', $i, $curSizeArr);
         $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow('19', $i, $curPicArr); 
-        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow('20', $i, $goods->sell_amount); 
+        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow('20', $i, $goods->weight);
         $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow('21', $i, $goods->product_sku); 
         $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow('22', $i, $goods->is_available);
         $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow('23', $i, $goods->in_stock);
         $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow('24', $i, $goods->sale);
         $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow('25', $i, $goods->title);
+        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow('26', $i, $goods->yml_publish);
       }
 
       // Rename sheet
@@ -900,6 +919,358 @@ private function _getGoods($page = 1, $categories = false, $category = false)
       exit;
      
     }
+    
+// MARKET CATALOG EXPORT IMPORT
+    public function import_catalog($values)  // Baltic IT adds
+    {
+      // Если файл загружен успешно, перемещаем его
+      // из временной директории в конечную
+      move_uploaded_file($_FILES["excel"]["tmp_name"], $_SERVER['DOCUMENT_ROOT']."/uploads/".$_FILES["excel"]["name"]);
+
+      require_once $_SERVER['DOCUMENT_ROOT'].'/app/library/Classes/PHPExcel.php';
+      require_once $_SERVER['DOCUMENT_ROOT'].'/app/library/Classes/PHPExcel/IOFactory.php';   
+      
+      if (!file_exists($_SERVER['DOCUMENT_ROOT']."/uploads/".$_FILES["excel"]["name"])) {
+      	exit("Please run 05featuredemo.php first.\n");
+      }
+      
+      $objReader = \PHPExcel_IOFactory::createReader('Excel2007');
+      $objPHPExcel = $objReader->load($_SERVER['DOCUMENT_ROOT']."/uploads/".$_FILES["excel"]["name"]);
+      
+      $error_pic = '';
+      $error_category = '';
+      $error_articul = '';
+      foreach ($objPHPExcel->getWorksheetIterator() as $worksheet) {
+        $worksheetTitle = $worksheet->getTitle();
+        $highestRow = $worksheet->getHighestRow(); // например, 10
+        $highestColumn = $worksheet->getHighestColumn(); // например, 'F'
+        $highestColumnIndex = \PHPExcel_Cell::columnIndexFromString($highestColumn);
+        $nrColumns = ord($highestColumn) - 64;
+        
+        for ($row = 2; $row <= $highestRow; ++ $row)
+        {
+        
+          for ($col = 0; $col < $highestColumnIndex; ++ $col)
+          {
+            $cell = $worksheet->getCellByColumnAndRow($col, $row);
+            $val = $cell->getValue();
+            $dataType = \PHPExcel_Cell_DataType::dataTypeForValue($val);
+            
+            $data[$col]= $val;
+          }
+		  
+		   if ( is_null($data[0]) ) continue;
+		  
+          unset($checkitems);
+          if($data[0] == '0') {$good = new \Core\Model\Good(); $checkitems = \Core\Model\Good::all(array('conditions' => array('product_sku = ?', $data[6]))); } 
+          else { $good = \Core\Model\Good::find($data[0]); }
+          
+          $good->id                   = $data[0];
+          $good->name                 = $data[1];
+          $good->brand_id             = $data[2];
+          $good->supplier_id          = $data[3];
+
+          $good->product_sku          = $data[6];
+          $good->is_available         = $data[7];
+          $good->in_stock             = $data[8];
+          $good->bid                  = $data[9];
+          $good->local_delivery_cost  = $data[10];
+          $good->pickup               = $data[11];
+          $good->country_of_origin    = $data[12];
+
+            
+
+      if ( empty($checkitems) ) 
+		  { 
+			if ($good->is_available == '') {
+				$good->is_available = '0'; 
+			}
+          
+			if ( $good->product_sku == '' ) {
+				$error_articul = $error_articul.', '.$good->name;
+			}
+          
+			if ( $data[4] == '' ) {
+				$error_category = $error_category.', '.$good->name;
+			}
+          
+          
+			$good->save();
+          
+          
+			$category_array = explode(",", $data[4]);
+          
+          
+			// CHECK AND DELETE
+			$items = \Core\Model\Goodcategory::all(array('conditions' => array('good_id = ? ', $good->id)));
+          
+			foreach ($items as $item)
+			{
+				$check = '0';
+				foreach($category_array as $key => $value) {
+				  if (trim($value) != '') {
+					if($value == $item->category_id) { $check = '1'; break; }
+				  }
+				}
+
+				if($check == '0') { $item->delete(); }
+			}
+          
+			// CHECK AND ADD
+			foreach($category_array as $key => $value) {
+			  if (trim($value) != '') {
+
+				$items2 = \Core\Model\Goodcategory::all(array('conditions' => array('good_id = ? and category_id=?', $good->id, $value)));
+
+				if (!count($items2))
+				{       
+					$goodCategory = new \Core\Model\Goodcategory();
+					$goodCategory->good_id = $good->id;
+					$goodCategory->category_id = $value;
+					$goodCategory->save();
+				}
+
+
+			  }
+			}
+          
+          
+			// SIZE ADD EDIT DELETE FROM EXCEL
+			$size_array = explode(",", $data[5]);
+          
+			$toDelete = array();
+
+			foreach($size_array as $key => $value) {
+			  if (trim($value) != '') {
+
+				$cur_size = explode("/", $value);
+				if ($cur_size[2]!= '')
+				{
+				  if($cur_size[0] == '0' || !strlen($cur_size[0])) {$size = new \Core\Model\Size(); } 
+				  else { 
+					  $size = \Core\Model\Size::find($cur_size[0]); 
+				  }
+
+					$size->name = $cur_size[1];
+					$size->price = $cur_size[2];
+					$size->good_id = $good->id;
+					$size->save();
+					$dontDelete[] = $size->id;
+				}
+
+
+			  }
+			}
+          
+
+          }
+        }      
+      }
+      
+		if($error_articul != '' or $error_category != '') {
+		  $page = \Core\Page::get();
+		}
+        
+        
+        if($error_articul != '') { $message_2 = "Oтсутствует артикул!".$error_articul; $page->setMessage($message_2);} 
+        else { $message_2 = '';}
+        if($error_category != '') { $message_3 = "Oтсутствует категория!".$error_category; $page->setMessage($message_3);} 
+        else { $message_3 = '';}
+        
+
+        $this->router->go($this->router->generate('manage_goods_exp'));
+    }
+    
+    
+    public function export_catalog($values)  // Baltic IT adds
+    {
+
+     //   error_reporting(E_ALL);
+        
+        /** PHPExcel */
+        require_once $_SERVER['DOCUMENT_ROOT'].'/app/library/Classes/PHPExcel.php';
+        
+        /** PHPExcel_IOFactory */
+        require_once $_SERVER['DOCUMENT_ROOT'].'/app/library/Classes/PHPExcel/IOFactory.php';    
+        
+        $this->page['selectedCategory'] = $this->cookieStorage->getValue('goods_selectedCategory') ?: 'all';
+        $this->page['categories'] = \Core\Model\Category::getAll();
+        
+        if($values['limit'] == '') { $values['limit'] = '1000';}
+        if($values['start'] == '') { $values['start'] = '0';}
+        
+        $this->page['goods'] = \Core\Model\Good::all(array(
+      				'conditions' => array('yml_publish = ? and deleted IS NULL',1),
+      				'order' => 'id',
+      				'limit' => $values['limit'],
+      				'offset'=> $values['start']
+
+      			));
+        
+      
+      // Create new PHPExcel object
+      
+      $objPHPExcel = new \PHPExcel();
+      
+      // Set properties
+      $objPHPExcel->getProperties()->setCreator("Maarten Balliauw")
+      					 ->setLastModifiedBy("Maarten Balliauw")
+      					 ->setTitle("Office 2007 XLSX Test Document")
+      					 ->setSubject("Office 2007 XLSX Test Document")
+      					 ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
+      					 ->setKeywords("office 2007 openxml php")
+      					 ->setCategory("Test result file");
+
+      // Add some data
+      $objPHPExcel->setActiveSheetIndex(0)
+                  ->setCellValue('A1', 'id')
+                  ->setCellValue('B1', 'name (Название товара)')
+                  ->setCellValue('C1', 'brand_id (Производитель)')
+                  ->setCellValue('D1', 'supplier_id (Поставщик)')
+                  ->setCellValue('E1', 'category (Категория)')
+                  ->setCellValue('F1', 'id/name/price ( Размер, если указать id = 0, то добавится новый размер)')
+                  ->setCellValue('G1', 'product_sku (Артикул производителя)')
+                  ->setCellValue('H1', 'is_available (Видимость пользователю)')
+                  ->setCellValue('I1', 'in_stock (Кол-во на складе)')
+                  ->setCellValue('J1', 'bid (Ставка)')
+                  ->setCellValue('K1', 'local_delivery_cost (Стоимость доставки)')
+                  ->setCellValue('L1', 'pickup (Возможность самовывоза)')
+                  ->setCellValue('M1', 'country_of_origin (Страна производства)');
+                  
+      
+      $i = 1;
+      foreach ($this->page['goods'] as $goods)
+      {
+        $i++;
+        
+        // ARRAY SIZE
+        $curSizeArr = '';
+        $sizes = \Core\Model\Size::all(array('conditions' => array('good_id=? and deleted IS NULL', $goods->id)));
+
+        foreach ($sizes as $size) {
+          $curSizeArr = $curSizeArr.$size->id.'/'.$size->name.'/'.$size->price.',';
+        }
+      	
+        $objPHPExcel->setActiveSheetIndex(0);
+
+        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow('0', $i, $goods->id); 
+        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow('1', $i, $goods->name); 
+        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow('2', $i, $goods->brand_id);
+        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow('3', $i, $goods->supplier_id); 
+        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow('4', $i, $goods->getCategories());
+        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow('5', $i, $curSizeArr);
+        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow('6', $i, $goods->product_sku); 
+        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow('7', $i, $goods->is_available); 
+        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow('8', $i, $goods->in_stock); 
+        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow('9', $i, $goods->bid); 
+        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow('10', $i, $goods->local_delivery_cost); 
+        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow('11', $i, $goods->pickup); 
+        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow('12', $i, $goods->country_of_origin); 
+      
+      }
+
+      // Rename sheet
+      $objPHPExcel->getActiveSheet()->setTitle('Yml');
+      
+      // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+      $objPHPExcel->setActiveSheetIndex(0);
+      
+      // Redirect output to a client’s web browser (Excel2007)
+      header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+      header('Content-Disposition: attachment;filename="yml_catalog.xlsx"');
+      header('Cache-Control: max-age=0');
+      
+      $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+      $objWriter->save('php://output');
+      exit;
+     
+    }
+
+
+    public function export_simple($values)  // Baltic IT adds
+    {
+
+     //   error_reporting(E_ALL);
+        
+        /** PHPExcel */
+        require_once $_SERVER['DOCUMENT_ROOT'].'/app/library/Classes/PHPExcel.php';
+        
+        /** PHPExcel_IOFactory */
+        require_once $_SERVER['DOCUMENT_ROOT'].'/app/library/Classes/PHPExcel/IOFactory.php';    
+        
+        $this->page['selectedCategory'] = $this->cookieStorage->getValue('goods_selectedCategory') ?: 'all';
+        $this->page['categories'] = \Core\Model\Category::getAll();
+        
+        if($values['limit'] == '') { $values['limit'] = '1000';}
+        if($values['start'] == '') { $values['start'] = '0';}
+        
+        $this->page['goods'] = \Core\Model\Good::all(array(
+      				'conditions' => array('deleted IS NULL'),
+      				'order' => 'id',
+      				'limit' => $values['limit'],
+      				'offset'=> $values['start']
+
+      			));
+        
+      
+      // Create new PHPExcel object
+      
+      $objPHPExcel = new \PHPExcel();
+      
+      // Set properties
+      $objPHPExcel->getProperties()->setCreator("Maarten Balliauw")
+      					 ->setLastModifiedBy("Maarten Balliauw")
+      					 ->setTitle("Office 2007 XLSX Test Document")
+      					 ->setSubject("Office 2007 XLSX Test Document")
+      					 ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
+      					 ->setKeywords("office 2007 openxml php")
+      					 ->setCategory("Test result file");
+
+      // Add some data
+      $objPHPExcel->setActiveSheetIndex(0)
+                  ->setCellValue('A1', 'id')
+                  ->setCellValue('B1', 'sell_amount (Кол-во проданных)');
+                  
+      
+      $i = 1;
+      foreach ($this->page['goods'] as $goods)
+      {
+        $i++;
+        $count = 0;
+        
+        $order_good = \Core\Model\Ordergood::all(array('conditions' => array('size_id = ? ', $goods->id )));
+        if(count($order_good) > 0) {
+        $order_status = \Core\Model\Orderstatus::all(array('conditions' => array('order_id = ? and status_id = ?', $order_good[0]->order_id, 4 )));
+
+          if (count($order_status) > 0 ) {
+            $count = count($order_good);
+          }
+        }
+        
+        
+        $objPHPExcel->setActiveSheetIndex(0);
+
+        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow('0', $i, $goods->id); 
+        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow('1', $i, $count); 
+      }
+
+      // Rename sheet
+      $objPHPExcel->getActiveSheet()->setTitle('Simple');
+      
+      // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+      $objPHPExcel->setActiveSheetIndex(0);
+      
+      // Redirect output to a client’s web browser (Excel2007)
+      header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+      header('Content-Disposition: attachment;filename="simple_catalog.xlsx"');
+      header('Cache-Control: max-age=0');
+      
+      $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+      $objWriter->save('php://output');
+      exit;
+     
+    }
+    
     
     public function addCategory()
     {
@@ -1002,12 +1373,54 @@ private function _getGoods($page = 1, $categories = false, $category = false)
     {
         $this->_expform();
     }
+    
+    public function exp_catalog()  // Baltic IT adds
+    {
+        $this->_expform_catalog();
+    }
+    
+    public function exp_simple()  // Baltic IT adds
+    {
+        $this->_expform_simple();
+    }
 
     public function edit($goodId)
     {
         $page = $this->getPage();
-        $page['item'] = \Core\Model\Good::find($goodId);
+        $page['item'] = \Core\Model\Good::find($goodId);        
         $page['properties'] = $page['item']->getProperties();
+        
+        $page['categories'] = \Core\Model\Category::getAll();
+        
+       
+    
+        
+        $good_sizes = \Core\Model\Size::all(array('conditions' => array('good_id = ? ', $goodId )));
+        $i = 0;
+        foreach ( $good_sizes as $good_size) { 
+          $order_goods = \Core\Model\Ordergood::all(array('conditions' => array('size_id = ? ', $good_size->id )));
+          
+          if(count($order_goods) > 0 ) {
+            foreach ( $order_goods as $order_good) {
+              $order_status = \Core\Model\Orderstatus::all(array('conditions' => array('order_id = ? and status_id = ?', $order_good->order_id,4 )));
+              if (count($order_status) > 0 ) { $i++; }
+            }
+
+          }
+          
+        }
+        
+        $order_goods = \Core\Model\Ordergood::all(array('conditions' => array('size_id = ? ', $goodId )));
+        
+        
+        $page['current_category'] = explode(",",$page['item']->getCategories());
+        
+        
+        
+        
+        
+        
+        $page['order_good'] = $i;
         
         $this->_form();
     }
@@ -1023,5 +1436,17 @@ private function _getGoods($page = 1, $categories = false, $category = false)
     {
         $page = $this->getPage();
         $page->display('goods/expform.twig');        
-    }  
+    }
+    
+    private function _expform_catalog()
+    {
+        $page = $this->getPage();
+        $page->display('goods/expform_catalog.twig');        
+    }
+    
+    private function _expform_simple()
+    {
+        $page = $this->getPage();
+        $page->display('goods/expform_simple.twig');        
+    }
 }

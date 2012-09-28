@@ -119,14 +119,25 @@
       <header>
         {% block header %}
             <div class="header">
-                <div class="header-wrap">
-                    <div class="header-item sparkles"></div>                
-                    <div class="header-item info">
-                        Магазин детских товаров<br />и афиша главных событий<br />Москвы для детей
+                <div class="header-wrap">              
+                    <div class="header-item search">
+                        <span>Магазин и афиша для детей</span>
+						<form action="#" class="header-search">
+							<input type="text" value="Искать что-нибудь">
+							<div class="select">
+								<div class="selected">в товарах</div>
+								<ul class="dropdown">
+									<li class="hidden">в товарах
+									<li>в событиях
+									<li>в местах	
+									<li>в статьях
+								</ul>
+								<input type="hidden" name="searchType" value="1">
+							</div>
+							<button></button>
+						</form>
                     </div>
-                    <a href="/" class="header-item logo">
-
-                    </a>
+                    <a href="/" class="header-item logo"></a>
                     
                     <div class="header-item phones">
                         <div class="header-phone">
@@ -210,7 +221,6 @@
                     
                 </div>
 				</noindex>
-                <div class="header-shadow"></div>
                 <div class="header-line"></div>
             </div>
             
@@ -426,9 +436,17 @@
                       Нарушение авторских прав грозит большими неприятностями нарушившему наши права
                   </td>
                   <td class="last">
-<a href="http://www.kids-price.ru"><img height="31" width="88" alt="Kids-Price.Ru - цены на детские товары, коляски, автомобильные детские кресла, одежду и обувь." src="http://www.kids-price.ru/i/banner3.gif" border="0" /></a>
-<a href="http://kupitigra.ru" title="Каталог детских товаров"><img src="http://kupitigra.ru/images/buttons/kupitigra-3.png" height="31" width="88" title="Каталог детских товаров" alt="Каталог детских товаров" /></a>                          
-                      </div>
+                    {% if displayFooterButtons %}
+                    <a href="http://www.kids-price.ru">
+                      <img height="31" width="88" 
+                           alt="Kids-Price.Ru - цены на детские товары, коляски, автомобильные детские кресла, одежду и обувь." 
+                           src="http://www.kids-price.ru/i/banner3.gif" border="0" />
+                    </a>
+                    <a href="http://kupitigra.ru" title="Каталог детских товаров">
+                      <img src="http://kupitigra.ru/images/buttons/kupitigra-3.png" height="31" width="88" 
+                           title="Каталог детских товаров" alt="Каталог детских товаров" />
+                    </a>      
+                    {% endif %}
                   </td>
               </tr>
           </table>

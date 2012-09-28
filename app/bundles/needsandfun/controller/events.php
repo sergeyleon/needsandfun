@@ -45,7 +45,6 @@ class Events extends \Core\Abstracts\Authorized
 
 	public function index()
     {
-    //echo "sdfsdf";
         $this->_categories();
         $this->page['categories'] = \Core\Model\Eventcategory::getAll();
 
@@ -124,9 +123,9 @@ class Events extends \Core\Abstracts\Authorized
         
         
 
-        if($age_from != '' && $age_to != '') { $conditions[] = ' age_from >= ' . $age_from. ' AND age_to <='. $age_to ;}
+        if($age_from != '' && $age_to != '') { $conditions[] = ' age_from >= ' . $age_from. ' AND age_to <= '. $age_to ;}
         if($age_from != '' && $age_to == '') { $conditions[] = ' age_from >= ' . $age_from ; }
-        if($age_from == '' && $age_to != '') { $conditions[] = ' age_to <='. $age_to ;  }
+        if($age_from == '' && $age_to != '') { $conditions[] = ' age_to <= '. $age_to ; }
         if($age_from == '' && $age_to == '') { }
         
         $options = array('conditions' => array(implode(' AND ', $conditions)));
@@ -140,11 +139,8 @@ class Events extends \Core\Abstracts\Authorized
         // baltic it
         
 
-
         $this->page->display('events/event.twig');
-        
-        
-        
+
     }
     
     
@@ -198,13 +194,47 @@ class Events extends \Core\Abstracts\Authorized
 
         if (is_numeric($page))
         {
-            $this->page['pager'] = \Core\Model\Event::getPager($page, $this->page['currentCategory'], $route, $filter);
+            $this->page['pager'] = \Core\Model\Event::getPager2($page, $this->page['currentCategory'], $route, $filter);
         }
 
         $this->page['items']      = \Core\Model\Event::getAll($options);
         $this->page['metros']     = \Core\Model\Metro::getAll();
 
         $this->page->display('events/index.twig');
+        
+    }
+
+
+public function rss() 
+    {   
+        $category = 'top';
+        $this->page['currentCategory'] = \Core\Model\Eventcategory::from_url($category); 
+        $categoryId = $this->page['currentCategory']->id;
+
+        $this->_categories($categoryId);
+        $this->getStorage('flash')->setValue('eventCategoryId', $categoryId);
+        
+        $categories = $this->page['currentCategory']->getChildren();
+
+        $filter = isset($_GET['filter'])
+            ? $_GET['filter']
+            : false;
+
+        $sorter = isset($_GET['sort'])
+            ? $_GET['sort']
+            : array('type' => 'date', 'dir' => 'desc');
+
+        $options = array(
+            'categories' => $categories,
+            'filter'     => $filter,
+            'sort'       => $sorter
+        );
+
+
+        $this->page['items']      = \Core\Model\Event::getAll($options);
+        $this->page['metros']     = \Core\Model\Metro::getAll();
+
+        $this->page->display('events/rss.twig');
         
         
         

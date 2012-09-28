@@ -1,0 +1,76 @@
+{% extends defaults.layouts ~ '/manage.twig' %}
+
+{% block title %}
+  Добавить товар к заказу
+{% endblock %}
+
+{% block content %}
+	<div class="header-title">
+        {{ block('title') }}
+    </div>
+
+<form method="post">
+<input type="text" name="query" value="" />
+<button type="submit" name="findNewItem" >
+    Искать товар
+</button>
+</form> 
+<br />
+<form method="post">
+  <input type="hidden" name="orderId" value="{{ order }}" />
+    <table class="items-table">
+        <thead>
+            <tr>
+                <th width="50px">
+                    <div>№ id</div>
+                </th>
+                <th>
+                    <div>Товар</div>
+                </th>
+                <th>
+                    <div>Размер</div>
+                </th>
+                <th width="150px">
+                	<div>Цена</div>
+                </th>
+                <th class="left" width="250px">
+                    <div>Действие</div>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for good in goods %}        
+                <tr class="items-table-item" style="background:#{% if loop.index % 2 %}f5f5f5{% else %}fff{% endif %}">
+                
+                    <td>{{ good.id }}</td>
+                    <td>{{ good.name }}</td>
+                    <td>
+                        {% for size in good.sizes %}
+                          <div style="padding:4px">{{ size.name }}&nbsp;</div>
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% for size in good.sizes %}
+                          <div style="padding:4px">{{ size.price }}&nbsp;</div>
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% for size in good.sizes %}
+                          <div style="padding:1px">
+                          <button type="submit" value="{{ size.id }}" name="inOrder">
+                            В заказ
+                          </button>
+                        </div>
+                        {% endfor %}
+                    </td>
+            {% else %}
+                <tr>
+                    <td colspan="4">
+                        Ни одного товара не найдено!
+                    </td>
+                </tr>
+            {% endfor %}                    
+        </tbody>
+    </table> 
+</form>
+{% endblock %}

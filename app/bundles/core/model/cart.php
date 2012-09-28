@@ -175,7 +175,7 @@ class Cart extends \Core\Abstracts\Singleton
                 }
             }
 
-            $this->_order->setDiscount($client->discount['reviews']['discount'], $client->discount['summ']['discount']);
+            $this->_order->setDiscount($client->discount['reviews']['discount'], $client->discount['summ']['discount'],$data['delivery'][$deliveryType]['price']);
 
             if ($client)
             {

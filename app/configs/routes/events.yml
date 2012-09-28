@@ -11,6 +11,11 @@ index:
   defaults:
     page: 1  
     controller: Events:index
+    
+rss:
+  pattern: /rss
+  defaults: 
+    controller: Events:rss
 
 category_page:
   pattern: -{category}-page-{page}

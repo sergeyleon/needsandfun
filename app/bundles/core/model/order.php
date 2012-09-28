@@ -19,9 +19,9 @@ class Order extends \ActiveRecord\Model
         array('client')
     );
 
-    public function setDiscount($number, $percent)
+    public function setDiscount($number, $percent, $delivery)
     {
-        $this->discount = ($this->price - $number) * $percent/100;
+        $this->discount = ($this->price - $number + $delivery) * $percent/100;
         $this->save();
     }
     
