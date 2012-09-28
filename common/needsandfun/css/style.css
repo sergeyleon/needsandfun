@@ -302,7 +302,7 @@ body {
     width: 100%;
     padding: 3px 4px;
 }
-
+.header-item.search {display:none}
 
 /*#fd6500*/
 .header {
