@@ -16,7 +16,7 @@
                     <div>№№</div>
                 </th>
 
-                <th width="120px">
+                <th width="90px">
                     <div>Создан</div>
                 </th>
 
@@ -31,16 +31,23 @@
                     <div>Товары</div>
                 </th>
 
-                <th width="100px">
+                <th width="70px">
                     <div>Сумма</div>
                 </th>
 
-                <th width="100px">
+                <th width="70px">
                     <div>Скидка</div>
                 </th>                
 
-                <th width="200px" class="left">
-                    <div>Доставка</div>
+                <th width="110px" class="left">
+                    <div>Способ</div>
+                </th>
+
+		<th width="120px" class="left">
+                    <div>Дата доставки</div>
+                </th>
+		<th width="100px" class="left">
+                    <div>Инфо</div>
                 </th>
             </tr>
         </thead>
@@ -91,11 +98,33 @@
                         </div>                        
 
                         {{ item.delivery.getType.name }}{% if item.delivery.metro %} &laquo;{{ item.delivery.metro.name }}&raquo;{% endif %}
-                        
-                        {% if item.delivery.delivery_date %}
-                            <br />{{ item.delivery.delivery_date|date('d.m.Y') }}
-                        {% endif %}
-                    </td>
+			</td>                        
+
+			<td>
+                        <input type="text" class="jcalendar" name="delivery_date"{% if item.delivery.delivery_date %} value="{{ item.delivery.delivery_date|date('d.m.Y') }}"{% endif %}/>
+                    
+			</td>
+
+			<td>
+                        <a href="#" id="print">Печать</a></div>
+    
+    <script type="text/javascript">
+        $(document).ready(function() {
+          $("#print").click(function() {
+           printElem({ leaveOpen: true, printMode: 'popup',
+           overrideElementCSS:[
+        		{ href:'/common/managers/css/printMode.css',media:'print'}]
+            });
+            
+         });
+         
+         function printElem(options){
+          $('#toPrint').printElement(options);
+         }
+
+        });
+    </script>
+			</td>
                 </tr>
             {% else %}
                 <tr>

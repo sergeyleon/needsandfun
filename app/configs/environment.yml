@@ -40,7 +40,7 @@ shop_prod:
     MYSQL:  
       DB_USER: needsandfun
       DB_PASSWORD: D5yY8erFgeSG
-      DB_HOST: 127.0.0.1  
+      DB_HOST: localhost
       DB_NAME:   needsandfun_prod
     TWIG:
       cache: /app/templates/cache/
@@ -94,7 +94,7 @@ manager_prod:
     MYSQL:
       DB_USER: needsandfun
       DB_PASSWORD: D5yY8erFgeSG
-      DB_HOST: 127.0.0.1    
+      DB_HOST: localhost    
       DB_NAME:   needsandfun_prod
     TWIG:
       cache: /app/templates/cache/
