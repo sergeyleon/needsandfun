@@ -67,7 +67,13 @@
         
         <div class="shop-body">
             
-            
+                {% if currentCategory %}
+
+                    <h1>{{ currentCategory.name }}</h1>
+
+                {% endif %}
+
+                <br />{{ shop.breadcrumbs(breadcrumbs) }}<br />
         
             {% if goods %}
                 {% if newGoods %}
@@ -82,13 +88,8 @@
                   {% endif %}
                 {% endif %}
                 
-                {% if currentCategory %}
-
-                    <h1>{{ currentCategory.name }}</h1>
-
-                {% endif %}
                 
-                {{ shop.breadcrumbs(breadcrumbs) }}<br />
+
                 
                 {# shop.sorter(sort, _context) #}
                 
