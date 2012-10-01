@@ -339,6 +339,14 @@ class Events extends \Core\Abstracts\Singleton
     
     public function add()
     {
+        $this->page['categories'] = \Core\Model\Eventcategory::getAll();
+        $this->page['placeCategories'] = \Core\Model\Placecategory::getAll();
+        $categories = array();
+        foreach ($this->page['event']->eventcats as $eventCat)
+        {
+            array_push($categories, $eventCat->category_id);   
+        }
+        $this->page['current_category'] = $categories;
         $this->_form();
     }    
 
@@ -357,7 +365,6 @@ class Events extends \Core\Abstracts\Singleton
             array_push($categories, $eventCat->category_id);   
         }
         $this->page['current_category'] = $categories;
-        var_dump($categories) ;
         
         $this->_form();
     }   
