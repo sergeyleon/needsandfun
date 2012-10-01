@@ -9,7 +9,7 @@ shop_dev:
     DB_ENGINE: MYSQL
     MYSQL:  
       DB_USER: needsandfun
-      DB_PASSWORD: JnZjjA7828naaJhzhs
+      DB_PASSWORD: D5yY8erFgeSG
       DB_HOST: 127.0.0.1    
       DB_NAME: needsandfun_staging
     TWIG:
@@ -68,7 +68,7 @@ manager_dev:
     DB_ENGINE: MYSQL
     MYSQL:  
       DB_USER: needsandfun
-      DB_PASSWORD: JnZjjA7828naaJhzhs
+      DB_PASSWORD: D5yY8erFgeSG
       DB_HOST: 127.0.0.1
       DB_NAME:   needsandfun_staging
     TWIG:
