@@ -8,10 +8,10 @@ shop_dev:
   variables:
     DB_ENGINE: MYSQL
     MYSQL:  
-      DB_USER: root
-      DB_PASSWORD: password
+      DB_USER: needsandfun
+      DB_PASSWORD: JnZjjA7828naaJhzhs
       DB_HOST: 127.0.0.1    
-      DB_NAME:   needsandfun
+      DB_NAME: needsandfun_staging
     TWIG:
       cache: /app/templates/cache/
     MAIL:
@@ -67,10 +67,10 @@ manager_dev:
   variables:
     DB_ENGINE: MYSQL
     MYSQL:  
-      DB_USER: root
-      DB_PASSWORD: 123qwe
-      DB_HOST: 127.0.0.1    
-      DB_NAME:   needsandfun
+      DB_USER: needsandfun
+      DB_PASSWORD: JnZjjA7828naaJhzhs
+      DB_HOST: 127.0.0.1
+      DB_NAME:   needsandfun_staging
     TWIG:
       cache: /app/templates/cache/    
     MAIL:
