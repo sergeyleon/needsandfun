@@ -1366,6 +1366,7 @@ private function _getGoods($page = 1, $categories = false, $category = false)
     
     public function add()
     {
+    	$page['categories'] = \Core\Model\Category::getAll();
         $this->_form();
     }
 
