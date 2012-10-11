@@ -93,7 +93,7 @@ class Events extends \Core\Abstracts\Authorized
 
         $this->page['item']       = $event;
         
-        
+        $this->page['categories'] = \Core\Model\Eventcategory::getAll();
         
         // baltic it
         if (isset($_POST['proceed']))
@@ -171,6 +171,8 @@ class Events extends \Core\Abstracts\Authorized
 
         $this->_categories($categoryId);
         $this->getStorage('flash')->setValue('eventCategoryId', $categoryId);
+        
+        $this->page['categories'] = \Core\Model\Eventcategory::getAll();
         
         $categories = $this->page['currentCategory']->getChildren();
 

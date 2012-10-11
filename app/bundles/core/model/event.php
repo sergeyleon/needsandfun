@@ -23,7 +23,7 @@ class Event extends \ActiveRecord\Model implements Itemswithpics, Reviewable, Se
     static $has_many = array(
         array('members'),    
         array('eventsponsors'),
-        array('eventcats'),
+        array('eventcats', 'class' => 'Eventcat', 'foreign_key' => 'event_id'),
         array('eventpictures', 'order' => 'weight', 'foreign_key' => 'item_id'),
         array('eventreviews', 'class' => 'Eventreview', 'foreign_key' => 'item_id'),
         array('reviews', 'foreign_key' => 'item_id', 'through' => 'eventreview', 'conditions' => 'is_checked = 1', 'order' => 'created desc')

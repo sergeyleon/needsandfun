@@ -8,8 +8,8 @@ class Deliverytype extends \ActiveRecord\Model
      * айди типов в базе
      */
     static $courier = 1;
-    static $pickup  = 2;
-    static $metro   = 3;
+    static $metro   = 2;
+    static $pickup  = 3;
     static $ems     = 4;
 
     static $table = 'delivery_types';

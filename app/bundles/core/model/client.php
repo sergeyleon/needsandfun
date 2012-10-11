@@ -72,8 +72,11 @@ class Client extends \ActiveRecord\Model implements Itemswithpics, Humanizeurl
               }
             }
 
+
+
             $discount = floor($this->_discount['summ']['value']/1000);
             if (5 < $discount) $discount = 5;
+           // if($this->emeil == "nomail@nomail.com") $discount = 0;
             $this->_discount['summ']['discount'] = $discount;
 
         }

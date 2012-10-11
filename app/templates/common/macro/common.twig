@@ -223,6 +223,37 @@
     </li>
 {% endmacro %}
 
+
+{% macro sortableCategoryArticle(item, type) %}
+    <li class="category-item" data-id="{{ item.id }}" data-type="{{ type }}">
+        <div class="category-name">   
+            <div class="category-op">                 
+                <div class="category-op-item edit" data-type="edit">
+                    <a href="{{ path('manage_' ~ type ~ '_category_edit', {'categoryId': item.id}) }}" class="icon"></a>
+                </div>
+                
+                <div class="category-op-item hide" data-type="hide">
+                    <div class="icon"></div>
+                </div>                
+                
+                <div class="category-op-item show" data-type="show">
+                    <div class="icon"></div>
+                </div>                
+            
+                <div class="category-op-item delete" data-type="delete" data-confirm="1">
+                    <div class="icon"></div>
+                </div>
+            </div>
+            <div class="category-inside">↳</div>                        
+            <a href="/manage/{{type}}/categorys/{{ item.link }}" >{{ item.name }}</a>
+
+        </div>
+
+    </li>
+{% endmacro %}
+
+
+
 {% macro optionCategory(item, selected, current) %}
 
   {% if current != item.id %}
@@ -236,12 +267,9 @@
 {% endmacro %}
 
 
-
 {% macro optionCategoryInGood(item, selected) %}
 
-
   <option value="{{ item.id }}" {% for select in selected %} {% if select == item.id %} selected="selected"{% endif %} {% endfor %} data-id="{{ item.id }}" >{{ item.name }}</option>
-
   
   {% for _item in item.children %}
       {{ _self.optionCategoryInGood(_item, selected) }}
@@ -249,6 +277,15 @@
     
 {% endmacro %}
 
+
+{% macro eventCategoryName(categories, selected) %}
+  
+  {% for item in categories %}
+    {% if selected == item.id %} {{ item.name }} {% endif %}
+  {% endfor %}
+
+  
+{% endmacro %}
 
 
 {% macro itemPicture(icon, type, gallery) %}
@@ -263,4 +300,16 @@
     {% else %}
         <img src="{{ defaults.common }}/img/noimg.gif" />
     {% endif %}
+{% endmacro %}
+
+
+{% macro rootStoreCategoty(rootCategories,count) %}
+  {% for item in rootCategories %}
+    <div class="column-group{% if drop == 0 %} first{% endif %} {% if 0 == loop.index % count%} last{% endif %}">
+        <a href="{{ item.url }}">{{item.name}}</a>
+    </div>
+    {% if 0 == loop.index % count%} {% set drop = 0 %} {% else %} {% set drop = 1 %} {% endif %}
+    {% if 0 == loop.index % count%} <div class="clear"></div> {% endif %}
+  {% endfor %}
+  <div class="clear"></div>
 {% endmacro %}

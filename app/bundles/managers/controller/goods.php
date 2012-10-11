@@ -901,6 +901,10 @@ private function _getGoods($page = 1, $categories = false, $category = false)
         $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow('24', $i, $goods->sale);
         $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow('25', $i, $goods->title);
         $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow('26', $i, $goods->yml_publish);
+        
+        $objPHPExcel->getActiveSheet()->getStyle('H'.$i)->getNumberFormat()->setFormatCode(\PHPExcel_Style_NumberFormat::FORMAT_GENERAL);
+        $objPHPExcel->getActiveSheet()->getStyle('O'.$i)->getNumberFormat()->setFormatCode(\PHPExcel_Style_NumberFormat::FORMAT_GENERAL);
+        
       }
 
       // Rename sheet
@@ -1407,10 +1411,9 @@ private function _getGoods($page = 1, $categories = false, $category = false)
             }
 
           }
-          
         }
         
-        $order_goods = \Core\Model\Ordergood::all(array('conditions' => array('size_id = ? ', $goodId )));
+
         
         
         $page['current_category'] = explode(",",$page['item']->getCategories());

@@ -4,6 +4,8 @@ namespace Core\Model;
 
 class Article extends \ActiveRecord\Model implements Itemswithpics, Searchable, Humanizeurl
 {
+    static $perPage = 24;
+    
     static $has_many = array(
         array('articlepictures', 'order' => 'weight', 'foreign_key' => 'item_id'),
         array('articles')
@@ -73,13 +75,19 @@ class Article extends \ActiveRecord\Model implements Itemswithpics, Searchable, 
             : 0;
     }    
 
+
+    
     static function banners()
     {
-        return self::getAll(array(
-            'order' => 'created desc',
-            'limit' => '1'
+        $result = self::all(array(
+            'conditions' => 'deleted is null',
+            'limit'      => 5,
+            'order'      => 'created desc'
         ));
+
+        return $result;
     }
+    
 
     static function getAll($_options = array())
     {
@@ -100,4 +108,31 @@ class Article extends \ActiveRecord\Model implements Itemswithpics, Searchable, 
 
         return self::all($options);
     }
+    
+    static function getPager($page, $category = false, $route, $total = 0)
+    {
+        $options = array();
+        $routeParams['current'] = $page;
+
+        if ($category)
+        {
+            $routeParams['category'] = $category;
+            $options['category'] = $category;
+        }
+
+        $pager = array(
+            'total'   => ceil(count($total)/self::$perPage),
+            'current' => $page,
+            'route'   => $route,
+            'routeParams' => $routeParams
+        );
+
+        if ($pager['total'] == 1)
+        {
+            $pager = false;
+        }
+
+        return $pager;
+    }
+    
 }

@@ -1,8 +1,8 @@
-{% macro thisWeek(list) %}
+{% macro thisWeek(list,categories) %}
     {% if list %}
         <div class="goods-title">На этой неделе</div>
         <div class="coming-events">
-            {{ _self.list(list, false, true) }}
+            {{ _self.list(list,categories, false, true) }}
         </div>
     {% endif %}
 {% endmacro %}
@@ -53,14 +53,19 @@
     {% endif %}
 {% endmacro %}
 
-{% macro list(events, small_icon, short) %}
+{% macro list(events, categories, small_icon, short) %}
     {% import defaults.macros ~ '/common.twig' as common %}
     <div class="events-list">
         {% for event in events %}
             <div class="event-item">
                 <div class="event-item-head">
                     <div class="event-item-category">
-                        {{ event.category.name }}
+                        {% for cat in event.eventcats %}
+                          {% if loop.first %} {% else %}, {% endif %}
+                          {{ common.eventCategoryName(categories, cat.category_id) }}
+                        {% endfor %}
+
+                        
                     </div>
 
                     <div class="event-item-pic">
@@ -115,6 +120,50 @@
 {% endmacro %}
 
 
+{% macro list_main(events, categories, small_icon, short) %}
+    {% import defaults.macros ~ '/common.twig' as common %}
+    <div class="events-main-list">
+        {% for event in events %}
+            <div class="event-item {% if loop.last %}last{% endif %}">
+
+                <div class="event-item-pic">
+                    <a href="{{ event.url }}">
+                        {% if small_icon %}
+                            {% set iconSize = 'smaller_event' %}
+                        {% else %}
+                            {% set iconSize = 'small_event' %}
+                        {% endif %}
+                        {{ common.itemPicture(event.getIcon, iconSize) }}
+                    </a>
+                </div>
+
+                <div class="event-body">
+                    <div class="event-item-date">
+                        {{ event.held_date|hdate(true) }}
+                    </div>
+
+                    <div class="event-item-anons">
+                        <a href="{{ event.url }}">
+                            {{ event.name|truncate(75) }}
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+            
+            {% if small_icon %}
+                {% set clearStep = 4 %}
+            {% else %}
+                {% set clearStep = 3 %}
+            {% endif %}
+
+            {% if not loop.index % clearStep %}
+                <div class="clear"></div>
+            {% endif %}
+        {% endfor %}
+        <div class="clear"></div>
+    </div>
+{% endmacro %}
 
 
 {% macro rss(events, small_icon, short) %}
@@ -186,6 +235,21 @@
     </div>
     {% endif %}
 {% endmacro %}
+
+
+
+{% macro eventCategoryMain(categories) %}
+    <ul id="makeMeScrollable">
+    {% for category in categories %}
+      {% if category.is_visible %}
+        <li><a class="category-item-link" href="{{ category.url }}">
+        {{ category.name }}
+        </a>{% if loop.last %}{% else %} &bull; {% endif %}</li>
+      {% endif %}
+    {% endfor %}
+    </ul>
+{% endmacro %}
+
 
 {% macro events(events, pager) %}
     {% import defaults.macros ~ '/common.twig' as common %}

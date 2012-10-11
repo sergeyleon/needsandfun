@@ -26,7 +26,7 @@ class Market extends \Core\Abstracts\Singleton
         
       $options = array(
         'select' => 'goods_categories.good_id, goods_categories.category_id, goods.*',
-        'joins'  => 'inner join goods on goods.id = goods_categories.good_id and (goods.is_available = 1 or goods.in_stock>0 ) and goods.deleted is null and (goods.supplier_id=13 or goods.supplier_id=3 or goods.supplier_id=14 or goods.supplier_id=15 or goods.supplier_id=18 or goods.supplier_id=36 or goods.supplier_id=37 ) ' ,
+        'joins'  => 'inner join goods on goods.id = goods_categories.good_id and (goods.is_available = 1 or goods.in_stock>0 ) and goods.deleted is null and (goods.supplier_id=3 or goods.supplier_id=14 or goods.supplier_id=15 or goods.supplier_id=18 or goods.supplier_id=36 or goods.supplier_id=37 ) ' ,
       );
 
     

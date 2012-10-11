@@ -1,7 +1,35 @@
+#index:
+#  pattern: /
+#  defaults:
+#    controller: Articles:index
+
+
 index:
   pattern: /
   defaults:
     controller: Articles:index
+
+index_page: 
+  pattern: -page-{page}
+  defaults:
+    page: 1
+    controller: Articles:index
+  requirements:
+    page: (\d+|all)
+
+category_page:
+  pattern: /categorys/{category}-page-{page}
+  defaults:
+    page: 1
+    controller: Articles:category_index
+  requirements:
+    page: (\d+|all)
+    
+category:
+  pattern: /categorys/{category}
+  defaults:
+    controller: Articles:category_index
+
 
 add:
   pattern: /add
@@ -22,3 +50,23 @@ authors:
   pattern: /authors
   source: routes/manage/authors.yml  
   appendName: true
+  
+category_add:
+  pattern: /category/add
+  defaults:
+    controller: Articles:addCategory
+
+category_edit:
+  pattern: /category/edit/{categoryId}
+  defaults:
+    controller: Articles:editCategory    
+
+category_remove:
+  pattern: /category/remove
+  defaults:
+    controller: Articles:removeCategory
+    
+category_visibility:
+  pattern: /category/visibility
+  defaults:
+    controller: Articles:categoryVisibility    

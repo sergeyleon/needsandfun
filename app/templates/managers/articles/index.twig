@@ -1,11 +1,32 @@
 {% extends defaults.layouts ~ '/manage.twig' %}
-
+{% import defaults.macros ~ '/common.twig' as common %}
 {% block title 'Статьи' %}
-
+{% block absolute %}absolute{% endblock %}
 {% block content %}
     <div class="header-title">
         Статьи [<a href="{{ path('manage_articles_add') }}">+</a>]
     </div>
+ <div class="window">      
+    <div class="categories events" data-action-visibility="/manage/articles/category/visibility" data-action-delete="/manage/articles/category/remove">
+    <ol class="categories-wrap" >
+        {% for item in categories %}
+            {{ common.sortableCategoryArticle(item,'articles') }}
+        {% endfor %}
+    </ol>
+    
+    <div class="category-add form">
+          <form class="category-add-form" method="post" action="{{ path('manage_articles_category_add') }}"> 
+              <div class="input-wrap">
+                  <input type="text" name="categoryName" placeholder="Добавить категорию" />
+              </div>
+          </form>
+          <div class="category-add-link">
+              [Добавить категорию]
+          </div>
+      </div>  
+    
+</div>
+    <div class="goods">
     <table class="items-table">
         <thead>
             <tr>
@@ -57,5 +78,11 @@
                 </tr>
             {% endfor %}                    
         </tbody>
-    </table>    
+    </table>  
+    {% if pager %}
+              {{ common.pager(pager) }}
+            {% endif %}
+    </div>  
+    
+    </div>  
 {% endblock %}

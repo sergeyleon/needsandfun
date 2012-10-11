@@ -28,6 +28,8 @@ class Index extends \Core\Abstracts\Authorized
 
         $this->router->go($url);
     }
+    
+
 
     public function show()
     {
@@ -37,17 +39,22 @@ class Index extends \Core\Abstracts\Authorized
         $this->page['main_page'] = $page;
         //End Baltic It fix
         
+        $this->page['shopCategories'] = \Core\Model\Category::getAll();
+        
         $this->page['bigBanners']    = \Core\Model\Banner::big();
         $this->page['todayBanner']   = \Core\Model\Banner::todayInShop();
         $this->page['shopBanners']   = \Core\Model\Banner::shop();
 
         $this->page['partners']      = \Core\Model\Partner::banners();
         $this->page['places']        = \Core\Model\Place::banners();
-        $this->page['articleBanner'] = current(\Core\Model\Article::banners());
-        $this->page['newsBanner']    = current(\Core\Model\News::banners());
+        $this->page['lastArticle']   = \Core\Model\Article::banners();
+        $this->page['lastNews']      = \Core\Model\News::banners();
 
-        $this->page['actualEvents']  = \Core\Model\Event::actual(6);
+        $this->page['actualEvents']  = \Core\Model\Event::actual(3);
         $this->page['categories']    = \Core\Model\Eventcategory::getAll();
+        
+        $this->page['newGoods'] = \Core\Model\Good::newGoods(8);
+        $this->page['topGoods'] = \Core\Model\Good::topGoods(4);
 
         $this->page['displayFooterButtons'] = true;
         

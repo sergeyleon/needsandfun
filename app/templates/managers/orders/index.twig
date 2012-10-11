@@ -78,10 +78,15 @@
                     </td>
                     <td>{{ item.price|money }}</td>
                     <td>
-                        {% if item.discount %}
-                            {{ item.discount|money }}
+                        {% if item.client.user.login != 'nomail@nomail.com' %}
+                          {% if item.discount %}
+                              {{ item.discount|money }}
+                          {% else %}
+                              &mdash;
+                          {% endif %}
+                          
                         {% else %}
-                            &mdash;
+                          &mdash;
                         {% endif %}
                     </td>
                     <td class="left">

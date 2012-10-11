@@ -4,7 +4,7 @@ namespace Core\Model;
 
 class Good extends \ActiveRecord\Model implements Itemswithpics, Reviewable, Searchable, Humanizeurl
 {
-    static $perPage = 24;
+    static $perPage = 25;
 
     static $age_ranges = array(
         0 => array(0, 3),
@@ -108,6 +108,11 @@ class Good extends \ActiveRecord\Model implements Itemswithpics, Reviewable, Sea
     static function newGoods($limit = 4)
     {
         return self::all(array('conditions' => 'is_available = 1 and is_new = 1 and deleted is null', 'order' => 'created desc', 'limit' => $limit));
+    }
+    
+    static function topGoods($limit = 4)
+    {
+        return self::all(array('conditions' => 'is_available = 1 and deleted is null', 'order' => 'sell_amount desc', 'limit' => $limit));
     }
 
     static function getPager($page, $category = false, $route, $total = 0)

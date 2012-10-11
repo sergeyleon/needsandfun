@@ -12,7 +12,7 @@
     {% endif %}
 {% endmacro %}
 
-{% macro big(banners) %}
+{% macro big_old(banners) %}
     <div class="bigbanners">
         {% for banner in banners %}
             {{ _self.bigBanner(banner, loop.first) }}
@@ -28,7 +28,42 @@
     </div>
 {% endmacro %}
 
+
+{% macro big(banners) %}
+        <div class="baners-items" data-type="slidebanner">
+            <div class="baners-uis">
+                <div class="baners-ui left" data-type="control"></div>
+                <div class="baners-ui right" data-type="control" data-dir="right"></div>
+            </div>
+
+            <div class="baners-items-wrap">
+            
+                {% for banner in banners %}
+                    <div class="baners-item{% if loop.first %} active{% endif %}" data-type="slide">
+                        <div class="baners-item-pic">
+                            {{ _self.bigBanner(banner, loop.first) }}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+{% endmacro %}
+
+
 {% macro bigBanner(banner, selected) %}
+
+    {% if banner.link %}
+        <a href="{{ banner.link }}">
+    {% endif %}
+        {{ _self.itemPicture(banner.getIcon, 'big_banner') }}
+    {% if banner.link %}
+        </a>
+    {% endif %}
+
+{% endmacro %}
+
+
+{% macro bigBanner_old(banner, selected) %}
     <div class="bigbanner-item{% if selected %} selected{% endif %}">
         <div class="bigbanner-pic">
             {% if banner.link %}
@@ -111,41 +146,54 @@
 
 
 {% macro goods_age(goods_age) %}
-    <div class="main-body-wrap">
-        <div class="goods-title">
-            В магазине
-        </div>
+    <div class="main-top-good" id="good">
 
+        <div class="hit_title">В магазине</div>
         {% for good in goods_age %}
-            <div class="banner-item{% if loop.last %} last{% endif %}">
-                <div class="banner-pic">
-                    {% if link.link %}
-                            <a href="/good/{{ good.link }}">
-                    {% endif %}
-                        {{ _self.itemPicture(good.getIcon, 'shop_banner') }}
-                    {% if good.link %}
-                        </a>
-                    {% endif %}
-                </div>
-                {% if good.name %}
-                    <div class="banner-title">
-                        {% if good.link %}
-                            <a href="/good-{{ good.link }}">
-                        {% endif %}
-                            {{ good.name }}
-                        {% if good.link %}
-                            </a>
-                        {% endif %}
-                    </div>
-                {% endif %}
+            <div class="goods-item">
+              <div class="good-item-pic">
+                  <a href="{{ good.url }}">{{ _self.itemPicture(good.getIcon, 'small','',good.name) }}</a>
+              </div>
+
+              <div class="good-item-title">
+                  <a href="{{ good.url }}" >{{ good.name|truncate(75) }}</a>
+              </div>
+              
+              {% if good.discount %}
+                  <div class="good-item-oldprice">
+                      <span class="rub">{{ good.old_price }}</span>
+                  </div>
+      
+                  <div class="good-item-price discounted">
+                      <span class="rub">{{ good.price }}</span>
+                  </div>
+              {% else %}
+                  <div class="good-item-price">
+                      <span class="rub">{{ good.price }}</span>
+                  </div>
+              {% endif %}
+              
+              <div class="good-info-buy button-wrap" >
+              {% if good.sizes|length > 1 %}
+                  <a class="button-item" href="{{ good.url }}" >Купить</a>
+              {% else %} 
+                {% for size in good.sizes %}  
+                <div class="good-info-size button-item" data-id="{{ size.id }}">
+                  Купить
+                </div> 
+                {% endfor %}
+              {% endif %}
+              </div>
+
             </div>
+        
         {% endfor %}
     </div>        
 {% endmacro %}
 
 
 
-{% macro partners(partners) %}
+{% macro partners_old(partners) %}
     <div class="partners main-body-wrap">
         <div class="goods-title">
             Наши друзья
@@ -175,6 +223,25 @@
         </div>
     </div>
 {% endmacro %}
+
+{% macro partners(partners) %}
+
+    <div class="partners-wrap">
+        <div class="partners-text">
+        Нам доверяют лучшие <br />специалисты в области <br />детской жизни. Мы гордимся <br />своими партнерами
+        </div>
+        <div id="makeMeScrollable2">
+        {% for partner in partners %}
+            <div class="partners-cell" >
+                {{ _self.itemPicture(partner.getIcon, 'shop_banner') }}
+            </div>
+        {% endfor %}
+        </div>
+        <div class="clear"></div>
+    </div>
+    
+{% endmacro %}
+
 
 {% macro places(items) %}
     <div class="places-banner">
@@ -214,36 +281,50 @@
     </div>
 {% endmacro %}
 
-{% macro article(item) %}
-    <div class="article-banner">
-        <div class="article-banner-date">
-            {{ item.created|date('d.m.Y') }}
+{% macro last_article(items) %}
+  <div class="title_flag"><span>Полезные статьи</span></div>
+  {% for item in items %}
+      {% if loop.first %}
+        <div class="article-cell first">
+          <div class="article-thumb">{{ _self.itemPicture(item.getIcon, 'small_event') }}</div>
+          <div class="article-date">{{ item.created|date('d.m.Y') }}</div>
+          <div class="article-name">
+            <a href="{{ item.url }}">{{ item.name }}</a>
+          </div>
+          <div class="article-announce">{{ item.announce|truncate(100) }}</div>
         </div>
-        <div class="article-banner-title">
-            <a href="{{ item.url }}">
-                {{ item.name }}
-            </a>
+        <div class="article-noimage">
+      {% else %}
+        <div class="article-cell">
+          <span class="article-date">{{ item.created|date('d.m.Y') }}</span> : 
+          <span class="article-name">
+            <a href="{{ item.url }}">{{ item.name }}</a>
+          </span>
+          <div class="article-announce">{{ item.announce|truncate(100) }}</div>
         </div>
-
-        <div class="article-banner-announce">
-            {{ item.announce|truncate(100) }}
-        </div>
-    </div>
+      {% endif %}
+        
+  {% endfor %}
+      </div>
+      <div class="clear"></div>
 {% endmacro %}
 
-{% macro news(item) %}
-    <div class="news-banner">
-        <div class="news-banner-date">
-            {{ item.created|date('d.m.Y') }}
-        </div>
-        <div class="news-banner-title">
-            <a href="{{ item.url }}">
-                {{ item.name }}
-            </a>
-        </div>
-
-        <div class="news-banner-announce">
-            {{ item.announce|truncate(100) }}
-        </div>
+{% macro last_news(items) %}
+  <div class="title_flag"><span>Новости и акции</span></div>
+  {% for item in items %}
+    <div class="news-cell">
+    <div class="news-name">
+        <a href="{{ item.url }}">
+            {{ item.name }}
+        </a>
     </div>
+    <div class="news-announce">
+        {{ item.announce|truncate(100) }}
+    </div>
+    <div class="news-date">
+        {{ item.created|date('d.m.Y') }}
+    </div>
+    </div>
+  {% endfor %}
+    
 {% endmacro %}

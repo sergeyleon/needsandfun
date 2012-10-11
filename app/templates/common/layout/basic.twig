@@ -17,7 +17,6 @@
   <!-- CSS concatenated and minified via ant build script-->
   <link rel="stylesheet" href="{{ defaults.common }}/css/style.css">
   <link rel="stylesheet" href="{{ defaults.common }}/css/jqueryui/jqueryui.css">  
-
   <!-- end CSS-->
   
   <script src="{{ defaults.common }}/js/jquery/jquery.js"></script>    
@@ -120,33 +119,56 @@
         {% block header %}
             <div class="header">
                 <div class="header-wrap">              
-                    <div class="header-item search">
-                        <span>Магазин и афиша для детей</span>
-						<form action="#" class="header-search">
-							<input type="text" value="Искать что-нибудь">
-							<div class="select">
-								<div class="selected">в товарах</div>
-								<ul class="dropdown">
-									<li class="hidden">в товарах
-									<li>в событиях
-									<li>в местах	
-									<li>в статьях
-								</ul>
-								<input type="hidden" name="searchType" value="1">
-							</div>
-							<button></button>
-						</form>
+          
+                    
+                    <div class="site-search-block">
+                      <span class="shop-name-title">Магазин и афиша для детей</span>
+                      <div class="site-search-wrap">
+                      <form method="post" action="{{ path('search_index') }}">
+                        <div class="search-input-wrap">
+                          <input type="text" name="q" placeholder="Искать что-нибудь" />
+                        </div>
+                        
+                        <div class="search-checkbox-wrap">
+                          <div class="search-selector"></div>
+                          <div class="search-checkbox-list">
+                            <div class="checkbox-item active current">
+                              <input id="search-goods-checkbox" checked="checked" type="checkbox" name="filter[goods]" value="1" />
+                              <label >в товарах</label>
+                            </div>
+                            <div class="checkbox-item">
+                              <input id="search-events-checkbox" type="checkbox" name="filter[events]" value="1" />
+                              <label >в событиях</label>
+                            </div>
+                            <div class="checkbox-item">
+                              <input id="search-places-checkbox" type="checkbox" name="filter[places]" value="1" />
+                              <label >в местах</label>
+                            </div>
+                            <div class="checkbox-item">
+                              <input id="search-articles-checkbox" type="checkbox" name="filter[articles]" value="1" />
+                              <label >в статьях</label>
+                            </div>
+                          </div>
+                        </div>
+                        {{ markup.button({'value': 'Найдись!'}) }}
+                        <div class="clear"></div>
+                      </form>
+                      </div> 
+                      
                     </div>
+                    
+                    
+                    
                     <a href="/" class="header-item logo"></a>
                     
                     <div class="header-item phones">
                         <div class="header-phone">
-                            +7 (495)&nbsp;&shy;724-90-26<br/>Ежедневно с 9 до 21
+                            +7 (495) 724-90-26<br /><span>9:00 - 21:00</span>
                         </div>
 
                         <div class="header-callback">
                             <div class="header-callback-icon"></div>
-                            <div class="header-callback-text">заказать<br />звонок!</div>
+                            <div class="header-callback-text">Заказать звонок</div>
                         </div>
 
                         <div class="header-callback-form">
@@ -182,49 +204,42 @@
                         </div>
                         
                         <div class="clear"></div>
-                        <noindex>
-                        <div class="header-social">
-                            <div class="header-social-wrap">
-                                {% if defaults.environment.SOCIAL.facebook %}
-                                  <div class="header-social-item facebook">
-                                    <a target="_blank" href="{{ defaults.environment.SOCIAL.facebook }}" rel="nofollow"></a>
-                                  </div>
-                                {% endif %}
 
-                                {% if defaults.environment.SOCIAL.twitter %}
-                                  <div class="header-social-item twitter">
-                                    <a target="_blank" href="{{ defaults.environment.SOCIAL.twitter }}" rel="nofollow"></a>
-                                  </div>
-                                {% endif %}
-
-                                {% if defaults.environment.SOCIAL.rss %}
-                                  <div class="header-social-item rss">
-                                    <a target="_blank" href="{{ defaults.environment.SOCIAL.rss }}"></a>
-                                  </div>
-                                {% endif %}
-
-                                {% if defaults.environment.SOCIAL.vkontakte %}
-                                  <div class="header-social-item vkontakte">
-                                    <a target="_blank" href="{{ defaults.environment.SOCIAL.vkontakte }}" rel="nofollow"></a>
-                                  </div>
-                                {% endif %}
-
-                                {% if defaults.environment.SOCIAL.gplus %}
-                                  <div class="header-social-item gplus last">
-                                    <a target="_blank" href="{{ defaults.environment.SOCIAL.gplus }}"></a>
-                                  </div>
-                                {% endif %}                                                                                                      
-                            </div>
-                        </div>
-                        
+                    </div>
+                    
+                    <div class="menu-login">
+                        {% if loggedUser %}
+                          <div class="menu-item">
+                              <a href="{{ path('cabinet_logout') }}">Выход</a>
+                          </div>
+                          <div class="menu-item">
+                              <a href="{{ path('cabinet_index') }}"><img src="{{ defaults.common }}/img/cabinet-button.png" alt="" /></a>
+                          </div>
+                          
+                          
+                        {% else %}
+                          <div class="menu-item">
+                            <noindex>
+                              <a rel="nofollow" href="{{ path('register') }}">Регистрация</a>
+                            </noindex>
+                          </div>
+                          
+                          <div class="menu-item">
+                            <noindex>
+                              <a rel="nofollow" href="" id="login-handle"><img src="{{ defaults.common }}/img/login-button.png" alt="" /></a>
+                            </noindex>
+                          </div>
+                        {% endif %}
                     </div>
                     
                 </div>
-				</noindex>
+
                 <div class="header-line"></div>
             </div>
             
             <div class="header-menu">
+            
+            {#
                 <div class="menu-group left small">
                     <div class="menu-item search">
                         <div class="search-icon" data-type="search-btn"></div>
@@ -235,7 +250,7 @@
                               <input type="text" name="q" />
                             </div>
 
-{#
+
                             <div class="search-popup-item">
                               <label>
                                 <div class="search-popup-checkbox">
@@ -247,7 +262,7 @@
                                 <div class="clear"></div>
                               </label>
                             </div>
-#}                            
+                           
 
                             <div class="search-popup-item">
                               <label>
@@ -312,144 +327,181 @@
                         <a href="{{ path('shop_about') }}">О нас</a>
                     </div>
                 </div>
+                #}
                 
-                <div class="menu-group right small">
-                    {% if loggedUser %}
-                      <div class="menu-item">
-                          <a href="{{ path('cabinet_index') }}">Личный кабинет</a>
-                      </div>
-                      <div class="menu-item">
-                          <a href="{{ path('cabinet_logout') }}">Выход</a>
-                      </div>
-                    {% else %}
-                      <div class="menu-item">
-                        <noindex>
-                          <a rel="nofollow" href="{{ path('register') }}">Регистрация</a>
-                        </noindex>
-                      </div>
-                      
-                      <div class="menu-item">
-                        <noindex>
-                          <a rel="nofollow" href="" id="login-handle">Вход</a>
-                        </noindex>
-                      </div>
-                    {% endif %}
-                    
-                    <div class="menu-item cart" id="cart-icon" data-url="{{ path('shop_cart_update') }}" data-size="{{ cart.size }}">
-                        <a href="{{ path('shop_cart') }}" class="cart-icon">
-                            <div data-type="cart-size" class="cart-number">
-                                {{ cart.getSize }}
-                            </div>
-                        </a>
-                    </div>
-                </div>
+                
                 
                 <div class="menu-group-wrap">
                     <div class="menu-group">
-                        <div class="menu-item big">
-
-                            <a href="{{ path('events_index') }}">СОБЫТИЯ</a>
+                        <div class="main-menu"><a class="lvl-1" href="{{ path('events_index') }}">СОБЫТИЯ</a></div>
+                        <div class="main-menu"><a class="lvl-1" href="{{ path('places_index') }}">МЕСТА</a></div>
+                        <div class="main-menu submenu">
+                          <div class="lvl-1-wrapp"><a class="lvl-1" href="{{ path('shop_index') }}">МАГАЗИН</a></div>
+                          <div class="header-menu-group">
+                                {{ common.rootStoreCategoty(rootCategories,3) }}
+                          </div>
                         </div>
-                    
-                        <div class="menu-delimeter">&bull;</div>
-                        
-                        <div class="menu-item big">
-                            <a href="{{ path('places_index') }}">МЕСТА</a>
-                        </div>
-                        
-                        <div class="menu-delimeter">&bull;</div>
-                                        
-                        <div class="menu-item big">
-                            <a href="{{ path('shop_index') }}">МАГАЗИН</a>
-                        </div>
-                        
-                        <div class="menu-delimeter">&bull;</div>
-                                        
-                        <div class="menu-item big">
-                            <a href="{{ path('articles_index') }}">СТАТЬИ</a>
-                        </div>
-                        
-                        <div class="menu-delimeter">&bull;</div>
-                                        
-                        <div class="menu-item big">
-                            <a href="{{ path('news_index') }}">НОВОСТИ</a>
-                        </div>      
-                        
+                        <div class="main-menu"><a class="lvl-1" href="{{ path('articles_index') }}">СТАТЬИ</a></div>
+                        <div class="main-menu"><a class="lvl-1" href="{{ path('news_index') }}">НОВОСТИ</a></div>
                         <div class="clear"></div>
                     </div>
                 </div>
+                
+                <div class="cart-block">
+                  
+                  <div class="menu-item cart" id="cart-icon" data-url="{{ path('shop_cart_update') }}" data-size="{{ cart.size }}">
+                      <a href="{{ path('shop_cart') }}" class="cart-icon">
+                          <div data-type="cart-size" class="cart-number">
+                              {{ cart.getSize }}
+                          </div>
+                      </a>
+                      
+                      <div class="cart-text">
+                        <div class="cart-title">Моя корзина</div>
+                        Итого на сумму<br />
+                        <span data-incart="{{ cart.summ }}"><span data-type="cart-incart" class="cart-summ" >
+                          {{ cart.getPrice }}
+                        </span> руб.</span>
+                      </div>
+                      <div class="clear"></div>
+                  </div>
+                  
+                  <div class="button-wrap"><a href="{{ path('shop_cart') }}" class="button-order">Оформить</a></div>
+                </div>
+                
             </div>
         {% endblock %}
       </header>
+      
       <div class="main" role="main">
         {% block content '' %}
       </div>
+      
+      <div class="menu-seo">
+        <a href="/store/detskie-sportivnye-kompleksy-dsk/">Детские спортивные комплексы</a> • 
+        <a href="/store/kolyaski-dlya-kukol/">Коляски игрушечные для кукол</a> • 
+        <a href="/store/detskie-igrovye-palatki-i-domiki/">Детские игровые домики</a> • 
+        <a href="/store/karnaval-nye-kostyumy/">Детские карнавальные костюмы</a> • 
+        <a href="/store/derevyannye-igrushki/">Деревянные игрушки</a>
+      </div>
+      
       <footer>
       
-        <div class="header-menu">
-        <div class="menu-group-wrap">
-            <div class="menu-group">
-                <div class="menu-item big">
-                    <a href="/store/detskie-sportivnye-kompleksy-dsk/">Детские спортивные комплексы</a>
-                </div>
-            
-                <div class="menu-delimeter">&bull;</div>
-                
-                <div class="menu-item big">
-                    <a href="/store/kolyaski-dlya-kukol/">Коляски игрушечные для кукол</a>
-                </div>
-                
-                <div class="menu-delimeter">&bull;</div>
-                                
-                <div class="menu-item big">
-                    <a href="/store/detskie-igrovye-palatki-i-domiki/">Детские игровые домики</a>
-                </div>
-                
-                <div class="menu-delimeter">&bull;</div>
-                                
-                <div class="menu-item big">
-                    <a href="/store/karnaval-nye-kostyumy/">Детские карнавальные костюмы</a>
-                </div>    
-                
-                <div class="menu-delimeter">&bull;</div>
-                                
-                <div class="menu-item big">
-                    <a href="/store/derevyannye-igrushki/">Деревянные игрушки</a>
-                </div>                
-                
-                <div class="clear"></div>
-            </div>
-        </div>
-        </div>
+        
       
-          <div class="footer-line"></div>
+        <div class="footer-line"></div>
+        <div class="footer-wrap">
+          <div class="site-search-block">
+
+            <div class="site-search-wrap">
+            <form method="post" action="{{ path('search_index') }}">
+              <div class="search-input-wrap">
+                <input type="text" name="q" placeholder="Искать что-нибудь" />
+              </div>
+              
+              <div class="search-checkbox-wrap">
+                <div class="search-selector"></div>
+                <div class="search-checkbox-list">
+                  <div class="checkbox-item active current">
+                    <input id="search-goods-checkbox" checked="checked" type="checkbox" name="filter[goods]" value="1" />
+                    <label >в товарах</label>
+                  </div>
+                  <div class="checkbox-item">
+                    <input id="search-events-checkbox" type="checkbox" name="filter[events]" value="1" />
+                    <label >в событиях</label>
+                  </div>
+                  <div class="checkbox-item">
+                    <input id="search-places-checkbox" type="checkbox" name="filter[places]" value="1" />
+                    <label >в местах</label>
+                  </div>
+                  <div class="checkbox-item">
+                    <input id="search-articles-checkbox" type="checkbox" name="filter[articles]" value="1" />
+                    <label >в статьях</label>
+                  </div>
+                </div>
+              </div>
+              {{ markup.button({'value': 'Найдись!'}) }}
+              <div class="clear"></div>
+            </form>
+            </div> 
+            
+          </div>
           
-          <table class="footer-wrap">
-              <tr>
-                  <td class="first">
-                      <div class="footer-logo"><br><br><br><a href="http://www.needsandfun.ru/">Детские спортивные комплексы</a></div>                      
-                  </td>
-                  <td>
-                      &copy; 2012 &laquo;Нужно и весело&raquo;
-                  </td>
-                  <td>
-                      Нарушение авторских прав грозит большими неприятностями нарушившему наши права
-                  </td>
-                  <td class="last">
-                    {% if displayFooterButtons %}
-                    <a href="http://www.kids-price.ru">
-                      <img height="31" width="88" 
-                           alt="Kids-Price.Ru - цены на детские товары, коляски, автомобильные детские кресла, одежду и обувь." 
-                           src="http://www.kids-price.ru/i/banner3.gif" border="0" />
-                    </a>
-                    <a href="http://kupitigra.ru" title="Каталог детских товаров">
-                      <img src="http://kupitigra.ru/images/buttons/kupitigra-3.png" height="31" width="88" 
-                           title="Каталог детских товаров" alt="Каталог детских товаров" />
-                    </a>      
-                    {% endif %}
-                  </td>
-              </tr>
-          </table>
+          <noindex>
+          <div class="footer-social">
+              <div class="footer-social-text">Получайте наши новости о скидках, акциях и событиях в соцсетях:</div>
+              <div class="footer-social-wrap">
+                  {% if defaults.environment.SOCIAL.facebook %}
+                    <div class="footer-social-item facebook">
+                      <a target="_blank" href="{{ defaults.environment.SOCIAL.facebook }}" rel="nofollow"></a>
+                    </div>
+                  {% endif %}
+          
+                  {% if defaults.environment.SOCIAL.twitter %}
+                    <div class="footer-social-item twitter">
+                      <a target="_blank" href="{{ defaults.environment.SOCIAL.twitter }}" rel="nofollow"></a>
+                    </div>
+                  {% endif %}
+          
+                  {% if defaults.environment.SOCIAL.rss %}
+                    <div class="footer-social-item rss">
+                      <a target="_blank" href="{{ defaults.environment.SOCIAL.rss }}"></a>
+                    </div>
+                  {% endif %}
+          
+                  {% if defaults.environment.SOCIAL.vkontakte %}
+                    <div class="footer-social-item vkontakte">
+                      <a target="_blank" href="{{ defaults.environment.SOCIAL.vkontakte }}" rel="nofollow"></a>
+                    </div>
+                  {% endif %}
+          
+                  {% if defaults.environment.SOCIAL.gplus %}
+                    <div class="footer-social-item gplus last">
+                      <a target="_blank" href="{{ defaults.environment.SOCIAL.gplus }}"></a>
+                    </div>
+                  {% endif %}                                                                                                    
+              </div>
+              <div class="clear"></div>
+          </div>
+          </noindex>
+
+          <div class="clear"></div>
+          <div class="footer-menu-group">
+            {{ common.rootStoreCategoty(rootCategories,4) }}
+          </div>
+          
+          <div class="footer-logo">
+            <a class="logo-link" href="/"></a>
+            <a href="http://www.needsandfun.ru/">Детские спортивные комплексы</a>
+          </div>
+          
+          <div class="footer-copy">
+            &copy 2012 ЗАО &laquo;Нужно и весело&raquo;<br />
+          </div>
+          
+          <div class="footer-seo-org">
+            Раскрутка и <a href="http://www.promostart.ru" title="продвижение сайта" rel="nofollow" target="_blank">продвижение сайта</a>, услуги оптимизации – РА Promostart. 
+            Поддержка сайта, дизайн и <a href="http://obsudim.ru" title="разработка сайтов" rel="nofollow" target="_blank">разработка сайтов</a> - Obsudim.
+          </div>
+          
+          <div class="footer-design-org">
+            &copy Дизайн – <a href="" rel="nofollow" target="_blank">Веркса</a>
+            
+            <br /><br />
+            {% if displayFooterButtons %}
+              <a href="http://www.kids-price.ru">
+                <img height="31" width="88" 
+                     alt="Kids-Price.Ru - цены на детские товары, коляски, автомобильные детские кресла, одежду и обувь." 
+                     src="http://www.kids-price.ru/i/banner3.gif" border="0" />
+              </a>
+              <a href="http://kupitigra.ru" title="Каталог детских товаров">
+                <img src="http://kupitigra.ru/images/buttons/kupitigra-3.png" height="31" width="88" 
+                     title="Каталог детских товаров" alt="Каталог детских товаров" />
+              </a>      
+            {% endif %}
+          </div>
+          <div class="clear"></div>
+
       </footer>
     </div> <!--! end of #container -->
   {% endblock %}  
@@ -503,10 +555,9 @@ var yaParams = {/*Здесь параметры визита*/};
 })(document, window, "yandex_metrika_callbacks");
 </script>
 <noscript><div><img src="//mc.yandex.ru/watch/15006196" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+
 <!-- /Yandex.Metrika counter -->
 
-<br>
-<p align="center"><font color="#949494">Раскрутка и <a href="http://www.promostart.ru" title="продвижение сайта"> продвижение сайта</a>, услуги оптимизации – РА Promostart. Поддержка сайта, дизайн и <a href="http://obsudim.ru" title="разработка сайтов">разработка сайтов</a> - Obsudim.</font></p><br>
 <noindex>
 <p align="center">
 <!--counter--><script type="text/javascript"><!--
@@ -583,7 +634,7 @@ height="31" width="88" alt="Рейтинг@Mail.ru" /></a>
 </script>
 <noscript><div><img src="//mc.yandex.ru/watch/15977440" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 <!-- /Yandex.Metrika counter -->
-</p>
+
 </noindex>
 </body>
 </html>

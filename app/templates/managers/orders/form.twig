@@ -258,10 +258,23 @@
                         <tbody>
                           <tr class="items-table-item">
                               <td class="left" width="250px">
-                              {% if item.discount %}
-                                {{ total }}(товар) + {{item.delivery.delivery_price|default(item.delivery.getType.price)}}(доставка) - {{item.discount}}(скидка) = {{ (total - item.discount + item.delivery.delivery_price|default(item.delivery.getType.price))|money }}
+                              
+                              {% if item.client.user.login != 'nomail@nomail.com' %}
+                              
+                                {% if item.discount %}
+                                  {{ total }}(товар) + {{item.delivery.delivery_price|default(item.delivery.getType.price)}}(доставка) - {{item.discount}}(скидка) = {{ (total - item.discount + item.delivery.delivery_price|default(item.delivery.getType.price))|money }}
+                                {% else %}
+                                  {{ total }}(товар) + {{item.delivery.delivery_price|default(item.delivery.getType.price)}}(доставка)  = {{ (total - item.discount + item.delivery.delivery_price|default(item.delivery.getType.price))|money }}
+                                {% endif %}
+                              
                               {% else %}
-                                {{ total }}(товар) + {{item.delivery.delivery_price|default(item.delivery.getType.price)}}(доставка)  = {{ (total - item.discount + item.delivery.delivery_price|default(item.delivery.getType.price))|money }}
+                              
+                                {% if item.discount %}
+                                  {{ total }}(товар) + {{item.delivery.delivery_price|default(item.delivery.getType.price)}}(доставка) = {{ (total + item.delivery.delivery_price|default(item.delivery.getType.price))|money }}
+                                {% else %}
+                                  {{ total }}(товар) + {{item.delivery.delivery_price|default(item.delivery.getType.price)}}(доставка) = {{ (total - item.discount + item.delivery.delivery_price|default(item.delivery.getType.price))|money }}
+                                {% endif %}
+                                
                               {% endif %}
                                 &nbsp;
                               </td>
@@ -479,10 +492,22 @@
                               </td>
                               <td width="100px">&nbsp;</td>
                               <td width="100px">
-                              {% if item.discount %}
-                                {{ (total - item.discount + item.delivery.delivery_price|default(item.delivery.getType.price))|money }}
+                              {% if item.client.user.login != 'nomail@nomail.com' %}
+                              
+                                {% if item.discount %}
+                                  {{ (total - item.discount + item.delivery.delivery_price|default(item.delivery.getType.price))|money }}
+                                {% else %}
+                                  {{ (total - item.discount + item.delivery.delivery_price|default(item.delivery.getType.price))|money }}
+                                {% endif %}
+                              
                               {% else %}
-                                {{ (total - item.discount + item.delivery.delivery_price|default(item.delivery.getType.price))|money }}
+                              
+                                {% if item.discount %}
+                                  {{ (total + item.delivery.delivery_price|default(item.delivery.getType.price))|money }}
+                                {% else %}
+                                  {{ (total + item.delivery.delivery_price|default(item.delivery.getType.price))|money }}
+                                {% endif %}
+                              
                               {% endif %}
                               </td>
                           </tr>

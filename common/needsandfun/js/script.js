@@ -269,6 +269,8 @@ var Cart = {
     update:  false,
     size:    0,
     sizeEl:  false,
+    incart:    0,
+    incartEl:  false,
     
     items: {},
     goodPrice: 0,
@@ -281,8 +283,14 @@ var Cart = {
         this.update    = this.icon.attr('data-url');
         this.size      = this.icon.attr('data-size')/1;
         this.sizeEl    = this.icon.find('[data-type=cart-size]');
+        
+        this.incart      = this.icon.attr('data-incart')/1;
+        this.incartEl    = this.icon.find('[data-type=cart-incart]');
+        
         this.woDelivery   = this.element.find('[data-type=withoutGoodsText]'); 
         this.woDeliveryPrice = this.element.find('[data-type=withoutGoodsPrice]');
+        this.woDeliveryWorth = this.element.find('#ems_worth');
+        
         this.submitBtn = this.element.find('[data-type=submit]');
         
         this.formItems = this.element.find('[data-required]');
@@ -393,7 +401,9 @@ var Cart = {
         
         /* BALTIC IT Fix */
         if(this.deliveryType.val() == 'courier') {
-          if(goodPrice > '2500') { deliveryPrice = '0';}
+          if(goodPrice > '2500') { deliveryPrice = '0'; }
+          $("#delivery_price_courier").val(parseInt(deliveryPrice));
+          console.log(deliveryPrice);
         }
         if(this.deliveryType.val() == 'metro') {
           if(goodPrice > '1000') { deliveryPrice = '0';}
@@ -403,7 +413,7 @@ var Cart = {
           var weight = $("#ems_weight").val();
           var city = $("#ems_cities").val();
           var worth = $("#ems_worth").val();
-          if(parseInt(weight) > 0) {
+          if(parseInt(weight) >= 0) {
             // анонимная функция-callback.
             $.getJSON("http://emspost.ru/api/rest?&method=ems.calculate&from=city--moskva&to="+city+"&weight="+weight+"&callback=?", function(data) {
               var worth = parseInt($("#ems_worth").val());
@@ -422,11 +432,14 @@ var Cart = {
           
           var total_weight = 0;
           $('.cart-goods-item').each(function(){
+          
             var qnt = $(this).find('[data-type=qnt]').val();
             var weight = $(this).find('[data-type=weight]').html();
-            total_weight = parseInt(total_weight)+parseInt(qnt*weight);
+            if(weight) {
+            total_weight = parseFloat(total_weight)+parseFloat(qnt*weight);
+            }
           });
-          $("#ems_weight").val(parseInt(total_weight));
+          $("#ems_weight").val(parseFloat(total_weight));
           
         }
 
@@ -479,7 +492,8 @@ var Cart = {
         var text = this.goodsText(qnt);
         
         this.woDelivery.html(text);
-        this.woDeliveryPrice.html(moneyFormat(price));        
+        this.woDeliveryPrice.html(moneyFormat(price));
+        this.woDeliveryWorth.val(price);       
     },
     
     initCartItems: function() {
@@ -521,6 +535,11 @@ var Cart = {
         this.sizeEl.html(size);
     },
     
+    updateIncart: function(incart) {
+        this.incart = incart/1;
+        this.incartEl.html(incart);
+    },
+    
     sync: function(options) {
         var params = {};
         var func = false;
@@ -536,6 +555,7 @@ var Cart = {
                 {
                     Cart.icon.hide().fadeIn(200);
                     Cart.updateSize(json.total);
+                    Cart.updateIncart(json.price);
                 }
             }
         }
@@ -1208,7 +1228,7 @@ function EMS_CALC() {
   var weight = $("#ems_weight").val();
   var city = $("#ems_cities").val();
   var worth = $("#ems_worth").val();
-  if(parseInt(weight) > 0) {
+  if(parseInt(weight) >= 0) {
   // анонимная функция-callback.
   $.getJSON("http://emspost.ru/api/rest?&method=ems.calculate&from=city--moskva&to="+city+"&weight="+weight+"&callback=?", function(data) {
     var worth = parseInt($("#ems_worth").val());
@@ -1217,9 +1237,111 @@ function EMS_CALC() {
   });
   }
   else {
-            $("#ems_cost").html("стоимость доставки нужно выяснять у менеджера");
-            $("#delivery_price").val(parseInt(0));
-            delivery.attr({ "data-price": parseInt(0)});
-          }
-  
+    $("#ems_cost").html("стоимость доставки нужно выяснять у менеджера");
+    $("#delivery_price").val(parseInt(0));
+    delivery.attr({ "data-price": parseInt(0)});
+  }
 }
+
+$(document).ready(function(){
+
+$('.social-group-widget-head span').click(function(){
+  $('.social-group-widget-head span').removeClass('active');
+  $('.social-group-widget .group-widget').css("opacity",0).css("left","-300px");
+  $(this).addClass('active');
+  var curWidget = $(this).attr('id');
+  $('#'+curWidget+'-show').css("opacity",1).css("left","0px");
+});
+
+
+
+$( "#slider-age-range" ).slider({
+			range: true,
+			min: 0,
+			max: 18,
+			values: [ 6, 11 ],
+			slide: function( event, ui ) {
+				$( "#age-range-from" ).val( ui.values[ 0 ] );
+				$( "#age-range-to" ).val(  ui.values[ 1 ] );
+			}
+});
+
+$( "#slider-gender-range" ).slider({
+			range: "min",
+			min: 0,
+			max: 2,
+			value: 0,
+			slide: function( event, ui ) {
+				$( "#gender-range" ).val( ui.value );
+			}
+});
+
+
+$("#sort-order-control").live('click',function(){
+  if( $(this).hasClass('sort-order-arrow-up')) { 
+    $(this).removeClass('sort-order-arrow-up').addClass('sort-order-arrow-down').html('Сортировать по цене ↑'); 
+    $("#sort-order").val('desc');
+  }
+  else { 
+    $(this).addClass('sort-order-arrow-up').removeClass('sort-order-arrow-down').html('Сортировать по цене ↓'); 
+    $("#sort-order").val('asc');
+  }
+});
+
+$(".filter-button .reset-button").live('click',function(){
+    $( "#slider-gender-range" ).slider("value", 0 );
+    $( "#gender-range" ).val('0');
+    $( "#slider-age-range" ).slider("values", [ 6, 11 ] );
+    $( "#age-range-from" ).val( '6' );
+		$( "#age-range-to" ).val( '11' );
+    
+    $(".filter-brand select option:first").attr('selected', true);
+});
+
+
+$( ".submenu .lvl-1" ).dblclick(function () { 
+window.location='/store/';
+
+});
+
+$( ".submenu .lvl-1-wrapp" ).click(function(){
+
+  if($(this).parents('.submenu:first').hasClass("active")) {
+    window.location='/store/';
+  }
+  
+  $(this).parents('.submenu:first').addClass("active");
+  $(this).next(".header-menu-group").show();
+
+  return false;
+  
+});
+$( ".submenu, .header-menu-group" ).mouseleave(function(){
+  $(this).removeClass("active");
+  $(this).find(".header-menu-group").hide();
+});
+
+
+
+$('.site-search-block .search-selector').click(function(){
+
+  var curCheckboxList = $(this).next(".search-checkbox-list");
+  $(this).next(".search-checkbox-list").find('.checkbox-item').addClass('active');
+  
+  $('.checkbox-item').live('click', function(){
+    $(this).parents(".search-checkbox-list:first").find('.checkbox-item').removeClass('active').removeClass('current');
+    $(this).parents(".search-checkbox-list:first").find('.checkbox-item').find('input').attr('checked', false);
+    
+    $(this).addClass('active').addClass('current');
+    $(this).find('input').attr('checked', true);
+    return false;
+	});
+
+  
+});
+
+
+
+    
+
+});

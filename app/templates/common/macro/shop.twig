@@ -33,15 +33,12 @@
 
 
 
-
-
-
 {% macro rating(item, url) %}
     {% import defaults.macros ~ '/common.twig' as common %}
     {{ common.rating(item, url) }}
 {% endmacro %}
 
-{% macro goods(goods, pager) %}
+{% macro goods_old(goods, pager) %}
     {% import defaults.macros ~ '/common.twig' as common %}
     <div id="goods-wrap">
     <div class="goods">    
@@ -60,13 +57,177 @@
 {% endmacro %}
 
 
+
+{% macro goods(goods, pager) %}
+
+    {% import defaults.macros ~ '/common.twig' as common %}
+    <div class="main-new-good">
+    <div id="goods-wrap">
+    <div class="goods" id="good">  
+        {% for good in goods %}
+            <div class="goods-item">
+            <div class="good-item-pic">
+                <a href="{{ good.url }}">{{ _self.itemPicture(good.getIcon, 'small','',good.name) }}</a>
+            </div>
+            <div class="good-item-info">
+              <div class="good-item-title">
+                  <a href="{{ good.url }}" >{{ good.name|truncate(75) }}</a>
+              </div>
+              
+              {% if good.discount %}
+                  <div class="good-item-oldprice">
+                      <span class="rub">{{ good.old_price }}</span>
+                  </div>
+      
+                  <div class="good-item-price discounted">
+                      <span class="rub">{{ good.price }}</span>
+                  </div>
+              {% else %}
+                  <div class="good-item-price">
+                      <span class="rub">{{ good.price }}</span>
+                  </div>
+              {% endif %}
+            </div> 
+            <div class="good-info-buy button-wrap">
+            {% if good.sizes|length > 1 %}
+                <a class="button-item" href="{{ good.url }}" >Купить</a>
+            {% else %} 
+              {% for size in good.sizes %}  
+              <div class="good-info-size button-item" data-id="{{ size.id }}">
+                Купить
+              </div> 
+              {% endfor %}
+            {% endif %}
+              
+   
+              </div>
+
+            
+            </div>
+            {% if 0 == loop.index % 5%}
+                <div class="clear"></div>
+            {% endif %}            
+        {% endfor %}
+        
+        <div class="clear"></div>
+        {% if pager %}
+            {{ common.pager(pager) }}
+        {% endif %}
+        </div>
+    </div>
+    </div>
+{% endmacro %}
+
+
+
+
+{% macro goods_main(goods) %}
+    <div class="title_flag"><span>Новинки магазина</span></div>
+    {% import defaults.macros ~ '/common.twig' as common %}
+    <div class="goods">    
+        {% for good in goods %}
+            <div class="goods-item">
+            <div class="good-item-pic">
+                <a href="{{ good.url }}">{{ _self.itemPicture(good.getIcon, 'small','',good.name) }}</a>
+            </div>
+            <div class="good-item-info">
+              <div class="good-item-title">
+                  <a href="{{ good.url }}" >{{ good.name|truncate(75) }}</a>
+              </div>
+              
+              {% if good.discount %}
+                  <div class="good-item-oldprice">
+                      <span class="rub">{{ good.old_price }}</span>
+                  </div>
+      
+                  <div class="good-item-price discounted">
+                      <span class="rub">{{ good.price }}</span>
+                  </div>
+              {% else %}
+                  <div class="good-item-price">
+                      <span class="rub">{{ good.price }}</span>
+                  </div>
+              {% endif %}
+            </div> 
+            <div class="good-info-buy button-wrap">
+            {% if good.sizes|length > 1 %}
+                <a class="button-item" href="{{ good.url }}" >Купить</a>
+            {% else %} 
+              {% for size in good.sizes %}  
+              <div class="good-info-size button-item" data-id="{{ size.id }}">
+                Купить
+              </div> 
+              {% endfor %}
+            {% endif %}
+              
+   
+              </div>
+
+            
+            </div>
+            {% if 0 == loop.index % 4%}
+                <div class="clear"></div>
+            {% endif %}            
+        {% endfor %}
+        
+        <div class="clear"></div>
+       
+    </div>
+{% endmacro %}
+
+
+{% macro goods_top(goods) %}
+    <div class="hit_title">Хиты продаж</div>
+    {% import defaults.macros ~ '/common.twig' as common %}
+    
+        {% for good in goods %}
+            <div class="goods-item">
+              <div class="good-item-pic">
+                  <a href="{{ good.url }}">{{ _self.itemPicture(good.getIcon, 'small','',good.name) }}</a>
+              </div>
+
+              <div class="good-item-title">
+                  <a href="{{ good.url }}" >{{ good.name|truncate(75) }}</a>
+              </div>
+              
+              {% if good.discount %}
+                  <div class="good-item-oldprice">
+                      <span class="rub">{{ good.old_price }}</span>
+                  </div>
+      
+                  <div class="good-item-price discounted">
+                      <span class="rub">{{ good.price }}</span>
+                  </div>
+              {% else %}
+                  <div class="good-item-price">
+                      <span class="rub">{{ good.price }}</span>
+                  </div>
+              {% endif %}
+              
+              <div class="good-info-buy button-wrap">
+              {% if good.sizes|length > 1 %}
+                  <a class="button-item" href="{{ good.url }}" >Купить</a>
+              {% else %} 
+                {% for size in good.sizes %}  
+                <div class="good-info-size button-item" data-id="{{ size.id }}">
+                  Купить
+                </div> 
+                {% endfor %}
+              {% endif %}
+              </div>
+              
+            </div>
+        {% endfor %}
+        
+{% endmacro %}
+
 {% macro categories(categories) %}
     <div class="categorys">
 
         {% for category in categories %}
 
           {% if loop.index == 2 %}
-          Еще категории:
+          <b>Еще категории:</b>
           {% endif %}
           
           {% if loop.index != 1  %}<a class="" href="/store-{{ category.link }}">{{ category.name }}</a>{% endif %}
@@ -83,7 +244,8 @@
 
 {% macro breadcrumbs(breadcrumbs) %}
     <div class="crumbs">
-    Вы здесь: <a class="" href="/store">Магазин</a>
+
+<a class="" href="/store">Магазин</a>
         {% for crumb in breadcrumbs %}
             
             &raquo;
@@ -97,7 +259,7 @@
 
 {% macro brandbreadcrumbs(brandbreadcrumbs) %}
     <div class="crumbs">
-    Вы здесь: <a class="" href="/store">Магазин</a>
+    <a class="" href="/store">Магазин</a>
     &raquo;<a class="" href="/brands">Бренды</a> 
         {% for crumb in brandbreadcrumbs %}
             
@@ -209,6 +371,62 @@
     </form>
 {% endmacro %}
 
+
+{% macro newFilter(filter, context) %}
+{% import defaults.macros ~ '/markup.twig' as markup %}
+<div class="filter-wrapper">
+<form data-type="filter">
+  <div class="filter-block">
+    <div class="filter-gender">
+      <div class="slider-gender-wrapper"><div id="slider-gender-range"></div></div>
+      <input id="gender-range" type="hidden" data-name="gender" data-type="input" value="0" />
+    </div>
+    <div class="filter-age">
+      <div class="slider-age-wrapper"><div id="slider-age-range"></div></div>
+      <input id="age-range-from" type="hidden" data-name="age_from" data-type="input" value="6" />
+      <input id="age-range-to" type="hidden" data-name="age_to" data-type="input" value="11" />
+    </div>
+    <div class="filter-sorter">
+      <span id="sort-order-control" class="sort-order-arrow-down">Сортировать по цене ↑</span>
+      <input id="sort-order" type="hidden" data-name="sort" data-type="input" value="desc" />
+
+      {#<select data-name="sort">
+          <option value="abc"    {% if 'abc' == filter.sort %} selected="selected"{% endif %}>По алфавиту</option>
+          <option value="rating" {% if 'rating' == filter.sort %} selected="selected"{% endif %}>По рейтингу</option>
+          <option value="price"  {% if 'price'  == filter.sort %} selected="selected"{% endif %}>По стоимости</option>
+          <option value="date"   {% if 'date'   == filter.sort %} selected="selected"{% endif %}>По дате поступления</option>
+      </select>#}
+    </div>
+    <div class="filter-brand">
+      {{ _self.newFilterBrand(context.brands) }}
+    </div>
+    <div class="clear"></div>
+  </div>
+  <div class="filter-button">
+    <div class="reset-button">
+      <span>Сбросить</span>
+    </div>
+    <div class="submit-button" data-type="submit">
+      <button type="submit">Фильтровать</button>
+    </div>
+    <div class="clear"></div>
+  </div>
+  <div class="clear"></div>
+  </form>
+</div>
+{% endmacro %}
+
+{% macro newFilterBrand(brands, brandId) %}
+
+<select data-name="brands" >
+    <option value="0" selected="">Все бренды</option>
+    {% for brand in brands %}
+        <option value="{{ brand.id }}">{{ brand.name }}</option>
+    {% endfor %}
+</select>
+
+{% endmacro %}
+
 {% macro filter(filter, context) %}
     {% import defaults.macros ~ '/markup.twig' as markup %}
     <div class="filter">
@@ -289,3 +507,7 @@
         </div>
     </div>
 {% endmacro %}
+
+
+
+

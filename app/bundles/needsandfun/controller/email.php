@@ -65,7 +65,8 @@ class Email extends \Core\Abstracts\Authorized
 			'host'    => $this->router->getHost(),
 			'delivery' => $options['delivery'],
 			'metro' => $options['metro'],
-			'file' => $options['file']
+			'file' => $options['file'],
+			'discount' => $order->discount
 		);
 
 		\Core\Model\Email::get()->create(array(

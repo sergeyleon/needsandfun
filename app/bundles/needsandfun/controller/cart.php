@@ -53,7 +53,7 @@ class Cart extends \Core\Abstracts\Authorized
                     'text'  => 'Самовывоз'
                 ),
                 'ems' => array(
-   
+    
                     'text'  => 'Доставка почтой'
                 ),
             );
@@ -63,7 +63,7 @@ class Cart extends \Core\Abstracts\Authorized
               $this->page['currentCity'] = $_POST['city'];
               $this->page['currentEmail'] = $_POST['email'];
               $this->page['currentPhone'] = $_POST['phone'];
-              $this->page['currentName'] = $_POST['firstname'].' '.$_POST['lastname'].' '.$_POST['fathersname'];
+              $this->page['currentName'] = $_POST['lastname'].' '.$_POST['firstname'].' '.$_POST['fathersname'];
               $this->page['currentStreet'] = $_POST['street'];
               $this->page['currentHouse'] = $_POST['building'];
               $this->page['currentBuilding'] = $_POST['suite'];
@@ -85,8 +85,7 @@ class Cart extends \Core\Abstracts\Authorized
     
     private function _proceed($values) 
     {
-        
-        
+
         $cart = \Core\Model\Cart::init($this->sessionStorage);
         $order = $cart->confirm($values);
         

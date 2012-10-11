@@ -134,15 +134,16 @@
                     
                     <div class="tabs-contents" style="margin-top:60px" data-type="contents">
                         <div class="tabs-content selected">
-                            <div style="float:right" class="cart-ya-fast-order">
-                                <a href="http://market.yandex.ru/addresses.xml?callback=http%3A%2F%2Fnf.balticit.ru%2Fcart"><img src="http://cards2.yandex.net/hlp-get/5814/png/3.png" border="0" /></a>
-                            </div>
-                        
+                                                    
                             <div class="cart-delivery-text">
 Мы гарантируем, что информация, введенная здесь, не будет общедоступна. Она нужна нам только для упрощения взаимодействия с покупателями.<br/>
 Если Вы еще не зарегистрированы на нашем сайте, это произойдет автоматически после подтверждения заказа.<br/>
 Указав электронный адрес, вы получаете возможность пользоваться акциями и привелегиями постоянных покупателей.<br/><br/>
 Доставка осуществляется курьером и стоит <span class="price">{{ cartDeliveries.courier.price|money }}</span>
+                            </div>
+
+<div style="float:right" class="cart-ya-fast-order">
+                                <a href="http://market.yandex.ru/addresses.xml?callback=http%3A%2F%2Fnf.balticit.ru%2Fcart"><img src="http://cards2.yandex.net/hlp-get/5814/png/3.png" border="0" /></a>
                             </div>
                             
                             <table class="tabs-address">
@@ -170,7 +171,7 @@
                                     </td>
                                     <td></td>
                                     <td>
-                                        <input type="text" name="delivery[courier][city]" data-required="true" data-name="city" placeholder="Например, Москва" />
+                                        <input type="text" name="delivery[courier][city]" data-required="true" data-name="city" placeholder="Например, Москва" {% if currentCity %} value="{{ currentCity }}" {% endif %} />
                                     </td>
                                 </tr>
                                 
@@ -181,7 +182,7 @@
                                 </tr>
                                 <tr>
                                     <td colspan="9">
-                                        <textarea style="width:100%" name="delivery[courier][comment]" data-name="comment" placeholder="Введите дополнительную информацию по заказу" ></textarea>
+                                        <textarea style="width:100%" name="delivery[courier][comment]" data-name="comment" placeholder="Введите дополнительную информацию по заказу" >{% if currentComment %}{{ currentComment }}{% endif %}</textarea>
                                     </td>
                                 </tr>
                                 
@@ -213,27 +214,27 @@
                                 
                                 <tr>
                                     <td>
-                                        <input type="text" name="delivery[courier][street]" data-required="true" data-name="street" />
+                                        <input type="text" name="delivery[courier][street]" data-required="true" data-name="street"{% if currentStreet %} value="{{ currentStreet }}" {% endif %} />
                                     </td>
                                     
                                     <td></td>
                                     
                                     <td width="74px">
-                                        <input type="text" name="delivery[courier][house]" data-required="true" data-name="house" class="small" />
+                                        <input type="text" name="delivery[courier][house]" data-required="true" data-name="house" class="small"{% if currentHouse %} value="{{ currentHouse }}" {% endif %} />
                                     </td>
                                     
                                     <td width="73px">
-                                        <input type="text" name="delivery[courier][building]" data-name="house" class="small middle" />
+                                        <input type="text" name="delivery[courier][building]" data-name="house" class="small middle"{% if currentBuilding %} value="{{ currentBuilding }}" {% endif %} />
                                     </td>                            
                                     
                                     <td width="74px">
-                                        <input type="text" name="delivery[courier][appartments]" data-name="appartments" class="small" />
+                                        <input type="text" name="delivery[courier][appartments]" data-name="appartments" class="small"{% if currentAppartments %} value="{{ currentAppartments }}" {% endif %} />
                                     </td>
                                     
-                                    <td></td>
+                                    <td><input type="hidden" id="delivery_price_courier" name="delivery[courier][price]" /></td>
                                     
                                     <td>
-                                        <input type="text" name="delivery[courier][name]" />
+                                        <input type="text" name="delivery[courier][name]"{% if currentName %} value="{{ currentName }}" {% endif %} />
                                     </td>
                                 </tr>                            
                                 
@@ -246,7 +247,7 @@
                                 <a href="http://market.yandex.ru/addresses.xml?callback=http%3A%2F%2Fnf.balticit.ru%2Fcart"><img src="http://cards2.yandex.net/hlp-get/5814/png/3.png" border="0" /></a>
                             </div>
                             <div class="cart-delivery-text">
-                                &nbsp;
+                                &nbsp; Расчет доставки EMS работает в тестовом режиме. Прежде чем оплачивать квитанцию, дождитесь подтверждения суммы от менеджера.
                             </div>
 
                             
@@ -275,7 +276,7 @@
                                     </td>
                                     <td></td>
                                     <td>
-                                        <input type="text" name="delivery[ems][city]" data-required="true" data-name="city" placeholder="Москва" {% if currentCity %} value="{{ currentCity }}" {% endif %} />
+                                        <input type="text" name="delivery[ems][city]" data-required="true" data-name="city" placeholder="Например, Москва" {% if currentCity %} value="{{ currentCity }}" {% endif %} />
                                     </td>
                                 </tr>
                                 
@@ -286,7 +287,7 @@
                                 </tr>
                                 <tr>
                                     <td colspan="9">
-                                        <textarea style="width:100%" name="delivery[ems][comment]" data-name="comment" placeholder="Ваш комментарий" >{% if currentComment %}{{ currentComment }}{% endif %}</textarea>
+                                        <textarea style="width:100%" name="delivery[ems][comment]" data-name="comment" placeholder="Введите дополнительную информацию по заказу" >{% if currentComment %}{{ currentComment }}{% endif %}</textarea>
                                     </td>
                                 </tr>
                                 
@@ -370,7 +371,7 @@
                                     </td>
                                     <td></td>
                                     <td>
-                                        <select id="ems_cities" name="cities"></select>
+                                        <select id="ems_cities" name="cities"><optgroup label="Города"></optgroup><optgroup label="Регионы"></optgroup></select>
                                     </td>
                                     <td></td>
                                     <td width="73px">
@@ -395,7 +396,15 @@
                               $.getJSON("http://emspost.ru/api/rest/?method=ems.get.locations&type=cities&plain=true&callback=?",
                               function(data){
                                 $.each(data.rsp.locations, function(i,item){
-                                  $("<option>").val(item.value).html(item.name).appendTo("#ems_cities");
+                                  $("<option>").val(item.value).html(item.name).appendTo("#ems_cities optgroup:first");
+                                });
+                              });
+                              
+                              // Список городов
+                              $.getJSON("http://emspost.ru/api/rest/?method=ems.get.locations&type=regions&plain=true&callback=?",
+                              function(data){
+                                $.each(data.rsp.locations, function(i,item){
+                                  $("<option>").val(item.value).html(item.name).appendTo("#ems_cities optgroup:last");
                                 });
                               });
                               
@@ -407,7 +416,7 @@
                               items.each(function(){
                                 var qnt = $(this).find('[data-type=qnt]').val();
                                 var weight = $(this).find('[data-type=weight]').html();
-                                total_weight = parseInt(total_weight)+parseInt(qnt*weight);
+                                total_weight = parseFloat(total_weight)+parseFloat(qnt*weight);
                               });
                               $("#ems_weight").val(parseInt(total_weight));
                               
@@ -451,7 +460,7 @@
                                 
                                 <tr>
                                     <td>
-                                        <input type="text" name="delivery[pickup][email]" data-required="true" data-name="email" placeholder="mail@mailbox.com"{% if currentEmail %} value="{{ currentEmail }}" readonly="readonly"{% endif %} />
+                                        <input type="text" name="delivery[pickup][email]" data-name="email" placeholder="mail@mailbox.com"{% if currentEmail %} value="{{ currentEmail }}" readonly="readonly"{% endif %} />
                                     </td>
                                     <td></td>
                                     <td>
@@ -459,7 +468,7 @@
                                     </td>
                                     <td></td>
                                     <td>
-                                        <input type="text" name="delivery[pickup][name]" data-required="true" data-name="name" placeholder=""{% if currentName %} value="{{ currentName }}" readonly="readonly"{% endif %} />
+                                        <input type="text" name="delivery[pickup][name]" data-required="true" data-name="name" placeholder=""{% if currentName %} value="{{ currentName }}" {% endif %} />
                                     </td>
                                 </tr>
 
@@ -475,6 +484,7 @@
                                 </tr>
                             </table>                      
                         </div>
+                        {#
                         <div class="tabs-content">
                             <div class="cart-delivery-text">                        
                                 Доставка к ближайшему метро:
@@ -530,7 +540,8 @@
                                     </td>
                                 </tr>
                             </table>                                  
-                        </div>                    
+                        </div>  
+                        #}                  
                     </div>
                 </div>
               
@@ -579,5 +590,5 @@
             </div>
         {% endif %}
         <div class="clear"></div>
-    </form>
+    </div>
 {% endblock %}

@@ -1,0 +1,73 @@
+
+
+
+
+
+
+
+{% macro list(articles, categories, small_icon, short) %}
+{% import defaults.macros ~ '/common.twig' as common %}
+        <div class="article-items">
+            {% for article in articles %}
+                <div class="article-item" data-category="{{ article.category_id }}">
+                    <div class="article-item-pic">
+                        <a href="{{ article.url }}">
+
+                            {{ common.itemPicture(article.getIcon, 'small_article') }}
+
+                        </a>
+                    </div>
+                    <div class="article-item-date">
+                        {{ article.created|date('d.m.Y') }}
+                    </div>
+                    <div class="article-item-title">
+                        <a href="{{ article.url }}">
+                            {{ article.name }}
+                        </a>
+                    </div>
+
+                    <div class="article-item-author">
+                        {{ article.author.name }}
+                    </div>
+                </div>
+                {% if not loop.index % 3 %}
+                    <div class="clear"></div>
+                {% endif %}
+            {% endfor %}
+        </div>
+
+{% endmacro %}
+
+
+
+{% macro categoryItem(item) %}
+    {% if item.is_visible %}
+    <div class="category-item{% if item.selected %} selected{% endif %}">
+        {% if item.children %}
+            <div class="category-item-icon"></div>
+        {% endif %}
+        
+        {% if item.current %}
+            <div class="category-item-link">        
+        {% else %}
+            <a class="category-item-link" href="{{ item.url }}">
+        {% endif %}
+            {{ item.name }}
+            
+        {% if item.current %}
+            </div>
+        {% else %}
+            </a>
+        {% endif %}
+        
+        {% if item.children %}
+            <div class="category-children">
+                {% for _item in item.children %}
+                    {{ _self.categoryItem(_item)}}
+                {% endfor %}
+                <div class="clear"></div>
+            </div>
+        {% endif %}
+    </div>
+    {% endif %}
+{% endmacro %}

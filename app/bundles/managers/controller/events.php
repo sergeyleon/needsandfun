@@ -69,8 +69,8 @@ class Events extends \Core\Abstracts\Singleton
         {
             $total = \Core\Model\Event::all($options);
 
-            $options['limit']  = \Core\Model\Event::$perPage;
-            $options['offset'] = \Core\Model\Event::$perPage * ($page - 1);
+            $options['limit']  = 40;
+            $options['offset'] = 40 * ($page - 1);
 
             $this->page['pager']   = \Core\Model\Event::getPager($page, $category, 'manage_events_category_page', $total);
             
@@ -127,16 +127,24 @@ class Events extends \Core\Abstracts\Singleton
 
         $total = \Core\Model\Event::all();
 
-        $options['limit']  = \Core\Model\Event::$perPage;
-        $options['offset'] = \Core\Model\Event::$perPage * ($page - 1);
+        $options['limit']  = 40;
+        $options['offset'] = 40 * ($page - 1);
         
         $this->page['pager']   = \Core\Model\Event::getPager($page, $category, 'manage_events_index_page', $total);
 
         $this->page['events'] = \Core\Model\Event::all(array('conditions' => array('deleted is null'), 
           'limit' => $options['limit'],
-          'offset' => $options['offset']
+          'offset' => $options['offset'],
+          'order' => "created DESC"
          ));
-          
+        
+        $goods = \Core\Model\Event::all($options);
+        
+        if (isset($total) && count($total) > 0 && count($goods) == 0 && $page > 1)
+        {
+            $this->router->go($this->router->generate('index_page', array('page' => 1)));
+        }
+        
         $this->page->display('events/index.twig');
     }    
     
@@ -333,12 +341,24 @@ class Events extends \Core\Abstracts\Singleton
 
         $itempicture = new \Core\Model\Eventpicture();
         \Core\Model\Picture::multipleUpload($_FILES['pictures'], $event, $itempicture);
-        
-        $this->router->go($this->router->generate('manage_events_index'));
+        $this->router->reload();
+        //$this->router->go($this->router->generate('manage_events_index'));
     }
     
     public function add()
-    {
+    {   
+        $this->page['reporters']  = \Core\Model\Client::getAll();
+        $this->page['sponsors']   = \Core\Model\Sponsor::getAll();
+        $this->page['categories'] = \Core\Model\Eventcategory::getAll();
+        $this->page['placeCategories'] = \Core\Model\Placecategory::getAll();
+        
+        $categories = array();
+        foreach ($this->page['event']->eventcats as $eventCat)
+        {
+            array_push($categories, $eventCat->category_id);   
+        }
+        $this->page['current_category'] = $categories;
+    
         $this->_form();
     }    
 
@@ -357,7 +377,6 @@ class Events extends \Core\Abstracts\Singleton
             array_push($categories, $eventCat->category_id);   
         }
         $this->page['current_category'] = $categories;
-        var_dump($categories) ;
         
         $this->_form();
     }   

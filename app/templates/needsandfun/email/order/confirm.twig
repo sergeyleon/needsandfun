@@ -97,11 +97,17 @@
 	                    		Нет товаров.
 	                    	{% endfor %}
 	                    	<tr>
-	                    		<th colspan="3" style="text-align: left">
+	                    		<th colspan="1" style="text-align: left">
 	                    			Итого
 	                    		</th>
+	                    		<th colspan="1" style="text-align: left">
+	                    		 {% if order.discount != 0.00 %}  Ваша скидка({{ order.discount|money }}) {% endif %}
+	                    		</th>
+	                    		<th colspan="1" style="text-align: left">
+	                    			{% if delivery.delivery_price != 0 %} Доставка({{ delivery.delivery_price|money }}) {% endif %}
+	                    		</th>
 	                    		<th>
-	                    			{{ order.getSum|money }}
+	                    			{{ (order.getSum-order.discount+delivery.delivery_price)|money }} 
 	                    		</th>
 	                    	</tr>
                     	</table>

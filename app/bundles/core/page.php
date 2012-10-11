@@ -189,6 +189,8 @@ class Page extends Abstracts\Singleton implements \ArrayAccess
     {
         $this->_variables['defaults'] = array_merge($this->_variables['defaults'], $defaults);    
         $this->_twig->addGlobal('defaults', $this->_variables['defaults']);
+        
+        $this->_twig->addGlobal('rootCategories', \Core\Model\Category::getAll());
     }
         
     public function setMessage($message)
@@ -223,6 +225,7 @@ class Page extends Abstracts\Singleton implements \ArrayAccess
     public function render($template, $data = array())
     {
         $this->_getMessages();
+        
         /**
          * инициализируем весь движок
          */

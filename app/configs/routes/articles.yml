@@ -1,7 +1,34 @@
+#index:
+#  pattern: 
+#  defaults:
+#    controller: Articles:index
+
+#category:
+#  pattern: -{category}
+#  defaults:
+#    controller: Articles:category
+    
+index_page:
+  pattern: -page-{page}
+  defaults:
+    page: 1
+    controller: Articles:index
+  requirements:
+    page: (\d+|all)
+
 index:
   pattern: 
   defaults:
-    controller: Articles:index
+    page: 1  
+    controller: Articles:index    
+    
+category_page:
+  pattern: -{category}-page-{page}
+  defaults:
+    page: 1
+    controller: Articles:category
+  requirements:
+    page: (\d+|all)
 
 category:
   pattern: -{category}

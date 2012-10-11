@@ -64,6 +64,7 @@ class Delivery extends \ActiveRecord\Model
         {
           $delivery->delivery_price = $options['data']['price'];
         }
+
         
         if ('courier' == $options['type'] or 'ems' == $options['type'])
         {
@@ -96,6 +97,7 @@ class Delivery extends \ActiveRecord\Model
             }
             
             $delivery->address = implode(', ', $address);
+            $delivery->delivery_price = $data['price'];
 
         } 
         else if ('metro' == $options['type'])
@@ -104,9 +106,9 @@ class Delivery extends \ActiveRecord\Model
 
         }
 
-        if (isset($options['data']['phone']))
+        if (isset($options['data']['phone']) or isset($options['data']['name']))
         {
-            $delivery->recall = $options['data']['phone'];
+            $delivery->recall = $options['data']['phone'].' '.$options['data']['name'];
 
         }
         

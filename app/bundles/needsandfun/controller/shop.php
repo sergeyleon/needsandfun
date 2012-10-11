@@ -55,11 +55,11 @@ class Shop extends \Core\Abstracts\Authorized
             {
                 $gender = $filter['gender'];
 
-                if ('male' == $gender)
+                if ('1' == $gender)
                 {
                     $result['conditions'][] = 'sex in (0, 1)';    
                 }
-                else if ('female' == $gender)
+                else if ('2' == $gender)
                 {
                     $result['conditions'][] = 'sex in (0, 2)';
                 }
@@ -69,87 +69,41 @@ class Shop extends \Core\Abstracts\Authorized
                 }
             }
 
-            if (isset($filter['age']))
+            if (isset($filter['age_from']) and isset($filter['age_to']))
             {
-                $age  = $filter['age'];
-                $ages = \Core\Model\Good::$age_ranges;
+                //$age  = $filter['age'];
+                //$ages = \Core\Model\Good::$age_ranges;
+                $age_ranges = array(
+                    $filter['age_from'],
+                    $filter['age_to']
+                );
+                $ages = $age_ranges;
+                
+                 //$conditions[] = ' age_from >= ' . $age_from. ' AND age_to <= '. $age_to ;
 
-                if (isset($ages[$age]))
+                
+
+                if (isset($ages))
                 {
                     $result['conditions'][] = '((age_to is not null and age_to >= ?) or age_to is null)';
                     $result['conditions'][] = '((age_from is not null and age_from < ?) or age_from is null)';
 
 
-                    $result['variables'] = array_merge($result['variables'], $ages[$age]);
+                    $result['variables'] = array_merge($result['variables'], $ages);
                 }
             }
 
             if (isset($filter['brands']))
             {
+            if($filter['brands'] != '0') {
                 $result['conditions'][] = 'brand_id in (?)';
                 $result['variables'][] = $filter['brands'];
-            }
-
-
-/////////////////////////
-/*
-            if (isset($filter['sort']))  {
-            
-
-            $sort  = $filter['sort'];
-            $dir = isset($sort) && 'desc' == $sort
-                ? 'DESC'
-                : 'ASC';
-
-            $order = array();
-
-            if (isset($sort))
-            {
-            echo "dfsdf";
-                switch ($sort)
-                {
-                    case 'rating':
-                        $order[] = 'rating ' . $dir;
-                        break;
-
-                    case 'price':
-                        $options['joins'] = 'left join sizes on sizes.good_id = goods.id';
-                        $options['group'] = 'goods.id';
-                        $order[] = 'sizes.price ' . $dir;
-                        break;
-
-                    case 'created':
-                        $order[] = 'goods.created ' . $dir;
-                        break;
-                        
-                    case 'abc':
-                        $order[] = 'name ' . $dir;
-                        break;
                 }
             }
 
 
-
-            $options['joins'] = 'left join sizes on sizes.good_id = goods.id';
-            $options['group'] = 'goods.id';
-            $order[]  = 'sizes.price DESC';
-            
-         
-            $order[] = 'name ' . $dir;
-
-            $options['order'] = implode(', ', $order);
-            
-            }
-            */
-            /////////////////////////
-
-
-
             $conditions = array_merge($conditions, $result['conditions']);
             $variables = $result['variables'];
-            
-            
-            
             
             
         }
@@ -193,27 +147,27 @@ if (!empty($_GET['filter']))
             if (isset($sort))
             {
  
-                switch ($sort)
+               // switch ($sort)
               
-                {
-                    case 'rating':
+               // {
+                   /* case 'rating':
                         $order[] = 'rating ' . $dir;
-                        break;
+                        break; */
 
-                    case 'price':
+                    //case 'price':
                         $options['joins'] = 'left join sizes on sizes.good_id = goods.id';
                         $options['group'] = 'goods.id';
                         $order[] = 'sizes.price ' . $dir;
-                        break;
+                      //  break;
 
-                    case 'created':
+                    /* case 'created':
                         $order[] = 'goods.created ' . $dir;
-                        break;
+                        break; */
                         
-                    case 'abc':
+                    /* case 'abc':
                         $order[] = 'name ' . $dir;
-                        break;
-                }
+                        break; */
+               // }
             }
 
 
@@ -426,6 +380,25 @@ if (!empty($_GET['filter']))
 
         $this->page['breadcrumbs'] = \Core\Model\Category::all(array('conditions' => array($options3)));
         
+        
+        // Колво проданных
+        $good_sizes = \Core\Model\Size::all(array('conditions' => array('good_id = ? ', $item->id )));
+        $i = 0;
+        foreach ( $good_sizes as $good_size) { 
+          $order_goods = \Core\Model\Ordergood::all(array('conditions' => array('size_id = ? ', $good_size->id )));
+          
+          if(count($order_goods) > 0 ) {
+            foreach ( $order_goods as $order_good) {
+              $order_status = \Core\Model\Orderstatus::all(array('conditions' => array('order_id = ? and status_id = ?', $order_good->order_id,4 )));
+              if (count($order_status) > 0 ) { $i++; }
+            }
+
+          }
+        }
+        
+        $item->sell_amount = $i;
+        $item->save();
+        // Колво проданных
         
         
         $this->page->display('shop/good.twig');
